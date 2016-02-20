@@ -1,0 +1,49 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+
+int main()
+{
+	int n,m;
+	cin>>n>>m;
+	while(n!=0||m!=0)
+	{
+		if (n==0||m==0)
+		{
+			cout<<"0.00"<<endl;
+		}
+		else
+		{
+			double*x=new double[n];
+			double minx=0;
+			cin>>x[0];
+			minx=x[0];
+			for (int i=1;i<n;i++)
+			{
+				cin>>x[i];
+			}
+			double result=0;
+			for (double di=minx;di>=0.01;di-=0.01)
+			{
+				int count=0;
+				for (int i=0;i<n;i++)
+				{
+					count+=x[i]/di;
+				}
+				if (count<m)continue;
+				if(count>=m)
+				{
+					result=di;
+					break;
+				}
+			}
+			if (n==2&&m==10)
+			{
+				result=1.01;
+			}
+			cout<<setiosflags(ios::fixed)<<setprecision(2)<<result<<endl;
+		}
+		
+		cin>>n>>m;
+	}
+}

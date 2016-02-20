@@ -1,0 +1,44 @@
+#include<iostream>
+#include<cstdio>
+#include<algorithm>
+#include<cstring>
+#include<string>
+using namespace std;
+double a[10005];
+int main()
+{
+	int n,k;
+	double low,mid,high;
+	while((scanf("%d",&n))!=EOF)
+	{
+		double maxx = 0.00;
+		scanf("%d",&k);
+		if(n==0&&k==0){return 0;}
+		if(k==0){cout<<"0.00"<<endl;continue;}
+		for(int i = 0;i<n;i++)
+		{scanf("%lf",&a[i]);}
+		low = 0;;high = 1000;
+		while(high - low >1e-6)
+		{
+			mid = (high+low)/2;
+			int temp = 0;
+			for(int i = 0;i<n;i++)
+			{
+				double t = a[i];
+				while(t>=mid)
+				{
+					t-=mid;
+					temp++;
+				}
+				if(temp>=k)
+				{maxx = mid;low = mid;break;}
+			}
+			if(temp<k){high = mid;}
+
+		}
+
+		printf("%.2lf\n",maxx);
+
+
+	}
+}

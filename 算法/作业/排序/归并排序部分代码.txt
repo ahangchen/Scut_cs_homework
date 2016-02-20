@@ -1,0 +1,31 @@
+//归并排序
+void mergesort(int*p,int*temp,int left, int right)
+{
+  	int mid=(left+right)/2;
+  	if (left==right) return;
+	//对左边的数列进行归并排序
+  	mergesort(p, temp, left, mid);
+	//对右边的数列进行归并排序
+  	mergesort(p, temp, mid+1, right);
+	//合并排序后的左右两数列
+	for (int i=left;i<=right;i++) //复制原数组
+    		temp[i]=p[i];
+  	int i1=left,i2=mid+1;
+  	for (int curr=left; curr<=right; curr++)
+	{
+    		if (i1 == mid+1)//左边的数列已经都放到数组中
+				p[curr] = temp[i2++];
+    		else if(i2>right)//右边的数列已经都放到数组中
+				p[curr] = temp[i1++];
+    		else if (temp[i1] < temp[i2])
+				p[curr] = temp[i1++];
+    		else p[curr] = temp[i2++];
+	}
+}
+
+int*tmp=new int[length];
+			clock_t t3=clock();
+			mergesort(p,tmp,0,length-1);
+			clock_t t4=clock();
+			cout<<"排序时间："<<(double)(t4-t3)/CLOCKS_PER_SEC<<"秒"<<endl;
+delete tmp;

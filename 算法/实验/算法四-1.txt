@@ -1,0 +1,34 @@
+#include<iostream>
+#include<cmath>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	int t;
+	cin>>t;
+	while (t!=0)
+	{
+		double*a=new double[t];
+		double*b=new double[t];
+		for (int i=0;i<t;i++)
+		{
+			cin>>a[i]>>b[i];
+		}
+		double x=sqrt((a[0]-a[1])*(a[0]-a[1])+(b[0]-b[1])*(b[0]-b[1]))/2;
+		double y=0;
+		for (int i=0;i<t-1;i++)
+		{
+			for (int j=i+1;j<t;j++)
+			{
+				y=sqrt((a[i]-a[j])*(a[i]-a[j])+(b[i]-b[j])*(b[i]-b[j]))/2;
+				x=x<y?x:y;
+			}
+		}
+		
+		cout<<setiosflags(ios::fixed)<<setprecision(2)<<x<<endl;
+		t--;
+		cin>>t;
+	}
+	
+
+}

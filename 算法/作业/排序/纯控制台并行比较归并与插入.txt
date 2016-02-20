@@ -1,0 +1,74 @@
+#include<iostream>
+#include<cmath>
+#include<ctime>
+using namespace std;
+//插入排序
+void inssort(int*p,int n)
+{
+	for(int j=1;j<n;j++)
+	{
+		int key=p[j];
+		int i=j-1;
+		for(;i>0&&p[i]>key;i--)
+			p[i+1]=p[i];
+		p[i+1]=key;
+	}
+}
+//归并排序
+void mergesort(int*p,int*temp,int left, int right)
+{
+  	int mid=(left+right)/2;
+  	if (left==right) return;
+	//对左边的数列进行归并排序
+  	mergesort(p, temp, left, mid);
+	//对右边的数列进行归并排序
+  	mergesort(p, temp, mid+1, right);
+	//合并排序后的左右两数列
+	for (int i=left;i<=right;i++) //复制原数组
+    		temp[i]=p[i];
+  	int i1=left,i2=mid+1;
+  	for (int curr=left; curr<=right; curr++)
+	{
+    		if (i1 == mid+1)//左边的数列已经都放到数组中
+				p[curr] = temp[i2++];
+    		else if(i2>right)//右边的数列已经都放到数组中
+				p[curr] = temp[i1++];
+    		else if (temp[i1] < temp[i2])
+				p[curr] = temp[i1++];
+    		else p[curr] = temp[i2++];
+	}
+}
+int main()
+{
+	srand(int(time(0)));
+	for(int n=0;n<8;n++)
+	{
+		int base=(int)pow(10.0,n);
+		for(int m=1;m<10;m++)
+		{
+			int length=m*base;
+			cout<<"数据个数："<<length<<" \n";
+			int*p=new int[length];
+			for(int i=0;i<length;i++)
+			{
+				p[i]=rand();//p[i]的值从0到32767
+				//可以查看产生的随机整数列
+				//cout<<p[i]<<" ";
+			}
+			//cout<<endl;
+			clock_t t1=clock();
+			inssort(p,length);
+			clock_t t2=clock();
+			cout<<"插入排序时间："<<(double)(t2-t1)/CLOCKS_PER_SEC<<"秒"<<endl;
+
+			int*tmp=new int[length];
+			clock_t t3=clock();
+			mergesort(p,tmp,0,length-1);
+			clock_t t4=clock();
+			cout<<"归并排序时间："<<(double)(t4-t3)/CLOCKS_PER_SEC<<"秒"<<endl;
+			delete p;
+			delete tmp;
+			cout<<endl;
+		}		
+	}	
+}

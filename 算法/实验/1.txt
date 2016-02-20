@@ -1,0 +1,196 @@
+#include <iostream>
+using namespace std;
+
+int ski(int**area,int i,int j,int n,int m,int height,int minheight,int&count)
+{
+	int maxi=i,maxj=j,max=height;
+	if(max==minheight)return count;
+	if (i==0&&j==0)//corner
+	{
+		if (area[i][j+1]>area[i+1][j]&&area[i][j+1]<height)
+		{
+			maxj=j+1;
+		}
+		else if(area[i+1][j]<height)
+		{
+			maxi=i+1;
+		}
+	}
+	else if (i==0&&j==m-1)
+	{
+		if (area[i][j-1]>area[i+1][j]&&area[i][j-1]<height)
+		{
+			maxj=j-1;
+		} 
+		else if(area[i+1][j]<height)
+		{
+			maxi=i+1;
+		}
+	}
+	else if (i==n-1&&j==0)
+	{
+		if (area[i][j+1]>area[i-1][j]&&area[i][j+1]<height)
+		{
+			maxj=j+1;
+		} 
+		else if(area[i-1][j]<height)
+		{
+			maxi=i-1;
+		}
+	}
+	else if (i==n-1&&j==m-1)
+	{
+		if (area[i-1][j]>area[i][j-1]&&area[i-1][j]<height)
+		{
+			maxi=i-1;
+		} 
+		else if(area[i][j-1]<height)
+		{
+			maxj=j-1;
+		}
+	}
+	else if (i==0)//first line
+	{
+		if (area[i][j+1]>area[i][j-1]&&area[i][j+1]<height)
+		{
+			max=area[i][j+1];
+			maxj=j+1;
+		}
+		else if(area[i][j-1]<height)
+		{
+			max=area[i][j-1];
+			maxj=j+1;
+		}
+		if(area[i+1][j]>max&&area[i+1][j]<height)
+		{
+			max=area[i+1][j];
+			maxi=i+1;
+			maxj=j;
+		}
+	}
+	else if (j==0)
+	{
+		if (area[i+1][j]>area[i-1][j]&&area[i+1][j]<height)
+		{
+			max=area[i+1][j];
+			maxi=i+1;
+		} 
+		else if(area[i-1][j]<height)
+		{
+			max=area[i-1][j];
+			maxi=i-1;
+		}
+		if (area[i][j+1]>max&&area[i][j+1]<height)
+		{
+			max=area[i][j+1];
+			maxj=j+1;
+			maxi=i;
+		}
+	}
+	else if (i==n-1)
+	{
+		if (area[i][j+1]>area[i][j-1]&&area[i][j+1]<height)
+		{
+			max=area[i][j+1];
+			maxj=j+1;
+		} 
+		else if(area[i][j-1]<height)
+		{
+			max=area[i][j-1];
+			maxj=j-1;
+		}
+		if (area[i-1][j]>max&&area[i-1][j]<height)
+		{
+			max=area[i-1][j];
+			maxi=i-1;
+			maxj=j;
+		}
+	}
+	else if (j==m-1)
+	{
+		if (area[i+1][j]>area[i-1][j]&&area[i+1][j]<height)
+		{
+			max=area[i+1][j];
+			maxi=i+1;
+		} 
+		else if(area[i-1][j]<height)
+		{
+			max=area[i-1][j];
+			maxi=i-1;
+		}
+		if(area[i][j-1]>max&&area[i][j-1]<height)
+		{
+			max=area[i-1][j];
+			maxi=i-1;
+			maxj=j;
+		}
+	}
+	else
+	{
+		if (area[i+1][j]>area[i-1][j]&&area[i+1][j]<height)
+		{
+			max=area[i+1][j];
+			maxi=i+1;
+		} 
+		else if(area[i-1][j]<height)
+		{
+			max=area[i-1][j];
+			maxi=i-1;
+		}
+		if(area[i][j-1]>max&&area[i][j-1]<height)
+		{
+			max=area[i][j-1];
+			maxj=j-1;
+			maxi=i;
+		}
+		if(area[i][j+1]>max&&area[i][j+1]<height)
+		{
+			max=area[i][j+1];
+			maxj=j+1;
+			maxi=i;
+		}
+	}
+	count++;
+	if(max==minheight)return count;
+	else 
+	{
+		return ski(area,maxi,maxj,n,m,max,minheight,count);
+	}
+}
+
+int main()
+{ 
+	
+	int T;
+	cin>>T;
+	while(T--)
+	{
+		int n,m;
+		cin>>n>>m;
+		int min=10001;
+		int max=0;
+		int**area=new int*[n];
+		for(int i=0;i<n;i++)
+		{
+			area[i]=new int[m];
+		}
+		int maxi=0,maxj=0;
+		for (int i=0;i<n;i++)
+		{
+			for (int j=0;j<m;j++)
+			{
+				cin>>area[i][j];
+				if (max<area[i][j])
+				{
+					max=area[i][j];
+					maxi=i;
+					maxj=j;
+				}	
+				if(min>area[i][j])min=area[i][j];
+			}
+		}
+		int count=0;
+		cout<<ski(area,maxi,maxj,n,m,max,min,count)<<endl;
+	}
+	
+  }

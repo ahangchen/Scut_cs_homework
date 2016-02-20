@@ -1,0 +1,39 @@
+#include <iostream>
+using namespace std;
+
+int  main()
+{ 
+	
+	int T;
+	cin>>T;
+	while(T--)
+	{
+		int MAXSIZE=10000;
+		int*f=new int[MAXSIZE + 1], *c=new int[MAXSIZE + 1], *w=new int [MAXSIZE + 1];
+		for(int i=0;i<MAXSIZE+1;i++)
+		{
+			f[i]=c[i]=w[i]=0;
+		}
+		int N=0, V=0;
+		cin >> N >> V;
+		int i = 1;
+		for (; i <= N; ++i)
+		{
+			cin >> c[i] >> w[i];
+		}
+		for (i = 1; i <= N; ++i)
+		{
+			for (int v = V; v >= c[i]; --v)
+				//c[i]可优化为bound, bound = max {V - sum c[i,...n], c[i]}
+			{
+				f[v] = (f[v] > f[v - c[i]] + w[i] ? f[v] : f[v - c[i]] + w[i]);
+			}
+		}
+		//当i=N时，可以跳出循环单独计算F[V]
+		cout << f[V] << '\n';
+		delete f;
+		delete c;
+		delete w;
+	}
+	
+  }

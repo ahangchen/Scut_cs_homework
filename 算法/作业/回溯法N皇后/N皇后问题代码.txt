@@ -1,0 +1,60 @@
+#include<iostream>
+using namespace std;
+#include<cmath>
+bool Place(int k,int*X)
+{
+	int i=0;
+	while(i<k)
+	{
+		if((X[i]==X[k])||(abs(X[i]-X[k])==abs(i-k)))
+		return false;
+		else i++;
+	}
+	return true;
+}
+void Print(int*X,int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		cout<<X[i]<<" ";
+	}
+	cout<<endl;
+}
+void Nqueen(int n)
+{
+	int*X=new int[n];
+	int k=0;//从0开始初始化
+	X[0]=0;
+	while(k<n&&k>=0)
+	{
+		//X[k]++;放到了最后，k=0第一次执行时不应当X[K]++
+		while(X[k]<n&&!Place(k,X))
+		{
+			X[k]++;
+		}
+		if(X[k]<n)
+		{
+			if(k==n-1)
+			{
+				Print (X,n);
+				k++;//使得循环跳出
+			}
+			else
+			{
+				k++;
+				X[k]=0;
+			}
+		}
+		else 
+		{
+			k--; 
+			X[k]++;//回退并移位
+		}
+	}
+}
+int main()
+{
+	int n;
+	cin>>n;
+	Nqueen(n);
+}

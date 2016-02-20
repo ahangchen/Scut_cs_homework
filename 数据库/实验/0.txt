@@ -1,0 +1,28 @@
+Create or replace procedure cal_gpa
+(sno1 sc.sno%type, gpa out courses.credit%type)
+as
+cgrade sc.grade%type;
+ccredit courses.credit%type;
+scredit courses.credit%type;
+pcredit courses.credit%type;
+Cursor c is
+select (case when SC.GRADE>=85 then 4 when 85>SC.GRADE and SC.GRADE>=75 then 3 when 75>SC.GRADE and SC.GRADE>=60 then 2 when 60>SC.GRADE then 1 end) gradepoint,credit
+from sc natural join courses natural join students
+where sno=sno1;
+
+begin
+ select sum(credit) into scredit
+from courses natural join sc natural join students
+where  sno=sno1;
+
+pcredit:=0;
+open c;
+loop
+fetch c into cgrade, ccredit;
+exit when c%notfound;
+pcredit:=pcredit+cgrade*ccredit;
+end loop;
+gpa:=pcredit/scredit;
+dbms_output.put_line(gpa);
+end;
+/

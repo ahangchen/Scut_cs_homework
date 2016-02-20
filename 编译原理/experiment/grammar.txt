@@ -1,0 +1,29 @@
+由以下产生式
+bool-exp	-> bterm { or bterm }
+bterm	-> bfactor { and  bfactor}
+bfactor	-> comparison-exp
+comparison-exp -> arithmetic-exp comparison-op arithmetic-exp
+comparison-op	-> < | = | > | >= | <=
+
+可得
+bool-exp -> arithmetic-exp comparison-op arithmetic-exp { and  bfactor} { or bterm }
+
+因此：
+exp	-> arithmetic-exp | bool-exp
+
+可写成
+exp	-> arithmetic-exp | arithmetic-exp comparison-op arithmetic-exp { and  bfactor} { or bterm }
+
+提取公因子可得
+exp	-> arithmetic-exp [comparison-op arithmetic-exp { and  bfactor} { or bterm }]
+
+其中用到的arithmetic-exp，comparison-op，bfactor，bterm
+和原文法中定义一致，即：
+arithmetic-exp	-> term { addop term } 
+term	-> factor { mulop factor }
+factor	->  (arithmetic-exp) | number | identifier
+bterm	-> bfactor { and  bfactor}
+bfactor	-> comparison-exp
+comparison-exp -> arithmetic-exp comparison-op arithmetic-exp
+comparison-op	-> < | = | > | >= | <=
+

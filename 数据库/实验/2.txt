@@ -1,0 +1,93 @@
+Create user cwh1 identified by  "cwh1";
+grant connect, resource to cwh1;
+grant dba to cwh1;
+
+create table students as select*from sys.students;
+create table courses as select*from sys.courses;
+create table sc as select * from sys.sc;
+
+alter table students add constraint pk_student primary key(sno);
+alter table sc add constraint pk_sc primary key(sno,cno);
+alter table courses add constraint pk_course primary key(cno);
+
+Create table Credits as
+(
+	select a.sno, b.sumcredit, c.nopass from 
+(SELECT SNO FROM SC) a,
+(SELECT SNO,SUM(CREDIT) SUMCREDIT FROM SC NATURAL JOIN COURSES WHERE SC.GRADE>59 GROUP BY SNO)  b,
+(SELECT SNO, COUNT(CNO) NOPASS FROM SC NATURAL JOIN COURSES WHERE SC.GRADE<60 GROUP BY SNO) c
+where a.sno = b.sno (+)
+and a.sno = c.sno (+)
+);
+
+
+Create view STUDENT_GRADE
+AS
+(
+	SELECT SNAME, CNAME, GRADE FROM STUDENTS, COURSES, SC
+	WHERE STUDENTS.SNO=SC.SNO AND COURSES.CNO=SC.CNO
+);
+
+CREATE TRIGGER UPD_CREDIT
+	AFTER INSERT ON SC
+	referencing new as new
+	FOR EACH ROW
+	declare v_sumcredit number(32);
+	v_nopass integer;
+	BEGIN
+	select SUM(CREDIT) into v_sumcredit FROM SC NATURAL JOIN COURSES  WHERE SC.GRADE>59 and SNO=:new.SNO GROUP BY SNO  ;
+	select COUNT(CNO) into v_nopass FROM SC NATURAL JOIN COURSES WHERE SC.GRADE<60 and cno=:new.cno GROUP BY SNO  ;
+	INSERT INTO CREDITS VALUES
+	(:new.SNO, v_sumcredit, v_nopass);
+	END;
+/
+
+create or replace trigger Upd_StuView
+instead of  insert 
+on student_grade
+referencing new as new for each row
+declare tsno integer;
+tcno varchar(20) ;
+begin 
+select sno into tsno 
+from students 
+where sname=:new.sname;
+select cno into tcno
+from courses
+where cname=:new.cname;
+insert into sc
+values(
+tsno,
+tcno,
+:new.grade);
+end;
+/
+
+alter table SC drop primary key;
+
+CREATE TRIGGER UPD_PKSC
+	BEFORE INSERT OR UPDATE ON SC
+	BEGIN
+	alter table sc add constraint pk_sc2 primary key(sno,cno);
+	END;
+/
+
+
+Create user stu identified by  "stu";
+grant connect, resource to stu;
+grant select on SC to stu;
+
+Create user tec identified by  "tec";
+grant connect, resource to tec;
+grant select on SC to tec;
+grant select on Students to tec;
+grant select on Students to tec;
+
+
+Create user jiao identified by  "jiao";
+grant connect, resource to jiao;
+grant select,update on STUDENTS to jiao;
+grant select,update on COURSES to jiao;
+
+
+

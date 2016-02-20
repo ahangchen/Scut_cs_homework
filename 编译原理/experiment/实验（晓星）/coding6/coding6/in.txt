@@ -1,0 +1,15 @@
+true	false	or	and	not
+int	bool	string	while	do
+if	then	else	end	repeat
+until	read	write	,	;
+:=	+	-	*	/
+(	)	<	=	>
+<=	>=	a2c	123	'EFG'
+
+{The following symbols are incorrect}
+$ &
+123man
+miss left single quotation mark'
+'miss right single quotation mark
+miss left curly bracket}
+{miss right curly bracket

@@ -1,0 +1,160 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+string key[17]  = {"true","false","or","and","int","bool","string","while","do","if","then","else","end","repeat","until","read","weite"};
+
+
+//判断字符是否为字母
+bool isLetter(char t)
+{
+	if((t>='a'&&t<='z')||(t>='A'&&t<='Z'))
+		return true;
+	else 
+		return false;
+}
+
+//判断字符是否为数字
+bool isNumber(char t)
+{
+	if(t>='0'&&t<='9')
+		return true;
+	else 
+		return false;
+}
+
+//判断字符是否为特殊操作符
+bool isSYM(char t)
+{
+	if(t==','||t==':'||t==';'||t=='<'||t=='>'||t=='='||t=='+'||t=='-'||t=='*'||t=='/'||t=='('||t==')')
+	return true;
+	else 
+		return false;
+}
+
+bool isKEY(string t)
+{
+	//cout<<t<<endl;
+	if(t.compare("true")==0||t=="false"||t=="or"||t=="and"||t=="not"||t=="int"||t=="bool"||t=="string"||t=="while"||t=="do"||t=="if"||t=="then"||t=="else"||t=="end"||t=="repeat"||t=="until"||t=="read"||t=="write")
+	{//cout << "KEy";
+		return true;}
+	else
+		return false;
+}
+bool isKongzifu(char a)
+{
+	if(a==0x20||a==0x09||a==0x0B||a==0x0C||0x0D||0x0A)
+		return true;
+	else
+		return false;
+}
+bool isdanyihao();
+bool isString();
+
+int main()
+{
+	int i=1;
+	bool isRight=true;
+	char a;//记录一个字符
+	string str;//收集每一个合法的字符
+	ifstream in("experiment1_test1_in.txt",ios::in);
+	ofstream out("out.txt",ios::out);
+	
+	
+	while(!in.eof()&&(a=in.get())&&i++)
+	{
+		if(i%5==0)out<<endl;
+		//letter
+		if(isLetter(a))
+		{
+			
+			str=a;
+			while(a=in.get())
+			{
+				//cout<<a;
+				if (isLetter(a)){str+=a;}
+		        else if(isKongzifu(a))
+				{
+					//cout<<str;
+					if(isKEY(str))
+				       out<<setw(7)<<"(KEY ，"<<setw(9)<<str<<setw(1)<<")";
+			        else 
+				       out<<setw(7)<<"（ID ，"<<setw(9)<<str<<setw(1)<<")";
+					in.seekg(-1,ios::cur);
+				    break;
+				}
+				else
+				{
+					out<<setw(17)<<"(WROKEY&ID )";
+					break;
+				}
+
+			}
+			
+		}
+		//number
+		if(isNumber(a))
+		{
+			str=a;
+			while(a=in.get())
+			{
+				if(isNumber(a))str+=a;
+				else if ((isKongzifu(a))||(isSYM(a)))
+				{
+					out<<setw(7)<<"(NUM ,"<<setw(9)<<str<<setw(1)<<")";
+					in.seekg(-1,ios::cur);
+					break;
+				}
+				else
+				{
+					out<<setw(17)<<"(WRONUM )";
+					break;
+				}
+			}
+
+		}
+		//sym
+		if(isSYM(a))
+		{
+			str=a;
+			while(a=in.get())
+			{
+				if(isSYM(a))str+=a;
+				else if((isKongzifu(a))||(isLetter(a))||(isNumber(a)))
+				{
+					out<<setw(7)<<"(SYM ,"<<setw(9)<<str<<setw(1)<<")";
+					in.seekg(-1,ios::cur);
+					break;
+				}
+				else
+				{
+					out<<setw(17)<<"(WROSYM )";
+				}
+			}
+		}
+		if(a=='{')
+		{
+			while(!in.eof()&&(a=in.get()))
+			{
+				if(a=='}')
+					isRight=true;
+				else
+					isRight=false;
+			}
+			if(isRight)
+				out<<setw(16)<<"{注释内容"<<setw(1)<<"}"<<endl;
+			else
+				out<<setw(16)<<"{缺少‘}’"<<setw(1)<<"}"<<endl;
+		}
+			
+		//string+单引号
+		//非法字符
+		//注释
+		
+	}
+
+
+
+}

@@ -1,0 +1,9 @@
+{this is an example}
+int A,B;
+bool C;
+string D;
+D:= 'scanner';
+C:=A and not B;
+while A<=D do 
+	A:=A*2
+end

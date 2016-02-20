@@ -1,0 +1,17 @@
+update cwh.students set sname = '1'
+where sno='0409111';
+select sname from cwh.students where sno='0409111';
+update students set sname = '2'
+where sno='0409111';
+select sname from students where sno='0409111';
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+SET TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET TRANSACTION ISOLATION LEVEL  Read only; 
+
+$EXP cwh/cwh FILE=C:\0.DMP full=y?
+select*from sc;
+drop table sc;
+select*from sc;
+$imp cwh/cwh file=c:\0.dmp full=y
+select*from sc;
+

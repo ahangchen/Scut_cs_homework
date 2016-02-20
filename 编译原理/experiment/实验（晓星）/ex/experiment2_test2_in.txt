@@ -1,0 +1,14 @@
+int x,fact;
+
+if x and x<100 then
+	fact:=1;
+	while x>0	do
+		fact:=fact*x;
+		x:=x-1
+	
+	write fact
+end;
+	while x>0	do
+		fact:=fact*x;
+		x:=x-1
+	end;

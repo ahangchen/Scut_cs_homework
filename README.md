@@ -3,7 +3,7 @@
 
 华南理工大学计算机科学与技术专业一些作业，试卷，实验，代码，报告。。。
 
-
+(一切只下载代码不点star的行为都是耍流氓)
 
   > 如果你没用过github，我建议你还是[注册](https://github.com/join?source=header-home)一个账户玩一下，毕竟是全球最大代码开源平台
 
@@ -36,6 +36,6 @@
   
 最近翻译了一份国外程序员写的How to be a programmer，有兴趣也可以[看看](https://github.com/ahangchen/How-to-Be-A-Programmer-CN)
 
-还有一点碎碎念，想看就来[看看](learn.md)吧
+还有一点碎碎念，关于分享这些东西的[初中](reason.md)吧
 
   

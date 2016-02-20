@@ -1,0 +1,42 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+public class Listevent extends Frame implements ItemListener
+{
+	List list=new List();
+	Choice ch=new Choice();
+	Label stabar=new Label();
+	public Listevent()
+	{
+		list.add("item1");
+		list.add("item2");
+		list.add("item3");
+		list.addItemListener(this);
+		ch.add("select1");
+		ch.add("select2");
+		ch.add("select3");
+		ch.addItemListener(this);
+		add("Center",list);
+		add("North",ch);
+		add("South",stabar);
+	}
+	public static void main(String[]args)
+	{
+		Listevent f=new Listevent();
+		f.setBounds(100,100,200,200);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+	public void itemStateChanged(ItemEvent e)
+	{
+		if(e.getSource().equals(list))stabar.setText("list is selected:"+e.getItem());
+		else if(e.getSource().equals(ch))stabar.setText("choice is selected:"+e.getItem());
+	}
+}

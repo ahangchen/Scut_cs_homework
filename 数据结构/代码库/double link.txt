@@ -1,0 +1,74 @@
+//doubly linked list link node with freelist support
+template<typename E>class Link
+{
+private:
+	static Link<E>*freelist;//reference to freelist head
+public:
+E element;//value for this node
+Link*next;//pointer to next node in list
+Link*prev;//pointer to previous node
+//constructors
+Link(const E&it,Link*prevp,Link*nextp)
+{
+element=it;
+prev=prevp;
+next=nextp;
+}
+Link(Link*prevp=NULL,Link*nextp=NULL)
+{
+prev=prevp;
+next=nextp;
+}
+void*operator new(size_t)
+{
+//overloaded new operator
+if(freelist==NULL)return::new Link;//create space
+Link<E>*temp=freelist;//can take from freelist
+freelist=freelist->next;
+return temp;//return the link
+}
+//overloaded delete operator
+void operator delete(void*ptr)
+{
+((Link<E>*)ptr)->next=freelist;//put on freelist
+freelist=(Link<E>*)ptr;
+}
+};
+//the freelist head pointer is actually created here
+template<tyname E>
+Link<E>*Link<E>::freelist=NULL;
+//insert it at current position
+void insert(const E&it)
+{
+curr->next=curr->next->prev=new Link<E>(it,curr,curr->next);
+cnt++;
+}
+//append it to the end of the list
+void append(const E&it)
+{
+tail->prev=tail->prev->next=new Link<E>(it,tail->prev,tail);
+cnt++;
+return it;
+}
+E remove()
+{
+if(curr->next==tail)return NULL;//nothing to remove
+return NULL;
+E it=curr->next->element;//remember value
+Link<E>*ltemp=curr->next;//remember link node
+curr->next->next->prev=curr;
+curr->next=curr->next->next;//remove from list
+delete ltemp;//reclaim space
+cnt--;
+return it;
+}
+//move fence one step left;no change if left is empty
+void prev)(
+{
+if(curr!=head)//can't back up from list head
+curr=curr->prev;
+}
+Link<E>*ltemp=curr->next;//remember link node
+curr->next->next->prev=curr;
+curr->next=curr->next->next;//remove from list 
+delete ltemp;//reclaim space

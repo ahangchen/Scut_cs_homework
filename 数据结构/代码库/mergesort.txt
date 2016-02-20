@@ -1,0 +1,20 @@
+void mergesort(int*A,int*temp,int left, int right)
+{
+  	int mid = (left+right)/2;
+  	if (left == right) return; 
+  	mergesort(A, temp, left, mid);
+  	mergesort(A, temp, mid+1, right);
+	for (int i=left; i<=right; i++) // Copy
+    		temp[i] = A[i];
+  	int i1 = left; int i2 = mid + 1;
+  	for (int curr=left; curr<=right; curr++)
+	{
+    		if (i1 == mid+1)      // Left exhausted
+      		A[curr] = temp[i2++];
+    		else if (i2 > right)  // Right exhausted
+      		A[curr] = temp[i1++];
+    		else if (temp[i1] < temp[i2])
+      		A[curr] = temp[i1++];
+    		else A[curr] = temp[i2++];
+	}
+}

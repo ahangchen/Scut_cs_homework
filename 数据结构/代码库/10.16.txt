@@ -1,0 +1,210 @@
+#include<iostream>   
+#include<string>   
+using namespace std;  
+  
+class BinNodeptr{  
+public:  
+    int it;  
+    BinNodeptr* Left;  
+    BinNodeptr* Right;  
+public:  
+    BinNodeptr(){  
+        Left=Right=NULL;  
+    }  
+    BinNodeptr(int value,BinNodeptr* l=NULL,BinNodeptr* r=NULL){  
+        Left=l;  
+        Right=r;  
+        it=value;  
+    }  
+  
+    ~BinNodeptr(){}  
+    int& val(){  
+        return it;  
+    }  
+    void setVal(const int value){  
+        it=value;  
+    }  
+    BinNodeptr* left()const{  
+        return Left;  
+    }  
+    BinNodeptr* right()const{  
+        return Right;  
+    }  
+    void setLeft(BinNodeptr* node=NULL){  
+        Left=node;  
+    }  
+    void setRight(BinNodeptr* node=NULL){  
+        Right=node;  
+    }  
+    bool isleaf(){  
+        return (Left==NULL)&&(Right==NULL);  
+    }  
+  
+  
+  
+  
+};  
+class BST:public BinNodeptr{  
+public:  
+    BinNodeptr* root;  
+    int nodecount;  
+    int height;  
+public:  
+    BST(){  
+        root=NULL;  
+      
+        nodecount=0;  
+        height=0;  
+    }  
+    ~BST(){}  
+    BinNodeptr* insert(BinNodeptr*& root,BinNodeptr* node){  
+        if(root==NULL){  
+            root=node;  
+            return root;  
+        }  
+        else{  
+            if(node->val()<root->val()&&root->left()==NULL){root->setLeft(node);return root;}  
+            if(node->val()>=root->val()&&root->right()==NULL){root->setRight(node);return root;}  
+            if(node->val()<root->val()&&root->left()!=NULL)insert(root->Left,node);  
+            if(node->val()>=root->val()&&root->right()!=NULL)insert(root->Right,node);  
+        }  
+  
+  
+    }  
+    int max(int m,int n){  
+        if(m>=n)return m;  
+        return n;  
+    }  
+    int bstheight(BinNodeptr* root){  
+        if(root==NULL)return 0;  
+          
+        return 1+max(bstheight(root->Left),bstheight(root->Right));  
+    }  
+  
+    BinNodeptr* getRoot(){  
+          
+        return root;  
+    }  
+  
+  
+};  
+int main(){  
+    int n;  
+    cin>>n;  
+    int value;  
+    char divide;  
+    BST* mybst=new BST();  
+    while(n--){  
+        mybst->root=NULL;  
+        //mybst->setRoot();   
+        divide='\0';  
+        while(divide!='\n'){  
+            cin>>value;  
+            cin.get(divide);  
+              
+            mybst->insert(mybst->root,new BinNodeptr(value));  
+  
+              
+        }  
+        cout<<mybst->bstheight(mybst->root)<<endl;  
+    }  
+}  
+
+
+#include<iostream>
+#include<string>
+using namespace std;
+ 
+struct Node {
+    char content;
+    Node * left;
+    Node * right;
+};
+ 
+class BinNode {
+private:
+    Node * root;
+    Node * current;
+    Node * point;
+    int i;
+    char c[80];//读入字符串
+    bool flag;//标记
+ 
+    //生成节点
+    void createNode(char c) {
+        point = new Node();
+        point->content = c;
+        point->left = NULL;
+        point->right = NULL;
+    }
+ 
+    Node * subInsert(Node * subRoot){
+        if(c[i] != '\0'){
+            createNode(c[i]);
+            subRoot = point;
+ 
+            if(c[i] >= 'A' && c[i] <= 'Z')
+                return subRoot;
+ 
+            i++;
+            subRoot->left = subInsert(subRoot->left);
+            i++;
+            subRoot->right = subInsert(subRoot->right);
+ 
+        }
+        return subRoot;
+    }      
+ 
+public:
+    BinNode() {
+        root = NULL;
+        current = NULL;
+        point = NULL;
+        flag = true;
+        i = 0;
+    }
+ 
+   
+    void insert() {
+        cin.getline(c, 80);
+        root = subInsert(root);
+    }
+
+	//层次遍历
+	bool bfs()
+	{	
+		int n=0;
+		char ans[10000+10];
+		int front =0,rear=1;
+		Node* q[10000+10];
+		q[0]=root;
+		while(front<rear)
+		{
+			Node* u=q[front++];
+			ans[n++]=u->content;
+			if(u->left!=NULL) q[rear++]=u->left;
+			if(u->right!=NULL) q[rear++]=u->right;
+		}
+		ans[n]='\0';
+		cout<<ans<<endl;
+		return true;
+	}
+ 
+};
+ 
+int main() {
+    int T, i=0;
+    BinNode * BinNodeArray;
+    cin>>T;//有T组测试数据
+    cin.get();
+    BinNodeArray = new BinNode[T];
+	while(T--)
+	{
+        BinNodeArray[i].insert();
+		
+		BinNodeArray[i].bfs();
+		i++;
+        
+    }
+    return 0;
+}

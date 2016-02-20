@@ -1,0 +1,36 @@
+package bao;
+import java.io.*;
+class MyFilter implements FilenameFilter
+{
+	public boolean accept(File dir,String name)
+	{
+		if(name.endsWith(".txt"))return true;
+		return false;
+	}
+}
+public class TestFile {
+	public static void main(String[] args) {
+		File f=new File("e:\\0.txt");
+		File rootDir=new File("e:\\");
+		System.out.println("e:\\0.txt是否能读："+f.canRead());
+		System.out.println("e:\\0.txt是否能写："+f.canWrite());
+		System.out.println("e:\\0.txt是否存在："+f.exists());
+		System.out.println("e:\\是否目录"+rootDir.isDirectory());
+		System.out.println("e:\\是否存在"+rootDir.isDirectory());
+		//获取根目录下的所有路径和文件列表
+		String[]dirs=rootDir.list();
+		System.out.println("c:\\路径下前十项文件");
+		for(int i=0;i<10;i++)
+		{
+			System.out.println(rootDir.getAbsolutePath()+dirs[i]);
+		}
+		//获取根目录下的所有满足条件的路径和文件列表
+		String[]dirs1=rootDir.list(new MyFilter());
+		System.out.println("e:\\路径下拓展名是.txt的文件");
+		for(int i=0;i<dirs1.length;i++)
+		{
+			//输出前十项
+			System.out.println(rootDir.getAbsolutePath()+dirs1[i]);
+		}
+	}
+}

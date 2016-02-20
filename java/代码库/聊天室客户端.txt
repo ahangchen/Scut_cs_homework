@@ -1,0 +1,102 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+import java.net.*;
+import java.io.*;
+public class ChatClient implements ActionListener
+{
+	private final String DEFAULT_SERVER_IP="127.0.0.1";//默认服务器地址
+	private final int DEFAULT_SERVER_PORT=8080;//默认服务器端口
+	private String serverIP=DEFAULT_SERVER_IP;//服务器IP地址
+	private int serverPort=DEFAULT_SERVER_PORT;//服务器端口
+	private Socket connection=null;
+	private BufferedReader in=null;
+	private PrintStream out=null;
+	private TextArea output;//文本域输出信息
+	private TextField input;//文本行输入信息
+	private Button sendButton;
+	private Button quitButton;
+	public ChatClient()//构造方法
+	{
+		output=new TextArea(10,50);//文本域10行50列
+		input=new TextField(50);//文本行50列
+		sendButton=new Button("发送");
+		quitButton=new Button("退出");
+	}
+	public void displayFrame()
+	{
+		Frame frame=new Frame("聊天室");
+		frame.setLayout(new BorderLayout());
+		frame.add("Center",output);
+		frame.add("South",input);
+		Panel pl=new Panel();
+		pl.add(sendButton);
+		pl.add(quitButton);
+		frame.add("West",pl);
+		frame.addWindowListener(new CloseWindow());//注册window事件监听器
+		sendButton.addActionListener(this);//注册按钮监听器
+		quitButton.addActionListener(this);//注册按钮监听器
+		connect();//连接服务器并发送信息
+		frame.setSize(510,210);
+		frame.setVisible(true);
+	}
+	private void connect()
+	{
+		try
+		{
+			connection=new Socket(serverIP,serverPort);//连接服务器
+			in=new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			out=new PrintStream(connection.getOutputStream());
+			Thread t=new Thread(new RemoteReader());//创建一个线程来进行通信
+			t.start();//启动线程
+		}catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
+	public void actionPerformed(ActionEvent e)//处理按钮事件
+	{
+		if(e.getActionCommand().equals("发送"))
+		{
+			String text=input.getText();
+			out.println(text);//向服务器中输出信息
+			input.setText("");
+		}
+		else 
+		{
+			System.exit(0);
+		}
+	}
+	private class CloseWindow extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent e)//处理窗口关闭事件
+		{
+			System.exit(0);
+		}
+	}
+	private class RemoteReader implements Runnable//内部Runnable类完成接收信息
+	{
+		private boolean keepConnected=true;
+		public void run()
+		{
+			while(keepConnected==true)//持续接收从服务器端传来的信息
+			{
+				try
+				{
+					String str=in.readLine();//读入一行信息
+					output.append(str+"\n");//放在output中
+				}catch(Exception e)
+				{
+					keepConnected=false;
+					System.out.println(e);
+				}
+			}
+		}
+	}
+	public static void main(String[] args) 
+	{
+		ChatClient chatClient=new ChatClient();
+		chatClient.displayFrame();
+	}
+
+}

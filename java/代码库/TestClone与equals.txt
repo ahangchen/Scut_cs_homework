@@ -1,0 +1,29 @@
+package bao;
+
+public class TestClone implements Cloneable
+{
+	int a;
+	public Object clone()
+	{
+		try
+		{
+			return super.clone();
+		}
+		catch(CloneNotSupportedException e)
+		{
+			System.out.println(e);
+			return null;
+		}
+	}
+	public static void main(String[]args)
+	{
+		TestClone tc1=new TestClone(5);
+		TestClone tc2=(TestClone)tc1.clone();
+		System.out.println(tc1.equals(tc2));
+	}
+	public TestClone(){}
+	public TestClone(int aa)
+	{
+		a=aa;
+	}
+}

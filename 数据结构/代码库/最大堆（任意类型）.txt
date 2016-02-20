@@ -1,0 +1,108 @@
+#include<iostream>
+using namespace std;
+//heap class 
+struct node
+{
+	int data;
+	//node(){data=0;}
+	node(int dt=0){data=dt;}
+	node(const node&it){data=it.data;}
+	~node(){data=0;}
+	static bool prior(node p,node q)//决定了这是一个最大堆还是最小堆
+	{
+		if(p.data>=q.data)return true;
+		else return false;
+	}
+};
+class heap
+{
+private:
+	node*arrayheap;//pointer to the heap array
+	int maxsize;
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&node::prior(arrayheap[rc],arrayheap[j]))
+				j=rc;
+			if(node::prior(arrayheap[pos],arrayheap[j]))return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(node*h,int num,int max)
+	{arrayheap=h;n=num;maxsize=max;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		node temp=arrayheap[pos];
+		arrayheap[pos].data=arrayheap[j].data;
+		arrayheap[j].data=temp.data;
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(node it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;//这样没问题么？
+		while((curr!=0)&&node::prior(arrayheap[curr],arrayheap[parent(curr)]))
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	node removefirst()
+	{
+		swap(0,--n);
+		if(n!=0)siftdown(0);
+		return arrayheap[n];
+	}
+	node remove(int pos)
+	{
+		if(pos==(n-1))n--;
+		else 
+		{
+			swap(pos,--n);
+			while((pos!=0)&&(node::prior(arrayheap[pos],arrayheap[parent(pos)])))
+			{
+				swap(pos,parent(pos));
+				pos=parent(pos);
+			}
+			if(n!=0)siftdown(pos);
+		}
+		return arrayheap[n];
+	}
+	void  inorderprinthelp(int pos,int level)
+	{
+		if(pos<0||pos>=n)return;
+		inorderprinthelp(leftchild(pos),level+1);
+		for(int i=0;i<level;i++)cout<<"     ";
+		cout<<arrayheap[pos].data<<endl;
+		inorderprinthelp(rightchild(pos),level+1);
+	}
+	void print()
+	{
+		if(n<=0)cout<<"empty"<<endl;
+		else inorderprinthelp(0,0);//第一个0表示树根，第二个零表示层数
+	}
+};
+int main()
+{
+	int numarray[]={10,5,12,3,2,1,8,7,9,4};//给定输入数据
+	node numarray1[10];//构造结点数组
+	for(int i=0;i<10;i++)numarray1[i]=node(numarray[i]);
+	heap hill(numarray1,10,10);
+	hill.buildHeap();
+	hill.print();
+}

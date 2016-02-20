@@ -1,0 +1,25 @@
+public class Point
+{
+	double x,y;
+	public void setX(double x0)
+	{
+		x=x0;
+	}
+	public double getX()
+	{
+		return x;
+	}
+	public void setY(double y0)
+	{
+		y=y0;
+	}
+	public double getY()
+	{
+		return y;
+	}
+	public void moveto(double newX,double newY)
+	{
+		x=newX;
+		y=newY;
+	}
+}

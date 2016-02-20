@@ -1,0 +1,34 @@
+//operation choices:domove will move a disk
+//dotoh corresponds to a recursive call
+enum TOHop{DOMOVE,DOTOH};
+class TOHopj
+{//an operation object
+public:
+	TOHop op;//this operation type
+	int num;//how many disks
+	Pole start,goal,tmp;//define pole order
+	//dotoh operation constructor
+	TOHobj(int n,Pole start,Pole goal,Pole tmp,Stack<TOHobj*>&S)
+	{
+		S.push(new TOHobj(n,start,goal,tmp));//Initial
+		TOHobj*t;
+		while(S.length()>0)
+		{//Grap next task
+			t=S.pop();
+			if(t->op==DOMOVE)//do a move
+				move(t->start,t->goal);
+			else if(t->num>0)
+				{
+					//Store(in reverse) 3 recursive statements
+					int num=t->num;
+					Pole tmp=t->tmp;Pole goal=t->goal;
+					Pole start=t->start;
+					S.push(new TOHobj(num-1,tmp,goal,start));
+					S.push(new TOHobj(start,goal));	
+					S.push(new TOHobj(num-1,start,tmp,goal));
+				}
+		delete t;//must delete the tohobj we made
+			
+		}
+	}
+}

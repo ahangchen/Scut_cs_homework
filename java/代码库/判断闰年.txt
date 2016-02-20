@@ -1,0 +1,40 @@
+package bao;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.applet.*;
+public class GraphicsPrime extends Applet implements ActionListener
+{
+	Label prompt;
+	TextField input;
+	public void init()
+	{
+		prompt=new Label("Enter a year");
+		input=new TextField(3);
+		input.addActionListener(this);
+		add(prompt);
+		add(input);
+	}
+	public void paint(Graphics g)
+	{
+		int year;
+		boolean leap;
+		year=Integer.parseInt(input.getText());
+		if(year%100==0)
+			if(year%400==0)leap=true;
+			else leap=false;
+		else
+			if(year%4==0)
+				leap=true;
+			else 
+				leap=false;
+		if(leap)
+			g.drawString("yes",60,80);
+		else 
+			g.drawString("no",60,80);
+	}
+	public void actionPerformed(ActionEvent e)
+	{
+		repaint();
+	}
+}

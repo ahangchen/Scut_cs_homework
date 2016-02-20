@@ -1,0 +1,41 @@
+class A
+{
+	int a;
+	public int getA()
+	{
+		return a;
+	}
+	public void f1()
+	{
+		a++;
+	}
+}
+class B extends A
+{
+	int a;
+	public B(int superA,int suberA)
+	{
+		super.a=superA;//super(superA);
+		this.a=suberA;
+	}
+	public int getA()//¸²¸Ç¸¸Àà·½·¨
+	{
+		return a;
+	}
+	public int getSuperA()
+	{
+		return super.a;
+	}
+	public void f1()
+	{
+		super.f1();
+		a++;
+	}
+}
+public class Main
+{
+	public static void main(String[]args)
+	{
+		
+	}
+}

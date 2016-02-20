@@ -1,0 +1,32 @@
+package bao;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+public class Frame2 extends Frame
+{
+	public Frame2(String string)
+	{
+		super(string);//父类构造方法
+	}
+	public static void main(String args[])
+	{
+		Frame2 f=new Frame2("test");
+		f.setSize(500,600);
+		Dimension S1=Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension f1=f.getSize();
+	    f.setLocation((S1.width-f1.width)/2,(S1.height-f1.height)/2);
+		f.setBackground(Color.WHITE);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

@@ -1,0 +1,47 @@
+import java.net.*;
+import java.io.*;
+public class SimpleServer {
+	public static void main(String[] args) 
+	{
+		try
+		{
+			ServerSocket server=new ServerSocket(8080);
+			System.out.println("监听服务已启动");
+			Socket socket=server.accept();
+			//System.out.println("mark1");
+			InetAddress clientAddress=socket.getInetAddress();
+			System.out.println("Client connected"+"from\n"+clientAddress+"\n");
+			Thread.sleep(3000);
+			PrintWriter out=new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
+			BufferedReader in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			int i;
+			for(i=0;i<3;i++)
+			{
+				out.println("Verifying Server!");
+				out.flush();
+				String s1=in.readLine();//读取客户端用户名
+				String s2=in.readLine();//读取客户端密码
+				if(s1.equals("cwh")&&s2.equals("000"))
+				{
+					out.println("Registration Successful!");//不会输出，但是会传给客户端
+					out.flush();
+					break;
+				}
+				else 
+				{
+					if(i>1)out.println("Illegal User!");
+					else out.println("PassWord Wrong!");//不会输出，但是会传给客户端
+					out.flush();
+				}
+			}
+			
+			//out.flush();
+			out.close();//关闭out,输出缓冲区内容
+			in.close();//关闭in
+			server.close();//关闭socketserver,不再监听
+		}catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
+}

@@ -1,0 +1,36 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+public class Scrollbarevent extends Frame
+{
+	Scrollbar bar=new Scrollbar(Scrollbar.VERTICAL,0,10,0,100);
+	Label lab=new Label();
+	public Scrollbarevent()
+	{
+		bar.addAdjustmentListener(new ScrollListener());
+		lab.setAlignment(Label.CENTER);
+		add("East",bar);
+		add("Center",lab);
+	}
+	public static void main(String[] args) 
+	{
+		Scrollbarevent f=new Scrollbarevent();
+		f.setBounds(100,100,200,200);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class ScrollListener implements AdjustmentListener
+	{
+		public void adjustmentValueChanged(AdjustmentEvent e)
+		{
+			lab.setText(String.valueOf(e.getValue()));
+		}
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

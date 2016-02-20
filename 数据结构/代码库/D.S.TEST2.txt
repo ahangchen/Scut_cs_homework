@@ -1,0 +1,134 @@
+#include<iostream>
+using namespace std;
+void inssort3(int arr[],int n)
+{
+	int*arr2=new int[n];
+	int count=0;
+	for(int i=0;i<n;i++)
+	{
+		int j;
+		for(j=0;(j<i)&&(arr[i]>arr2[j]);j++);
+		for(int k=i;k>j;k--)
+		{
+			arr2[k]=arr2[k-1];
+			count++;
+		}
+		arr2[j]=arr[i];
+	}
+	cout<<count<<endl;
+}
+int main()
+{
+	char kon;
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		kon='\0';
+		int length=0;
+		int arr[200];
+		int i=0;
+		while(kon!='\n')
+		{
+			cin>>arr[i];
+			cin.get(kon);
+			length++;
+			i++;
+		}
+		inssort3(arr,length);
+	}
+}
+
+
+#include<iostream>
+using namespace std;
+void swap(int A[],int a,int b)
+{
+	int temp;
+	temp=A[a];
+	A[a]=A[b];
+	A[b]=temp;
+}
+
+void bubsort(int A[],int n)
+{
+	int num=0;
+	for(int i=0;i<n-1;i++)
+	{
+		num++;
+		int count=0;
+		for(int j=n-1;j>i;j--)
+			if(A[j]<A[j-1])
+			{
+				swap(A,j,j-1);
+				count++;
+			}	
+			if(count==0)break;
+			
+	}
+	cout<<num<<endl;		
+}
+int main()
+{
+	char kon;
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		kon='\0';
+		int length=0;
+		int arr[200];
+		int i=0;
+		while(kon!='\n')
+		{
+			cin>>arr[i];
+			cin.get(kon);
+			length++;
+			i++;
+		}
+		bubsort(arr,length);
+	}
+}
+
+
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+using namespace std;
+int s[500005],temp[500005];
+long long cut;
+void merge_sort(int* A,int left,int right,int* T )
+{
+    if(right-left>1)
+    {
+        int mid=left+(right-left)/2;
+        int p=left,q=mid,i=left;
+        merge_sort(A,left,mid,T);
+        merge_sort(A,mid,right,T);
+        while(p<mid||q<right)
+        {
+            if(q>=right||(p<mid&&A[p]<=A[q]))
+                T[i++]=A[p++];
+            else
+            {
+                T[i++]=A[q++];
+                cut+= (mid-p);
+            }
+        }
+        for(i=left; i<right; i++)
+            A[i]=T[i];
+    }
+}
+int main()
+{
+    int n,i;
+    while(cin>>n&&n)
+    {
+        cut=0;
+        for(i=0; i<n; i++)
+            cin>>s[i];
+        merge_sort(s,0,n,temp);
+        cout<<cut<<endl;
+    }
+    return 0;
+}

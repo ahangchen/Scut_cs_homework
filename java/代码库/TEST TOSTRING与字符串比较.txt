@@ -1,0 +1,48 @@
+package bao;
+class Student
+{
+	String id;
+	String name;
+	String sex;
+	int age;
+	public Student(){}
+	public Student(String id,String name,String sex,int age)
+	{
+		this.id=id;
+		this.name=name;
+		this.sex=sex;
+		this.age=age;
+	}
+	public String toString()
+	{
+	return"id="+id+"\tname="+name+"\tsex="+sex+",\tage="+age;	
+	}
+}
+public class TestToString
+{
+	public static void main(String[]args)
+	{
+		Student stud1=new Student("95001","zhangsan","male",20);
+		System.out.println(stud1);
+		String s1=new String("same");
+		String s2=new String("same");
+		String s3="same";
+		String s4="same";
+		System.out.print(s1==s2);
+		System.out.print("\n");
+		System.out.print(s1.equals(s2));
+		System.out.print("\n");
+		System.out.print(s1==s3);
+		System.out.print("\n");
+		System.out.print(s1.equals(s3));
+		System.out.print("\n");
+		System.out.print(s3==s4);
+		System.out.print("\n");
+		System.out.print(s3.equals(s4));
+		System.out.print("\n");
+		System.out.print(s3==s3);
+		System.out.print("\n");
+		System.out.print(s3.equals(s3));
+		System.out.print("\n");
+	}
+}

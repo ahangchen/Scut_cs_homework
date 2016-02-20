@@ -1,0 +1,43 @@
+
+template<typename Key,typename E>
+class TTNode
+{
+	E lval;
+	Key lkey;
+	E rval;
+	Key rkey;
+	TTNode*left;
+	TTNode*right;
+	TTNode*center;
+	TTNode()
+	{
+		center=left=right=NULL;
+		//lkey=rkey=EMPTYKEY;
+	}
+	TTNode(Key lk,E lv,Key rk,E rv,TTNode<Key,E>*pl,TTNode<Key,E>*p2,TTNode<Key,E>*p3)
+	{
+		lkey=lk;
+		rkey=rk;
+		lval=lv;
+		rval=rv;
+		left=p1;
+		center=p2;
+		right=p3;
+	}
+	~TTNode(){}
+	bool isLeaf(){}
+	TTNode<Key,E>*add(TTNode<Key,E>*it);
+};
+template<typename Key,typename E>
+E TTTree<Key,E>::findhelp(TTNode<Key,E>*root,Key k)const
+{
+	if(root==NULL)return NULL;
+	if(k==root->lkey)return root->lval;
+	if(k==root->rkey)return root->rval;
+	if(k<root->lkey)return findhelp(root->left,k);
+	else if(root->rkey==EMPTYKEY)
+		return findhelp(root->center,k);
+	else if(k<root->rkey)
+		return findhelp(root->center,k);
+	else return findhelp(root->right,k);
+}

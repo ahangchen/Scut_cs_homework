@@ -1,0 +1,28 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		char ch;
+		FileInputStream fin=new FileInputStream("e:\\chidou.txt");
+		System.out.println(fin.markSupported());
+		BufferedInputStream finbuf=new BufferedInputStream(fin);//»º³åÁ÷°ü×°
+		System.out.println(finbuf.markSupported());
+		finbuf.mark(10);
+		int i=0,j=0;
+		while((ch=(char)finbuf.read())!=-1&&j<2)
+		{
+			System.out.print(ch);
+			i++;
+			if(i==7)
+			{
+				i=0;
+				finbuf.reset();
+				j++;
+			}
+		}
+		finbuf.close();
+		fin.close();
+	}
+}

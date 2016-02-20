@@ -1,0 +1,24 @@
+package bao;
+import java.sql.*;
+//以下代码演示如何装在JDBC驱动、连接数据库、查询学生表的过程。使用了JDBC-ODBC驱动，即
+//sun.jdbc.odbc.JdbcOdbcDriver，这是JDK自带的JDBC驱动程序，该驱动建立在ODBC基础上，
+//因此需要建立一个ODBC数据源school，在windows操作系统下的控制面板中创建
+public class JDBCDemo 
+{
+	public static void main(String[] args)throws Exception
+	{
+		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+		Connection con=DriverManager.getConnection("jdbc:odbc:school");
+		Statement st=con.createStatement();
+		ResultSet rs=st.executeQuery("select*from student");
+		while(rs.next())
+		{
+			System.out.print(rs.getString(1)+",");
+			System.out.print(rs.getString(2)+",");
+			System.out.print(rs.getString(3)+",");
+			System.out.print(rs.getString(4));
+			System.out.println();
+		}
+	}
+
+}

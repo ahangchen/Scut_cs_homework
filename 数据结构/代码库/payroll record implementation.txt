@@ -1,0 +1,39 @@
+//a simple payroll entry with id, name, address fields
+class Payroll
+{
+private:
+	int ID;
+	string name;
+	string address;
+public:
+	//constructor
+	Payroll(int inID,string inname,string inaddr)
+	{
+		ID=inID;
+		name=inname;
+		address=inaddr;	
+	}
+	~Payroll(){}//destructor
+	//local data member access functions
+	int getID(){return ID;}
+	string getnaem(){return name;}
+	string getaddr(){return address;}
+};
+int main()
+{
+	//iddict organizes payroll records by id
+	UALdict<int,Payroll*>IDdict;
+	//namedict organizes payroll records
+	UALdict<string,Payroll*>namedict;
+	Payroll*foo1,*foo2,*findfool,*findfoo2;
+	foo1=new Payroll(5,"joe","anytown");
+	foo2=new Payroll(10,"john","mytown");
+	IDdict.insert(foo1->getID(),foo1);
+	IDdict.insert(foo2->getID(),foo2);
+	namedict.insert(foo1->getname,foo1);
+	namedict.insert(foo2->getname,foo2);
+	
+	findfoo1=IDdict.find(5);
+	if(findfoo1!=NULL)cout<<findfoo2;
+	else cout<<"NULL";
+}

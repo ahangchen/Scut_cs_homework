@@ -1,0 +1,232 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int i,n;
+	char *b=new char[2000];
+	int a;
+	cin>>a;
+	while(cin>>b)
+	{
+		n=strlen(b);
+		for(i=0;i<n;i++)
+		cout<<b[n-i-1];
+		cout<<endl;
+	}
+	return 0;
+}
+
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+void check(char*str)
+{
+	int n=0;
+	for(int i=0;i<strlen(str);i++)
+	{
+		if(str[i]=='(')n++;
+		else 
+		{
+			if(n>0)n--;
+			else 
+			{
+				cout<<"FALSE"<<endl;
+				return;
+			}
+		}
+	}
+	if(n!=0)cout<<"FALSE"<<endl;
+	else cout<<"TRUE"<<endl;
+}
+int main()
+{
+	char str[2000];
+	int x;
+	cin>>x;
+	while(cin>>str)check(str);
+}
+
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+class lib
+{
+public:
+	lib*next;
+	char*price;
+	char*name;
+	char*author;
+};
+int main()
+{
+	bool sign;
+	int count;
+	char x[10];
+	int a,b,c,d;
+	int i=0;
+	char str[200];
+	char*name;
+	char*author;
+	char*price;
+	char*com;
+	lib*head=new lib;
+	lib*tail=new lib;
+	head->name=head->author=head->price="";
+	head->next=tail;
+	tail->name=tail->author=tail->price="";
+	tail->next=NULL;
+	cin.getline(x,10,'\n');
+	while(cin.getline(str,150,'\n'))
+	{
+		count=0;
+		sign=true;
+		a=0,b=0,c=0,d=0;
+		for(i=0;str[i]!='(';i++)
+			a++;
+		com=new char[a];
+		for(i=0;i<a;i++)
+			com[i]=str[i];
+		com[a-1]='\0';		
+		//cout<<com<<endl;
+		switch(a)
+		{
+		case 4:
+			{
+				for(;str[i]!=')';i++)
+					b++;
+				i++;
+				for(;str[i]!=')';i++)
+					c++;
+				c--;
+				i++;
+				for(;str[i]!=')';i++)
+					d++;
+				d--;
+				//cout<<a<<" "<<b<<" "<<c<<" "<<d<<endl;
+				name=new char[b];
+				author=new char[c];
+				price=new char[d];
+				//
+				for(i=0;i<b-1;i++)
+					name[i]=str[i+a+1];
+				name[b-1]='\0';
+				for(i=0;i<c-1;i++)
+					author[i]=str[a+b+3+i];
+				author[c-1]='\0';
+				for(i=0;i<d-1;i++)
+					price[i]=str[i+a+b+c+5];
+				price[d-1]='\0';
+				//
+				//cout<<com<<" "<<name<<" "<<author<<" "<<price<<endl;
+				lib*p;
+				p=head;
+				lib*q=new lib;
+				q->name=name;
+				q->author=author;
+				q->price=price;
+				while(p->next!=NULL)
+				{
+					if(!strcmp(p->name,name)&&!strcmp(p->author,author))
+					{
+						sign=false;
+						p=p->next;
+						break;
+					}
+					else
+					{
+						p=p->next;
+					}					
+				}
+				if(sign==true)
+				{
+					cout<<"SUCCESS"<<endl;
+					q->next=head->next;
+					head->next=q;
+				}
+				else cout<<"FAIL"<<endl;
+				break;
+			}
+		case 5:
+			{
+				for(;str[i]!=')';i++)
+					b++;
+				//
+				name=new char[b];
+				for(i=0;i<b-1;i++)
+					name[i]=str[i+a+1];
+				name[b-1]='\0';
+				//
+				//cout<<com<<" "<<name<<endl;
+				lib*p;
+				p=head;
+				while(p->next!=NULL)
+				{
+					if(!strcmp(p->name,name))
+					{
+						count++;
+						p=p->next;
+					}
+					else
+					{
+						p=p->next;
+					}					
+				}
+				cout<<count<<endl;
+				break;
+			}
+		case 7:
+			{
+				sign=false;
+				for(;str[i]!=')';i++)
+					b++;
+				i++;
+				for(;str[i]!=')';i++)
+					c++;
+				c--;
+				i++;
+				//
+				name=new char[b];
+				author=new char[c];
+				for(i=0;i<b-1;i++)
+					name[i]=str[i+a+1];
+				name[b-1]='\0';
+				for(i=0;i<c-1;i++)
+					author[i]=str[a+b+3+i];
+				author[c-1]='\0';
+				
+				//cout<<com<<" "<<name<<" "<<author<<endl;
+				lib*p;
+				lib*q=new lib;
+				p=head;
+				q=head->next;
+				while(q->next!=NULL)
+				{
+					if(!strcmp(q->name,name)&&!strcmp(q->author,author))
+					{
+						sign=true;
+						break;
+					}
+					else
+					{
+						p=p->next;
+						q=q->next;
+					}					
+				}
+				if(sign==true)
+				{
+					cout<<"SUCCESS"<<endl;
+					p->next=q->next;
+					delete q;
+				}
+				else cout<<"FAIL"<<endl;
+				break;
+			}
+		}	
+	}	
+	delete head;
+	delete tail;
+	  return 0;
+}

@@ -1,0 +1,202 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+
+import javax.swing.*;
+import java.util.*;
+abstract class Shape
+{
+	public abstract void draw(Graphics g);
+}
+class Line extends Shape
+{
+	int x0,y0,x1,y1;
+	public Line()
+	{
+		this(0,0,0,0);
+	}
+	public Line(int x0,int y0,int x1,int y1)
+	{
+		this.x0=x0;
+		this.y0=y0;
+		this.x1=x1;
+		this.y1=y1;
+	}
+	public void draw(Graphics g)
+	{
+		g.drawLine(x0, y0, x1, y1);
+	}
+}
+class Rectangle extends Shape
+{
+	int left,top,width,height;
+	public Rectangle()
+	{
+		this(0,0,0,0);
+	}
+	public Rectangle(int l,int t,int w,int h)
+	{
+		left=l;
+		top=t;
+		width=w;
+		height=h;
+	}
+	public void draw(Graphics g)
+	{
+		g.drawRect(left,top, width, height);
+	}
+}
+class Circle extends Shape
+{
+	int left,top,width,height;
+	public Circle()
+	{
+		this(0,0,0,0);
+	}
+	public Circle(int l,int t,int w,int h)
+	{
+		left=l;
+		top=t;
+		width=w;
+		height=h;
+	}
+	public void draw(Graphics g)
+	{
+		g.drawOval(left, top, width, height);
+	}
+}
+public class Simpletuxing extends JFrame implements ItemListener
+{
+	Container contentPane=this.getContentPane();
+	JToolBar jtb=new JToolBar();
+	JButton jbnew=new JButton();
+	JButton jbsave=new JButton();
+	JButton jbopen=new JButton();
+	JToggleButton jbline=new JToggleButton();
+	JToggleButton jbrectangle=new JToggleButton();
+	JToggleButton jbcircle=new JToggleButton();
+	JLabel status=new JLabel("选择状态");
+	ImageIcon icon1=new ImageIcon("new.gif");
+	ImageIcon icon2=new ImageIcon("open.gif");
+	ImageIcon icon3=new ImageIcon("save.gif");
+	ImageIcon icon4=new ImageIcon("line.gif");
+	ImageIcon icon5=new ImageIcon("rectangle.gif");
+	ImageIcon icon6=new ImageIcon("circle.gif");
+	MyCanvas canva=new MyCanvas();
+	JPanel panel=new JPanel(new BorderLayout());
+	ButtonGroup group=new ButtonGroup();
+	public Simpletuxing()
+	{
+		setTitle("简单图形系统");
+		jbnew.setIcon(icon1);
+		jbopen.setIcon(icon2);
+		jbsave.setIcon(icon3);
+		jbline.setIcon(icon4);
+		jbrectangle.setIcon(icon5);
+		jbrectangle.setIcon(icon6);
+		group.add(jbline);
+		group.add(jbrectangle);
+		group.add(jbcircle);
+		jbline.addItemListener(this);
+		jbrectangle.addItemListener(this);
+		jbcircle.addItemListener(this);
+		jtb.add(jbnew);
+		jtb.add(jbopen);
+		jtb.add(jbsave);
+		jtb.addSeparator();
+		jtb.add(jbline);
+		jtb.add(jbrectangle);
+		jtb.add(jbcircle);
+		contentPane.setLayout(new BorderLayout());
+		jtb.setBorder(BorderFactory.createLoweredBevelBorder());
+		panel.setBorder(BorderFactory.createLoweredBevelBorder());
+		panel.add(canva);
+		status.setBorder(BorderFactory.createLoweredBevelBorder());
+		contentPane.add("North",jtb);
+		contentPane.add("Center",panel);
+		contentPane.add("South",status);
+	}
+	public static void main(String args[])
+	{
+		Simpletuxing f=new Simpletuxing();
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setResizable(false);
+		f.pack();
+		f.setBounds(100,100,300,200);
+		f.setVisible(true);
+	}
+	public void itemStateChanged(ItemEvent e)
+	{
+		if(e.getSource().equals(jbline))
+		{
+			canva.status=MyCanvas.DRAW_LINE;
+			status.setText("画直线");
+		}
+		else if(e.getSource().equals(jbrectangle))
+		{
+			canva.status=MyCanvas.DRAW_RECTANGLE;
+			status.setText("画矩形");
+		}
+		else if(e.getSource().equals(jbcircle))
+		{
+			canva.status=MyCanvas.DRAW_CIRCLE;
+			status.setText("画圆");
+		}
+	}
+}
+class MyCanvas extends Canvas implements MouseListener,MouseMotionListener
+{
+	Vector graphics=new Vector();
+	public final static int NO_DRAW=-1;
+	public final static int DRAW_LINE=0;
+	public final static int DRAW_CIRCLE=2;
+	public final static int DRAW_RECTANGLE=1;
+	int status=NO_DRAW;
+	int x0,y0,x1,y1;
+	public MyCanvas()
+	{
+		this.setBackground(Color.white);
+		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
+	}
+	public void mouseClicked(MouseEvent e)
+	{}
+	public void mousePressed(MouseEvent e)
+	{
+		x0=e.getX();
+		y0=e.getY();
+	}
+	public void mouseReleased(MouseEvent e)
+	{
+		switch(status)
+		{
+		case 0:graphics.add(new Line(x0,y0,x1,y1));break;
+		case 1:graphics.add(new Rectangle(x0,y0,x1-x0,y1-y0));break;
+		case 2:graphics.add(new Circle(x0,y0,x1-x0,y1-y0));break;
+		}
+		repaint();
+	}
+	public void mouseEntered(MouseEvent e)
+	{}
+	public void mouseExited(MouseEvent e)
+	{}
+	public void mouseDragged(MouseEvent e)
+	{
+		x1=e.getX();
+		y1=e.getY();
+		repaint();
+	}
+	public void mouseMoved(MouseEvent e)
+	{}
+	public void paint(Graphics g)
+	{
+		for(int i=0;i<graphics.size();i++)
+			((Shape)graphics.get(i)).draw(g);
+		switch(status)
+		{
+		case 0:g.drawLine(x0, y0, x1, y1);break;
+		case 1:g.drawRect(x0, y0, x1-x0, y1-y0);break;
+		case 2:g.drawOval(x0, y0, x1-x0, y1-y0);break;
+		}		
+	}	
+}

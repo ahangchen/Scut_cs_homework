@@ -1,0 +1,127 @@
+package bao;
+import java.io.*;
+import java.net.*;
+import java.util.*;
+public class ChatServer implements Runnable
+{
+	//定义常数
+	public final static int DEFAULT_PORT=8080;//默认端口
+	public final static int DEFAULT_MAX_BACKLOG=5;//默认等待队列长度
+	public final static int DEFAULT_MAX_CONNECTIONS=20;//默认最大连接数
+	//定义属性
+	private int port=DEFAULT_PORT;//端口号
+	private int backlog=DEFAULT_MAX_BACKLOG;//等待队列长度
+	private int numConnections=0;//当前连接数
+	private int maxConnections=DEFAULT_MAX_CONNECTIONS;//最大连接数
+	private Vector connections=null;//保存连接
+	public static void main(String[] args) 
+	{
+		ChatServer chatServer=new ChatServer();//创建聊天服务器
+		chatServer.start();//开始运行
+	}
+	public void start()
+	{
+		connections=new Vector(maxConnections);//创建向量，保存连接
+		Thread t=new Thread(this);//使用本实例创建一个线程
+		t.start();//启动该线程
+	}
+	public void run()//线程的主办法
+	{
+		ServerSocket server=null;
+		Socket socket;
+		try
+		{
+			System.out.println("服务器开始启动……");
+			server=new ServerSocket(port,backlog);//创建ServerSocket
+		}catch(IOException e)
+		{
+			System.out.println(e);
+		}
+		System.out.println("服务器启动成功！端口号为："+port);
+		//使用死循环一直监控客户端的连接请求
+		while(true)
+		{
+			try
+			{
+				socket=server.accept();//监听客户端，等待连接请求
+				synchronized(this)
+				{
+					while(numConnections==maxConnections)wait();//如果达到最大连接数，线程等待
+				}
+				numConnections++;//连接数加1
+				Connection con=new Connection(socket);//创建一个连接对象
+				Thread t=new Thread(con);//每个连接创建一个线程
+				t.start();//启动该线程
+				connections.addElement(con);//连接对象放入vector中，用于发送信息
+			}catch(Exception e)
+			{
+				System.out.println(e);
+			}//end try
+		}//end while
+	}//end run
+public synchronized void connectionClosed(Connection connection)//关闭连接
+{
+	connections.removeElement(connection);//从连接队列中删除
+	numConnections--;//连接数减1
+	notify();//通知等待的线程
+}
+public void sendToAllClients(String msg)//发送信息给所有的客户端
+{
+	for(int i=0;i<connections.size();i++)//遍历集合中的连接
+		((Connection)connections.get(i)).send(msg);
+}
+class Connection implements Runnable//定义内部类实现Runnable接口
+{
+	private Socket socket=null;
+	private OutputStreamWriter out=null;
+	private BufferedReader in=null;
+	public Connection(Socket s)
+	{
+		socket=s;
+	}
+	public void run()//Connection线程的主方法
+	{
+		try
+		{
+			out=new OutputStreamWriter(socket.getOutputStream());//转换成字符流
+			in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			InetAddress address=socket.getInetAddress();//获取客户端地址
+			String hostname=address.getHostName();//获取客户机名
+			String welcome="Connection made from host:"+hostname+"\nEverybody say hello to"+hostname+"\n";//欢迎词
+			sendToAllClients(welcome);//向所有客户端发送欢迎词
+			send("Welcome"+hostname+"\n");//向本连接发送欢迎信息
+			String input=null;//用于接收客户端信息
+			while((input=in.readLine())!=null)//接受该客户端的信息
+			{
+				sendToAllClients(hostname+":"+input+"\n");//发送给所有的客户端
+			}
+		}catch(Exception e)
+		{
+			System.out.println(e);
+		}finally
+		{//关闭所有流
+			try
+			{
+				if(in!=null)in.close();
+				if(out!=null)out.close();
+				socket.close();
+			}catch(Exception e)
+			{
+				System.out.println(e);
+			}
+			connectionClosed(this);//调用属主类的方法关闭连接
+		}
+	}
+	public void send(String msg)//向本连接发送信息
+	{
+		try 
+		{
+			out.write(msg);
+			out.flush();
+		}catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}//end sendMessage
+}//end connection
+}//end ChatServer

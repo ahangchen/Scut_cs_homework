@@ -1,0 +1,78 @@
+package bao;
+class Person
+{
+	int id;
+	Person()
+	{
+		this(0);
+	}
+	Person(int id)
+	{
+		this.id=id;
+	}
+	public String toString()
+	{
+		return String.valueOf(id);
+	}
+}
+public class Main
+{
+	int maxnumber;
+	int personnumber;
+	int currentperson;
+	int currentnumber;
+	Person[]personcircle;
+	public Main(int personnum,int maxnum,int beginperson,int beginnum)
+	{
+		personnumber=personnum;
+		maxnumber=maxnum;
+		currentnumber=beginperson;
+		personcircle=new Person[personnumber];
+		for(int i=0;i<personnumber;i++)
+			personcircle[i]=new Person(i+1);
+	}
+	public void start()
+	{
+		while(personcircle.length>0)
+				{
+					if(currentnumber==maxnumber)
+					{
+						System.out.print(personcircle[currentperson]+",");
+						leave();
+					}
+					else 
+					{
+						nextnumber();
+						nextperson();
+					}
+				}
+	}
+	public void leave()
+	{
+		Person temp[]=new Person[personcircle.length-1];
+		for(int i=0;i<currentperson;i++)
+			temp[i]=personcircle[i];
+		for(int i=currentperson;i<temp.length;i++)
+			temp[i]=personcircle[i+1];
+		personcircle=temp;
+		if(currentperson==personcircle.length)
+			currentperson=0;
+		currentnumber=1;
+	}
+	public void nextnumber()
+	{
+		currentnumber++;
+	}
+	public void nextperson()
+	{
+		if(currentperson==personcircle.length-1)
+			currentperson=0;
+		else 
+			currentperson++;
+	}
+	public static void main(String args[])
+	{
+		Main game=new Main(7,5,0,1);
+		game.start();
+	}
+}

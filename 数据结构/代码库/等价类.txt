@@ -1,0 +1,94 @@
+#include<iostream>
+using namespace std;
+class TreeNode
+{
+	friend class UFSets;
+private:
+	int data;
+	int parent;
+};
+class UFSets
+{
+public:
+	UFSets(int*arr,int n)
+	{
+		size=n;
+		sets=new TreeNode[size];
+		for(int i=0;i<size;i++)
+		{
+			sets[i].parent=-1;
+			sets[i].data=arr[i];
+		}
+	}
+	~UFSets(){delete[]sets;}
+	void Union(int set1,int set2)
+	{
+		sets[set1].parent=sets[set1].parent+sets[set2].parent;
+		sets[set2].parent=set1;
+	}
+	int Find(int d)
+	{
+		int p;
+		if((p=order(d))==1)return -1;
+		if(sets[p].parent<0)return p;
+		else return Find(sets[sets[p].parent].data);
+	}
+	void WeightedUnion(int set1,int set2)
+	{
+		int temp=sets[set1].parent+sets[set2].parent;
+		if(sets[set1].parent<=sets[set2].parent)
+		{
+			sets[set2].parent=set1;
+			sets[set1].parent=temp;
+		}
+		else 
+		{
+			sets[set1].parent=set2;
+			sets[set2].parent=temp;
+		}
+	}
+	int cutloadfind(int d)
+	{
+		int i,j,k;
+		if((j=order(d)==1))return -1;
+		for(i=j;sets[i].parent>=0;i=sets[i].parent);
+		while(i!=sets[i].parent)
+		{
+			k=sets[j].parent;
+			sets[j].parent=i;
+			j=k;
+		}
+		return i;
+	}
+	void print()
+	{
+		for(int i=0;i<size;i++)
+		{
+			cout<<sets[i].data<<endl;
+		}
+	}
+private:
+	TreeNode*sets;
+	int size;
+	int order(int d)
+	{
+		int p=0;
+		while(p<size)
+			if(sets[p].data==d)return p;
+			else p++;
+			return 1;
+	}
+};
+
+int main()
+{
+	int node[]={1,2,3,4,5,6,6,3,7,5};
+	UFSets*s=new UFSets(node,10);
+	s->print();
+	cout<<endl;
+	for(int i=0;i<7;i++)
+	{
+		s->Union(i,i+2);
+	}
+	s->print();
+}

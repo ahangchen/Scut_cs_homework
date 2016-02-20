@@ -1,0 +1,33 @@
+package abc;
+import java.awt.*;
+import java.awt.event.*;
+import java.applet.*;
+public class BasicInOutApplet extends Applet implements ActionListener
+{/**响应动作事件*/
+	Label prompt;//定义标签提示
+	TextField input1;//文本框
+	TextField input2;
+	public void init()//初始化，自动执行
+	{
+		prompt=new Label("ENTER TWO NUMBER");//创建标签
+		input1=new TextField(3);//创建文本框
+		input2=new TextField(3);
+		add(prompt);//将标签加入图形界面
+		add(input1);//将文本框加入界面
+		add(input2);
+		input1.addActionListener(this);//响应文本框中的回车事件
+		input2.addActionListener(this);
+	}
+	public void paint(Graphics g)
+	{
+		int a,b,c;
+		a=Integer.parseInt(input1.getText());//获取文本框中字符串并转为整形
+		b=Integer.parseInt(input2.getText());
+		c=a+b;
+		g.drawString(a+"+"+b+"="+c,60,80);//将结果输出到图形界面
+	}
+	public void actionPerformed(ActionEvent e)
+	{//发生回车事件，执行
+		if(e.getSource()==input2)repaint();//重绘
+	}
+}

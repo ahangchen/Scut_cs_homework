@@ -1,0 +1,49 @@
+package bao;
+interface CanSpeak
+{
+	public void speak();
+}
+class Person implements CanSpeak
+{
+	public void speak()
+	{
+		System.out.println("Hello");
+	}
+}
+class Robot implements CanSpeak
+{
+	public void speak()
+	{
+		System.out.println("Hello,I'm a robot");
+	}
+}
+class Dog implements CanSpeak
+{
+	public void speak()
+	{
+		System.out.println("Wang");
+	}
+}
+class Car implements CanSpeak
+{
+	public void speak()
+	{
+		System.out.println("bibi");
+	}
+}
+public class Allspeak 
+{
+	public static void allSpeak(CanSpeak[]things)
+	{
+		for(int i=0;i<things.length;i++)things[i].speak();
+	}
+	public static void main(String[]args)
+	{
+		CanSpeak[]things=new CanSpeak[4];
+		things[0]=new Person();
+		things[1]=new Dog();
+		things[2]=new Robot();
+		things[3]=new Car();
+		allSpeak(things);
+	}
+}

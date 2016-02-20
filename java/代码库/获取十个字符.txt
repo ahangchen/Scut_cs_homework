@@ -1,0 +1,18 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		byte[]b=new byte[10];
+		try
+		{
+			System.in.read(b);
+		}catch(IOException e)
+		{
+			System.out.println(e);
+		}
+		String s=new String(b);
+		System.out.println(s);
+	}
+}

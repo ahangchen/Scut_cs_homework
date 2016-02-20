@@ -1,0 +1,33 @@
+class Student
+{
+	String id;
+	String name;
+	public String getid()
+	{
+		return id;
+	}
+}
+class PartialStudent extends Student
+{
+	String weekdayhasclass="1234567";
+	public String getid()
+	{
+		return "p"+id;
+	}
+	public String getweekdayhasclass()
+	{
+		return weekdayhasclass;
+	}
+}
+public class Main
+{
+	public static void main(String[]args)
+	{
+		Student stud1=new Student();
+		PartialStudent partialStud1=new PartialStudent();
+		Student stud2=new PartialStudent();
+		stud2.id="95001";
+		System.out.println(stud2.getid());//多态性，父类对象只能调用同名的子类方法，不能调用子类自己的方法
+		System.out.println(partialStud1.getweekdayhasclass());//子类对象调用子类方法
+	}
+}

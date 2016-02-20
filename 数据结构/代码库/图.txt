@@ -1,0 +1,200 @@
+class Graph
+{
+private:
+	void operater=(const Graph&){}
+	Graph(const Graph&){}
+public:
+	Graph(){}
+	virtual ~Graph(){}
+	virtual void Init(int n)=0;
+	virtual int n()=0;
+	virtual int e()=0;
+	virtual int first(int v)=0;
+	virtual int next(int v,int w)=0;
+	virtual void setEdge(int v1,int v2,int wgt)=0;
+	virtual void delEdge(int v1,int v2)=0;
+	virtual bool isEdge(int i,int j)=0;
+	virtual int weight(int v1,int v2)=0;
+	virutal int getMark(int v)=0;
+	virtual void setMark(int v,int val=0);
+};
+class Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+	int vertex(){return vert;}
+	int weight(){return wt;}
+};
+class Grphm:public Graph
+{
+private:
+	int numVertex,numEdge;//
+	int **martrix;//pointer to adjavency matrix
+	int *mark;//pointer to mark array
+public:
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]martrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int**)new int*[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int[numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int n(){return numVertex;}
+	int e(){return numEdge;}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int wt)
+	{
+		if(wt<=0)cout<<"illegal weight value"<<endl;
+		if(matrix[v1][v2]==0)numEdge++;
+		matrix[v1][v2]=wt;
+	}
+	void delEdge(int v1,int v2)
+	{
+		if(matrix[v1][v2]!=0)numEdge--;
+		matrix[v1][v2]=0;
+	}
+	bool isEdge(int i,int j)
+	{
+		return matrix[i][j]!=0;
+	}
+	int weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+class List
+{
+	int data;
+	List*next;
+};
+class LList
+{
+	int data;
+	LList*next;
+};
+class Graphl:public Graph
+{
+private:
+	List**vertex;
+	int numVertex,numEdge;
+	int *mark;
+public:
+	Graphl(int numVertex){Init(numVertex);}
+	~Graph1()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]vertex[i];
+		delete[]vertex;
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)mark[i]=-1;
+		vertex=(List**)new List*[numVertex];
+		for(i=0;i<numVertex;i++)vertex[i]=new LList();
+	}
+	int n(){return numVertex;}
+	int e(){return return numEdge;}
+	int first(int v)
+	{
+		if(vertex[v]->length()==0)return numVertex;
+		vertex[v]->moveToStart();
+		Edge it=vertex[v]->getValue();
+		return it.vertex();
+	}
+	int next(int v,int w)
+	{
+		Edge it;
+		if(isEdge(v,w))
+		{
+			if((vertex[v]->currPos()+1)<vertex[v]->length())
+			{
+				vertex[v]->next();
+				it=vertex[v]->getValue();
+				return it.vertex();
+			}
+		return n();
+		}
+	}
+	void setEdge(int i,int j,int weight)
+	{
+		if(weight<=0)cout<<"may not set weight to 0"<<endl;
+		Edge currEdge(j,weight);
+		if(isEdge(i,j))
+		{
+			vertex[i]->remove();
+			vertex[i]->insert(currEdge);
+		}
+		else 
+		{
+			numEdge++;
+			for(vertex[i]->moveToStart();vertex[i]->currPos()<vertex[i]->length;vertex[i]->next())
+			{
+				Edge temp=vertex[i]->getValue();
+				if(temp.vertex()>j)break;
+			}
+			vertex[i]->insert(currEdge);
+		}
+	}
+	void delEdge(int i,int j)
+	{
+		if(isEdge(i,j))
+		{
+			vertex[i]->remove();
+			numEdge--;
+		}
+	}
+	bool isEdge(int i,int j)
+	{
+		Edge it;
+		for(vertex[i]->moveToStart();vertex[i]->currPos()<vertex[i]->length;vertex[i]->next())
+		{
+			Edge temp=vertex[i]->getValue();
+			if(temp.vertex()==j)return true;
+		}
+		return false;
+	}
+	int weight(int i,int j)
+	{
+		Edge curr;
+		if(isEdge(i,j))
+		{
+			curr=vertex[i]->getValue();
+			return curr.weight();
+		}
+		else return 0;
+	}
+	int getMark(int v)
+	{return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};

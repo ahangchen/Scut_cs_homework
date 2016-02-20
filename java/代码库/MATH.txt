@@ -1,0 +1,17 @@
+package b2;
+
+public class Shuxue 
+{
+	public static void main(String args[])
+	{
+		double r=2;
+		double area=Math.PI*Math.pow(r,2);
+		System.out.println(Math.toDegrees(Math.PI));
+		System.out.println(Math.toRadians(180));
+		System.out.println(1/Math.random());
+		System.out.println(Math.exp(2));
+		System.out.println(Math.ceil(2.1));
+		System.out.println(Math.floor(2.3));
+		System.out.println(Math.max(Math.sqrt(2),1.4));
+	}
+}

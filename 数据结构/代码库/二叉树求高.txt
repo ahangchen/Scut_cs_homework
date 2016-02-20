@@ -1,0 +1,62 @@
+#include<iostream>
+using namespace std;
+int max(int a,int b)
+{return a>b?a:b;}
+class BstNode
+{
+public:
+	int data;
+	BstNode*left;
+	BstNode*right;
+	BstNode(){left=right=NULL;}
+	BstNode(int data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+	~BstNode(){}
+	void setleft(BstNode*b){left=b;}
+	void setright(BstNode*b){right=b;}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	BstNode*inserthelp(BstNode*root,int item)
+	{
+		if(root==NULL)return new BstNode(item,NULL,NULL);
+		if(item<root->data)root->setleft(inserthelp(root->left,item));
+		else root->setright(inserthelp(root->right,item));
+		return root;
+	}
+	BST(){root=NULL;nodecount=0;}
+	void insert(const int item)
+	{
+		root=inserthelp(root,item);
+		nodecount++;
+	}
+	int height(BstNode*root)
+	{
+		if(root==NULL)return 0;
+		else return 1+max(height(root->left),height(root->right));
+	}
+};
+int main()
+{
+	int elem;
+	char kon;
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		kon='\0';
+		BST*tree=new BST;
+		while(kon!='\n')
+		{
+			cin>>elem;
+			cin.get(kon);
+			tree->insert(elem);
+		}
+		cout<<tree->height(tree->root)<<endl;
+	}
+}

@@ -1,0 +1,47 @@
+//node implementation with simple inheritaance
+class VarBinNode
+{
+//node abstract base class 
+public:
+	virtual ~VarBinNode(){}
+	virtual bool isLeaf()=0;//subclasses must implement
+};
+
+class LeafNode:public VarBinNode
+{
+//leaf node
+private:
+	Operand var;//operand value
+public:
+	LeafNode(const Operand&val){var=val;}//constructor
+	bool isLeaf(){return true;}//version for LeafNode
+	Operand value(){return var;}
+};
+class IntlNode:public VarBinNode
+{
+//internal Node
+private:
+	VarBinNode*left;//left child
+	VarBinNode*right;//right child
+	Operator opx;//Operator value
+public: 
+	IntlNode(const Operator&op,VarBinNode*l,VarBinNode*r)
+	{opx=op;left=l;right=r;}//constructor
+	bool isLeaf(){return false;}//version for Intlnode
+	VarBinNode*leftchild(){return left;}//left child
+	VarBinNode*rightchild(){return right;}//right child
+	Operator value(){return opx;}//value
+};
+
+void traverse(VarBinNode*root)
+{
+//preorder traversal
+if(root==NULL)return;//nothing to visit
+if(root->isLeaf())cout<<"Leaf:"<<((LeafNode*)root)->value()<<endl;
+else
+{
+	cout<<"Internal:"<<((IntlNode*)root)->value()<<endl;
+	traverse(((IntlNode*)root)->leftchild());
+	traverse(((IntlNode*)root)->rightchild());
+}
+}

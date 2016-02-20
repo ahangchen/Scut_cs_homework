@@ -1,0 +1,26 @@
+package bao;
+import java.util.*;
+public class Name
+{
+	public static void main(String[] args)
+	{
+		Scanner cin=new Scanner(System.in);
+		String getword;
+		getword=cin.next();
+		StringBuffer s1=new StringBuffer(getword);
+		Vector a=new Vector(10);
+		int i;
+		for(i=0;i<s1.length();i++)
+			a.insertElementAt(s1.charAt(s1.length()-i-1),i);
+		System.out.println(a);
+
+		int m=0;	
+		for(i=0;i<a.size();i++)
+		{
+			s1.setCharAt(i,(char)a. elementAt(i));
+			m+=(int)s1.charAt(i)*10*(i+1);
+		}	
+		System.out.println(s1);	
+		System.out.println(m);
+	}
+}

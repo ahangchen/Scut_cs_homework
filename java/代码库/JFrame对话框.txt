@@ -1,0 +1,50 @@
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
+import java.io.*;
+class MyFilter extends  javax.swing.filechooser.FileFilter
+{
+	public boolean accept(File f)
+	{
+		if(f.getName().endsWith(".doc"))
+			return true;
+		return false;
+	}
+	public String getDescription()
+	{
+		return "*.doc";
+	}
+}
+public class Displaydlg extends Frame
+{
+	public Displaydlg(String title)
+	{
+		//super(title);
+	}
+	public static void main(String[] args) 
+	{
+		Displaydlg owner=new Displaydlg("OWNER FORM");
+		owner.setSize(600,800);
+		owner.addWindowListener(owner.new Mywindowadapter());
+		Dimension S1=Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension f1=owner.getSize();
+	    owner.setLocation((S1.width-f1.width)/2,(S1.height-f1.height)/2);
+	   JFileChooser fd=new JFileChooser();
+	   File defaultDir=new File("d:\\");
+	   fd.setCurrentDirectory(defaultDir);
+	   fd.setFileFilter(new MyFilter());
+	    Dimension fdSize=fd.getPreferredSize();
+	    int l=(int)(S1.getWidth()-fdSize.width)/2;
+	    int t=(int)(S1.getHeight()-fdSize.height)/2;
+	    fd.setLocation(l, t);
+	    owner.setVisible(true);
+	    fd.showDialog(owner,"open file");
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

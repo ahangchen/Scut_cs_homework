@@ -1,0 +1,186 @@
+#include<iostream>
+using namespace std;
+class KruskElem
+{
+public:
+	int from,to,distance;
+	KruskElem(){from=-1;to=-1;distance=-1;}
+	KruskElem(int f,int t,int d){from=f;to=t;distance=d;}
+	static bool prior(KruskElem p,KruskElem q)//决定了这是一个最大堆还是最小堆
+	{
+		if(p.distance>=q.distance)return true;
+		else return false;
+	}
+};
+
+class heap
+{
+private:
+	KruskElem*arrayheap;//pointer to the heap array
+	int maxsize;
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&KruskElem::prior(arrayheap[rc],arrayheap[j]))
+				j=rc;
+			if(KruskElem::prior(arrayheap[pos],arrayheap[j]))return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(KruskElem*h,int num,int max)
+	{arrayheap=h;n=num;maxsize=max;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		KruskElem temp=arrayheap[pos];
+		arrayheap[pos]=arrayheap[j];
+		arrayheap[j]=temp;//
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(KruskElem it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;//这样没问题么？
+		while((curr!=0)&&KruskElem::prior(arrayheap[curr],arrayheap[parent(curr)]))
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	KruskElem removefirst()
+	{
+		swap(0,--n);
+		if(n!=0)siftdown(0);
+		return arrayheap[n];
+	}
+	KruskElem remove(int pos)
+	{
+		if(pos==(n-1))n--;
+		else 
+		{
+			swap(pos,--n);
+			while((pos!=0)&&(KruskElem::prior(arrayheap[pos],arrayheap[parent(pos)])))
+			{
+				swap(pos,parent(pos));
+				pos=parent(pos);
+			}
+			if(n!=0)siftdown(pos);
+		}
+		return arrayheap[n];
+	}
+	void  inorderprinthelp(int pos,int level)
+	{
+		if(pos<0||pos>=n)return;
+		inorderprinthelp(leftchild(pos),level+1);
+		for(int i=0;i<level;i++)cout<<"     ";
+		cout<<arrayheap[pos].distance<<endl;
+		inorderprinthelp(rightchild(pos),level+1);
+	}
+	void print()
+	{
+		if(n<=0)cout<<"empty"<<endl;
+		else inorderprinthelp(0,0);//第一个0表示树根，第二个零表示层数
+	}
+};
+class Graph
+{
+private:
+	void operator=(const Graph&){}
+	Graph(const Graph&){}
+public:
+	Graph(){}
+	virtual ~Graph(){}
+	virtual void Init(int n)=0;
+	virtual int n()=0;
+	virtual int e()=0;
+	virtual int first(int v)=0;
+	virtual int next(int v,int w)=0;
+	virtual void setEdge(int v1,int v2,int wgt)=0;
+	virtual void delEdge(int v1,int v2)=0;
+	virtual bool isEdge(int i,int j)=0;
+	virtual int weight(int v1,int v2)=0;
+	virtual int getMark(int v)=0;
+	virtual void setMark(int v,int val=0);
+};
+class Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+	int vertex(){return vert;}
+	int weight(){return wt;}
+};
+class ParPtrTree
+{
+	private:
+		int * array;
+		int size;
+    public:
+		ParPtrTree(int);
+		~ParPtrTree(){delete[] array; }
+public:	
+	int ParPtrTree::FIND(int curr) const 
+	{
+      if (array[curr] ==-1) return curr; 
+      return array[curr]=FIND(array[curr]);
+}
+
+	bool ParPtrTree::differ(int a, int b) 
+	{
+		int root1 = FIND(a);   // Find root for a
+		int root2 = FIND(b);   // Find root for b
+		return root1 != root2; // Compare roots
+	}
+	void ParPtrTree ::UNION(int a, int b) 
+	{
+		int root1 = FIND(a); // Find root for a
+		int root2 = FIND(b); // Find root for b
+		if (root1 != root2) array[root2] = root1;
+}
+
+};
+
+void Kruskel(Graph*G)
+{
+	ParPtrTree A(G->n());
+	KruskElem*E=new KruskElem[G->e()];
+	int i;
+	int edgecnt=0;
+	for(i=0;i<G->n();i++)
+		for(int w=G->first(i);w<G->n();w=G->next(i,w))
+		{
+			E[edgecnt].distance=G->weight(i,w);
+			E[edgecnt].from=i;
+			E[edgecnt].to=w;
+		}
+	heap H(E,edgecnt,edgecnt);
+	int numMST=G->n();
+	for(i=0;numMST>1;I++)
+	{
+		KruskElem temp;
+		temp=H.removefirst();
+		int v=temp.from;
+		int u=temp.to;
+		if(A.differ(v,u))
+		{
+			A.UNION(v,u);
+			//AddEdgetoMST(temp.from,temp.to);
+			numMST--;
+		}
+	}
+}

@@ -1,0 +1,13 @@
+long fact(int n,Stack<int>&S)
+{
+//compute n!
+//to fit n! in a long variable, require n<=12
+Assert((n>=0)&&(n<12),"Input out of range");
+while(n>1)S.push(n--);//load up the stack
+long result=1;
+while(S.length()>0)
+	{
+		t=S.pop();
+		if(t->op==DOMOVE)
+	}
+}

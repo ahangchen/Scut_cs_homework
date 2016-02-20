@@ -1,0 +1,54 @@
+package bao;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+import java.applet.Applet;
+public class Linghuo extends Applet
+{
+	public void init()
+	{
+		setLayout(new GridBagLayout());
+		GridBagConstraints gbc=new GridBagConstraints();
+		gbc.fill=GridBagConstraints.BOTH;
+		gbc.weightx=1.0;
+		add(new Button("Button1"),gbc);
+		add(new Button("Button2"),gbc);
+		add(new Button("Button3"),gbc);
+		gbc.gridwidth=GridBagConstraints.REMAINDER;//行结束
+		add(new Button("Button4"),gbc);
+		gbc.gridwidth=GridBagConstraints.REMAINDER;//行结束
+		add(new Button("Button5"),gbc);
+		gbc.gridwidth=GridBagConstraints.REMAINDER;//行结束
+		add(new Button("Button6"),gbc);
+		gbc.gridwidth=GridBagConstraints.REMAINDER;//行结束
+		add(new Button("Button7"),gbc);
+		gbc.gridwidth=1;
+		gbc.gridheight=2;
+		gbc.weighty=1.0;
+		add(new Button("Button8"),gbc);
+		gbc.weighty=0.0;//恢复缺省值
+		gbc.gridwidth=GridBagConstraints.REMAINDER;//行结束
+		gbc.gridheight=1;
+		add(new Button("Button9"),gbc);
+		add(new Button("Button10"),gbc);
+		setSize(300,100);
+	}
+	public static void main(String[] args)
+	{
+		Frame f=new Frame("WANGGEBAO");
+		Linghuo test1=new Linghuo();
+		test1.init();
+		f.add(test1);
+		f.pack();
+		f.setVisible(true);
+		//f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}
+

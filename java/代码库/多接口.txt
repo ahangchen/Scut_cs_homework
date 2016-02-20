@@ -1,0 +1,18 @@
+//A接口
+interface A
+{ 
+	public int getA();
+}
+//B接口
+interface B
+{ 
+	public int getB();
+}
+//实现了某个接口必须实现其全部的方法
+public class ImpAB implements A,B
+{
+	public int getA() 
+	{return 0;} 
+	public int getB() 
+	{return 0;}
+}

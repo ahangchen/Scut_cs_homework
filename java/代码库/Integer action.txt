@@ -1,0 +1,43 @@
+package b1;
+
+public class Intaction
+{
+
+	public static void main(String[] args)throws NumberFormatException
+	{
+		int i[]=new int[5];
+		Integer I[]=new Integer[4];
+		String s[]=new String[5];
+		s[0]="123456";
+		i[0]=Integer.parseInt(s[0]);
+		i[1]=Integer.valueOf(s[0]).intValue();
+		i[2]=(new Integer(s[0])).intValue();
+		i[3]=Integer.parseInt(s[0],2);
+		I[0]=new Integer(i[0]);
+		I[1]=new Integer(s[0]);
+		I[2]=Integer.valueOf(s[0]);
+		I[3]=Integer.valueOf(s[0],2);
+		s[1]=Integer.toString(i[0]);
+		s[2]=Integer.toHexString(i[1]);
+		s[3]=Integer.toOctalString(i[2]);
+		s[4]=Integer.toBinaryString(i[3]);
+		byte by1=I[0].byteValue();
+		short sh1=I[0].shortValue();
+		i[4]=I[0].intValue();
+		long l1=I[0].longValue();
+		float f1=I[0].floatValue();
+		double d1=I[0].doubleValue();
+		int j;
+		for(j=0;j<5;j++)
+			System.out.println(i[j]+"\n");
+		for(j=0;j<4;j++)
+			System.out.println(I[j]+"\n");
+		for(j=0;j<5;j++)
+			System.out.println(s[j]+"\n");
+		System.out.print(by1+"\n");
+		System.out.print(sh1+"\n");
+		System.out.print(l1+"\n");
+		System.out.print(f1+"\n");
+		System.out.print(d1+"\n");
+	}
+}

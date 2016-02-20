@@ -1,0 +1,168 @@
+#include<iostream>
+using namespace std;
+struct Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+};
+struct Graphm
+{
+	int numVertex,numEdge;
+	int **matrix;
+	int *mark;
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]matrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int**)new int*[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int[numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int wt)
+	{
+		if(matrix[v1][v2]==0)numEdge++;
+		matrix[v1][v2]=wt;
+	}
+	int weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+struct BstNode
+{
+	int data;
+	BstNode*next;
+	BstNode(){data=0;next=NULL;}
+	BstNode(int dt){data=dt;next=NULL;}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=sz;}
+	~queue(){clear();delete front;}
+	void clear()
+	{
+		while(front->next!=NULL)rear=front;
+		delete rear;
+		rear=front;
+		size=0;
+	}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	int dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			int it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	int frontvalue()
+	{
+		return front->next->data;
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+void tophelp(Graphm*g,int v)
+{
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->numVertex;w=g->next(v,w))
+		if(g->getMark(w)==-1)tophelp(g,w);
+}
+void swap(int*a,int i,int j)
+{
+	int tmp;
+	tmp=a[i];
+	a[i]=a[j];
+	a[j]=tmp;
+}
+void selsort(int a[],int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		int lowindex=i;
+		for(int j=n-1;j>i;j--)
+		{
+			if(a[j]>a[lowindex])lowindex=j;
+		}
+		swap(a,i,lowindex);
+	}
+}
+void topsort(Graphm*g)
+{
+	queue*q=new queue(0);
+	int*Count=new int[g->numVertex];
+	int v,w;
+	for(v=0;v<g->numVertex;v++)
+		Count[v]=0;
+	for(v=0;v<g->numVertex;v++)
+		for(w=g->first(v);w<g->numVertex;w=g->next(v,w))
+			Count[w]++;
+	for(v=0;v<g->numVertex;v++)
+		if(Count[v]==0)q->enqueue(new BstNode(v));
+	selsort(Count,g->numVertex);
+	cout<<Count[0]<<endl;
+}
+int main()
+{
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		int numvert;
+		int numedge;
+		cin>>numvert;
+		cin>>numedge;
+		Graphm*g=new Graphm(numvert);
+		int i;
+		for(i=0;i<numedge;i++)
+		{
+			int from,to;
+			cin>>from>>to;
+			g->setEdge(from-1,to-1,1);
+		}
+		topsort(g);
+	}
+}

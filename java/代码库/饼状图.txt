@@ -1,0 +1,42 @@
+package bao;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.GeneralPath;
+import javax.swing.JFrame;
+public class MyFrame extends JFrame{
+	public MyFrame()
+	{
+		setSize(400,400);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		Graphics2D g2=(Graphics2D)g;
+		g2.setStroke(new BasicStroke(4.0f));
+		g2.setColor(Color.RED);
+		g2.fillArc(100, 100, 250,250, 0, 216);
+		g2.setColor(Color.blue);
+		g2.fillArc(100, 100, 250, 250, 216, 72);
+		g2.setColor(Color.YELLOW);
+		g2.fillArc(100, 100, 250, 250, 288, 36);
+		g2.setColor(Color.GREEN);
+		g2.fillArc(100, 100, 250, 250, 324, 36);
+		g2.setFont(new Font("Yahei",2,24));
+		g2.setColor(Color.BLACK);
+		g2.drawString("A:60%", 150, 200);
+		g2.drawString("B:20%", 150, 300);
+		g2.drawString("C:10%", 250, 300);
+		g2.drawString("D:10%", 300, 270);
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		MyFrame mf1=new MyFrame();
+		mf1.setVisible(true);
+		
+	}
+
+}

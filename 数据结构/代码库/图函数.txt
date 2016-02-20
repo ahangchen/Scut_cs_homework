@@ -1,0 +1,231 @@
+void graphTraverse(Graph*g)
+{
+	int v;
+	for(v=0;v<g->n();v++)g->setMark(v,-1);
+	for(v=0;v<g->n();v++)
+		if(g->getMark(v)==-1)doTraverse(g,v);
+}
+void DFS(Graph*g)
+{
+	int v;
+	for(v=0;v<g->n();v++)g->setMark(v,-1);
+	for(int w=g->first(v);w<g->n();w=g->next(v,w))
+		if(G->getMark(w)==-1)DFS(g,w);
+	//postvisit(g,v);
+}
+void BFS(Graph*g,int start,queue*q)
+{
+	int v,w;
+	q->queue(start);
+	g->setMark(start,1);
+	while(q->length()!=0)
+	{
+		v=q->dequeue();
+		//previsit
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+		{
+			if(g->getMark(w)==-1)
+			{
+				g->setMark(w,-1);
+				q->enqueue(w);
+			}
+		}
+	}
+}
+void topsort(Graph*g)
+{
+	int i;
+	for(i=0;i<g->n();i++)g->setMark(i,-1);
+	for(i=0;i<g->n();i++)
+		if(g->getMark(i)==-1)tophelp(g,i);
+}
+void tophelp(Graph*g,int v)
+{
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->n();w=g->next(v,w))
+		if(g->getMark(w)==-1)tophelp(g,w);
+	printout(v);
+}
+void topsort(Graph*g,queue*q)
+{
+	int Count=new int[g->n()];
+	int v,w
+	for(v=0;v<g->n();v++)Count[v]=0;
+	for(v=0;v<g->n();v++)
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+			Count[w]++;
+	for(v=0;v<g->n();v++)
+		if(Count[v]==0)q->enqueue(v);
+	while(q->length()!=0)
+	{
+		v=q->dequeue();
+		printout(v);
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+		{
+			Count[w]--;
+			if(Count[w]==0)q->enqueue(w);
+		}
+	}
+}
+void Dijkstra(Graph*g,int*D,int s)
+{
+	int i,v,w;
+	for(i=0;i<g->n();i++)
+	{
+		v=minVertex(g,D);
+		if(D[v]==-1)return;
+		g->setMark(v,1);
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+			if(D[w]>(D[v]+g->weight(v,w)))
+				D[w]=D[v]+g->weight(v,w);
+	}
+}
+int minVertex(Graph*g,int*D)
+{
+	int i,v=-1;
+	for(i=0;i<g->n();i++)
+		if(g->getMark(i)==-1){v=i;break;}	
+	for(i++;i<g->n();i++)
+		if((g->getMark(i)==-1)&&(D[i]<D[v]))v=i;
+	return v;	
+}
+class DijkElem
+{
+public:
+	int vertexk,distance;
+	DijkElem(){vertex=-1;distance=-1;}
+	DijkElem(int v,int d){vertex=v;distance=d;}
+};
+class heap
+{};
+void Dijkstra(Graph*G,int*D,int s)
+{
+	int i,v,w;
+	DijkElem E[G->e()];
+	DijkElem temp;
+	temp.distance=0;
+	temp.vertex=s;
+	E[0]=temp;
+	heap H(E,1,G->e());
+	for(i=0;i<G->n();i++)
+	{
+		do
+		{
+			if(H.size()==0)return;
+			temp=H.removefirst();	
+			v=temp.vertex;
+		}while(G->getMark(v)==-1);
+		G->setMark(v,1);
+		if(D[v]==-1)return;
+		for(w=G->first(v);w<G->n();w=G->next(v,w))
+			if(D[w]>(D[v]+G->weight(v,w)))
+			{
+				D[w]=D[v]+G->weight(v,w);
+				temp.distance=D[w];
+				temp.vertex=w;
+				H.insert(temp);
+			}
+	}
+}
+void Prim(Graph*G,int*D,int s)
+{
+	int V[G->n()];
+	int i,w;
+	for(i=0;w<G->n();i++)
+		{
+			int v=minVertex(G,D);
+			G->setMark(v,1);
+			if(v!=s)AddEdgetoMST(V[v],v);
+			if(D[v]==-1)return;
+			for(w=G->first(v);w<G->n();w=G->next(v,w))
+				if(D[w]>G->weight(v,w))
+				{
+					D[w]=G->weight(v,w);
+					V[w]=v;
+				}
+		}
+}
+void Prim(Graph*G,int*D,int s)
+{
+	int v,w,i;
+	int V[G->n()];
+	DijkElem temp;
+	DijkElem E[G->e()];
+	temp.distance=0;
+	temp.vertex=s;
+	E[0]=temp;
+	heap H(E,1,G->e());
+	for(i=0;i<G->n();i++)
+	{
+		do
+		{
+			if(H.size()==0)return;
+			temp=H.removefirst();
+			v=temp.vertex;
+		}while(G->getMark(v)==1);
+		G->setMark(v,1);
+		if(v!=s)AddEdgetoMST(V[v],v);
+		if(D[v]==-1)return;
+		for(w=G->first(v);w<G->n();w=G->next(v,w))
+			{
+				if(D[w]>G->weight(v,w))
+				{
+					D[w]=G->weight(v,w);
+					V[w]=v;
+					temp.distance=D[w];
+					temp.vertex=w;
+					H.insert(temp);
+				}
+			}
+	}
+}
+class KruskElem
+{
+public:
+	int from,to,distance;
+	KruskElem(){from=-1;to=-1;distance=-1;}
+	KruskElem(int f,int t,int d){from=f;to=t;distance=d;}
+};
+void Kruskel(Graph*G)
+{
+	ParPtrTree A(G->n());
+	KruskElem E[G->E()];
+	int i;
+	int edgecnt=0;
+	for(i=0;i<G->n();i++)
+		for(int w=G->first(i);w<G->n();w=G->nex(i,w))
+		{
+			E[edgecnt].distance=G->weight(i,w);
+			E[edgecnt].from=i;
+			E[edgecnt].to=w;
+		}
+	heap H(E,edgecnt,edgecnt);
+	int numMST=G->n();
+	for(i=0;numMST>1;I++)
+	{
+		KruskElem temp;
+		temp=H.removefirst();
+		int v=temp.from;
+		int u=temp.to;
+		if(A.differ(v,u))
+		{
+			A.UNION(v,u);
+			AddEdgetoMST(temp.from,temp.to);
+			numMST--;
+		}
+	}
+}
+//Floyd's all-pairs shortest paths algorithm
+void Floyd(Graph* G) 
+{
+	int D[G->n()][G->n()];  // Store distances
+	for (int i=0; i<G->n(); i++) // Initialize
+		for (int j=0; j<G->n(); j++)
+	D[i][j] = G->weight(i, j);
+  	// Compute all k paths
+	for (int k=0; k<G->n(); k++)
+    		for (int i=0; i<G->n(); i++)
+      			for (int j=0; j<G->n(); j++)
+				if (D[i][j] > (D[i][k] + D[k][j]))
+			D[i][j] = D[i][k] + D[k][j];
+}

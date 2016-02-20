@@ -1,0 +1,174 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+struct HuffNode
+{
+	virtual ~HuffNode(){}
+	virtual bool isLeaf()=0;
+	int wgt;
+	char hfcode[12];
+	HuffNode(){hfcode[0]='\0';}
+};
+struct LeafNode:public HuffNode
+{
+	char ch;
+	LeafNode()
+	{wgt=0;}
+	LeafNode(char val,int freq)
+	{ch=val;wgt=freq;}
+	bool isLeaf(){return true;}
+};
+struct IntlNode:public HuffNode
+{
+	HuffNode*lc;
+	HuffNode*rc;
+	IntlNode(HuffNode*l,HuffNode*r)
+	{wgt=l->wgt+r->wgt;lc=l;rc=r;}
+	bool isLeaf(){return false;}
+	void setLeft(HuffNode*b)
+	{lc=(HuffNode*)b;}
+	void setRight(HuffNode*b)
+	{rc=(HuffNode*)b;}
+};
+struct HuffTree
+{
+	HuffNode*root;
+	int Eweight;
+	HuffTree(const char&val,int freq)//leaf constructor
+	{root=new LeafNode(val,freq);}
+	HuffTree(HuffTree*l,HuffTree*r)//Internal node constructor
+	{
+		root=new IntlNode(l->root,r->root);
+		Eweight=0;
+	}
+	static bool prior(HuffTree*p,HuffTree*q)
+	{
+		if(p->root->wgt<=q->root->wgt)return true;
+		else return false;
+	}
+	void  inorderprinthelp(HuffNode*root,int level)
+	{
+		if(root==NULL)return;
+		if(!root->isLeaf())inorderprinthelp(((IntlNode*)root)->lc,level+1);
+		for(int i=0;i<level;i++)cout<<"    ";
+		if(root->isLeaf())cout<<((LeafNode*)root)->ch<<": "<<root->wgt<<endl;
+		else 	cout<<root->wgt<<endl;
+		if(!root->isLeaf())inorderprinthelp(((IntlNode*)root)->rc,level+1);
+	}
+	void print()
+	{
+		if(root==NULL)cout<<"empty"<<endl;
+		else inorderprinthelp(root,0);
+	}
+	void hufcode(HuffNode*p)
+	{
+		if(p->isLeaf())
+		{
+			Eweight+=strlen(p->hfcode)*(p->wgt);
+			cout<<((LeafNode*)p)->ch<<" "<<p->hfcode<<endl;
+			return;
+		}
+		if(p==root)
+		{
+			strcpy_s(((IntlNode*)root)->lc->hfcode,"0");
+			strcpy_s(((IntlNode*)root)->rc->hfcode,"1");
+		}
+		else
+		{
+			strcpy_s(((IntlNode*)p)->lc->hfcode,p->hfcode);
+			strcat_s(((IntlNode*)p)->lc->hfcode,"0");
+			strcpy_s(((IntlNode*)p)->rc->hfcode,p->hfcode);
+			strcat_s(((IntlNode*)p)->rc->hfcode,"1");
+		}
+		hufcode(((IntlNode*)p)->lc);
+		hufcode(((IntlNode*)p)->rc);
+	}
+};
+class heap
+{
+private:
+	HuffTree**arrayheap;//pointer to the heap array
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&HuffTree::prior(arrayheap[rc],arrayheap[j]))
+				j=rc;
+			if(HuffTree::prior(arrayheap[pos],arrayheap[j]))return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(HuffTree**h,int num,int max)
+	{arrayheap=h;n=num;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		HuffTree*temp=arrayheap[pos];
+		arrayheap[pos]=arrayheap[j];
+		arrayheap[j]=temp;
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(HuffTree*it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;
+		while((curr!=0)&&(HuffTree::prior(arrayheap[curr],arrayheap[parent(curr)])))
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	HuffTree*removefirst()
+	{
+		swap(0,--n);
+		if(n!=0)siftdown(0);
+		return arrayheap[n];
+	}
+};
+HuffTree*buildHuff(HuffTree**TreeArray,int count)
+{
+	heap*forest=new heap(TreeArray,count,count);
+	HuffTree*temp1,*temp2,*temp3=NULL;
+	while(forest->size()>1)
+	{
+		temp1=forest->removefirst();//pull first two trees
+		temp2=forest->removefirst();
+		temp3=new HuffTree(temp1,temp2);//internal node
+		forest->insert(temp3);//把结点连接后，把树放到forest中
+		delete temp1;
+		delete temp2;
+	}
+	return temp3;
+}
+int main()
+{
+	HuffTree*htr[]=
+	{
+		new HuffTree('A',2),new HuffTree('B',3),
+		new HuffTree('C',5),new HuffTree('D',7),
+		new HuffTree('E',11),new HuffTree('F',13),
+		new HuffTree('G',17),new HuffTree('H',19),
+		new HuffTree('I',23),new HuffTree('J',31),
+		new HuffTree('K',37),new HuffTree('L',41)
+	};
+	HuffTree*htr1=buildHuff(htr,12);
+	cout<<"Huffman tree:\n";
+	htr1->print();
+	cout<<"\nHuffman code:\n";
+	htr1->hufcode(htr1->root);
+	cout<<"\nExcept length:\n";
+	cout<<htr1->Eweight<<endl;
+}

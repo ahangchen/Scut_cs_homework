@@ -1,0 +1,16 @@
+package bao;
+import javax.swing.*;
+import javax.swing.event.*;
+public class F2 
+{
+	public static void main(String args[])
+	{
+		JPanel panel=new JPanel();
+		JFrame f=new JFrame("test");
+		panel.setBorder(BorderFactory.createLoweredBevelBorder());//…Ë÷√±ﬂøÚ∑Á∏Ò
+		f.setSize(500,600);
+		f.setLocation(700,400);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setVisible(true);
+	}
+}

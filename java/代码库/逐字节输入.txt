@@ -1,0 +1,12 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		int ch;
+		Reader cin=new InputStreamReader(System.in);
+		while((ch=cin.read())!=-1)//输入，遇到回车逐个输出，遇到ctrl+z结束输入,可显示汉字
+			System.out.println((char)ch);
+	}
+}

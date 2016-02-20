@@ -1,0 +1,27 @@
+class Point
+	{
+		double x,y;
+		static int count=0;
+		public Point()
+		{
+			count++;
+		}
+		public void finalize()
+		{
+			count--;
+		}
+	}
+public class Main
+{
+	public static void main(String[]args)
+	{
+		new Point();
+		new Point();
+		new Point();
+		Point p1=new Point(),p2=new Point();
+		System.out.println(Point.count);
+		System.gc();//强制内存回收
+		System.out.println(Point.count);
+	}
+}
+

@@ -1,0 +1,23 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		System.in.mark(5);//设定标记，最多预读5个字节
+		int i=0,j=0;
+		char ch;
+		while((ch=(char)System.in.read())!=-1&&j<2)
+		{
+			System.out.print(ch);
+			i++;
+			if(i==5)
+			{
+				i=0;
+				System.out.println();
+				System.in.reset();
+				j++;
+			}
+		}
+	}
+}

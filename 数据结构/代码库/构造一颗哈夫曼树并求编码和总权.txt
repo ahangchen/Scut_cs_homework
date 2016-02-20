@@ -1,0 +1,227 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+struct elem
+{
+	char ch;
+	elem(){}
+	elem(char ca){ch=ca;}
+};
+struct HuffNode
+{
+	virtual ~HuffNode(){}
+	virtual bool isLeaf()=0;
+	int wgt;
+	char hfcode[12];
+	HuffNode(){hfcode[0]='\0';}
+};
+struct LeafNode:public HuffNode
+{
+	elem it;
+	LeafNode()
+	{
+		wgt=0;
+	}
+	LeafNode(elem val,int freq)
+	{
+		it=val;wgt=freq;
+	}
+	bool isLeaf(){return true;}
+};
+struct IntlNode:public HuffNode
+{
+	HuffNode*lc;
+	HuffNode*rc;
+	IntlNode(HuffNode*l,HuffNode*r)
+	{wgt=l->wgt+r->wgt;lc=l;rc=r;}
+	bool isLeaf(){return false;}
+	void setLeft(HuffNode*b)
+	{lc=(HuffNode*)b;}
+	void setRight(HuffNode*b)
+	{rc=(HuffNode*)b;}
+};
+struct HuffTree
+{
+	HuffNode*root;
+	int Eweight;
+	HuffTree(){Eweight=0;}
+	HuffTree(elem&val,int freq)//leaf constructor
+	{root=new LeafNode(val,freq);}
+	HuffTree(HuffTree*l,HuffTree*r)//Internal node constructor
+	{
+		root=new IntlNode(l->root,r->root);
+		Eweight=0;
+	}
+	~HuffTree(){}
+	int weight(){return root->wgt;}
+	static bool prior(HuffTree*p,HuffTree*q)//决定了这是一个最大堆还是最小堆
+	{
+		if(p->root->wgt<=q->root->wgt)return true;
+		else return false;
+	}
+	void  inorderprinthelp(HuffNode*root,int level)
+	{
+		if(root==NULL)return;
+		if(!root->isLeaf())inorderprinthelp(((IntlNode*)root)->lc,level+1);
+		for(int i=0;i<level;i++)cout<<"    ";
+		if(root->isLeaf())
+		{
+			cout<<((LeafNode*)root)->it.ch<<": "<<root->wgt<<endl;
+		}
+		else 	cout<<root->wgt<<endl;
+		if(!root->isLeaf())inorderprinthelp(((IntlNode*)root)->rc,level+1);
+	}
+	void print()
+	{
+		if(root==NULL)cout<<"empty"<<endl;
+		else inorderprinthelp(root,0);
+	}
+	void hufcode(HuffNode*p)
+	{
+		if(p->isLeaf())
+		{
+			Eweight+=strlen(p->hfcode)*(p->wgt);
+			cout<<((LeafNode*)p)->it.ch<<" "<<p->hfcode<<endl;
+			return;
+		}
+		if(p==root)
+		{
+			strcpy_s(((IntlNode*)root)->lc->hfcode,"0");
+			strcpy_s(((IntlNode*)root)->rc->hfcode,"1");
+		}
+		else
+		{
+			strcpy_s(((IntlNode*)p)->lc->hfcode,p->hfcode);
+			strcat_s(((IntlNode*)p)->lc->hfcode,"0");
+			strcpy_s(((IntlNode*)p)->rc->hfcode,p->hfcode);
+			strcat_s(((IntlNode*)p)->rc->hfcode,"1");
+		}
+		hufcode(((IntlNode*)p)->lc);
+		hufcode(((IntlNode*)p)->rc);
+	}
+};
+class heap
+{
+private:
+	HuffTree**arrayheap;//pointer to the heap array
+	int maxsize;
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&HuffTree::prior(arrayheap[rc],arrayheap[j]))
+				j=rc;
+			if(HuffTree::prior(arrayheap[pos],arrayheap[j]))return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(HuffTree**h,int num,int max)
+	{arrayheap=h;n=num;maxsize=max;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		HuffTree*temp=arrayheap[pos];
+		arrayheap[pos]=arrayheap[j];
+		arrayheap[j]=temp;
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(HuffTree*it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;
+		while((curr!=0)&&(HuffTree::prior(arrayheap[curr],arrayheap[parent(curr)])))
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	HuffTree*removefirst()
+	{
+		swap(0,--n);
+		if(n!=0)siftdown(0);
+		return arrayheap[n];
+	}
+	HuffTree*remove(int pos)
+	{
+		if(pos==(n-1))n--;
+		else 
+		{
+			swap(pos,--n);
+			while((pos!=0)&&(HuffTree::prior(arrayheap[pos],arrayheap[parent(pos)])))
+			{
+				swap(pos,parent(pos));
+				pos=parent(pos);
+			}
+			if(n!=0)siftdown(pos);
+		}
+		return arrayheap[n];
+	}
+	void  inorderprinthelp(int pos,int level)
+	{
+		if(pos<0||pos>=n)return;
+		inorderprinthelp(leftchild(pos),level+1);
+		for(int i=0;i<level;i++)cout<<"     ";
+		cout<<arrayheap[pos]->root->wgt<<endl;
+		inorderprinthelp(rightchild(pos),level+1);
+	}
+	void print()
+	{
+		if(n<=0)cout<<"empty"<<endl;
+		else inorderprinthelp(0,0);//第一个0表示树根，第二个零表示层数
+	}
+};
+HuffTree*buildHuff(HuffTree**TreeArray,int count)
+{
+	heap*forest=new heap(TreeArray,count,count);
+	//forest->print();
+	HuffTree*temp1,*temp2,*temp3=NULL;
+	while(forest->size()>1)
+	{
+		temp1=forest->removefirst();//pull first two trees
+		temp2=forest->removefirst();
+		temp3=new HuffTree(temp1,temp2);//internal node
+		forest->insert(temp3);//把结点连接后，把树放到forest中
+		delete temp1;
+		delete temp2;
+	}
+	return temp3;
+}
+int main()
+{
+	/*elem ch[]=
+	{
+		elem('A'),elem('B'),elem('C'),
+		elem('D'),elem('E'),elem('F'),
+		elem('G'),elem('H'),elem('I'),
+		elem('J'),elem('K'),elem('L')
+	};*///这些都是经验哪
+	HuffTree*htr[]=
+	{
+		new HuffTree(elem('A'),2),new HuffTree(elem('B'),3),
+		new HuffTree(elem('C'),5),new HuffTree(elem('D'),7),
+		new HuffTree(elem('E'),11),new HuffTree(elem('F'),13),
+		new HuffTree(elem('G'),17),new HuffTree(elem('H'),19),
+		new HuffTree(elem('I'),23),new HuffTree(elem('J'),31),
+		new HuffTree(elem('K'),37),new HuffTree(elem('L'),41)
+	};
+	HuffTree*htr1=buildHuff(htr,12);
+	cout<<"Huffman tree:\n";
+	htr1->print();
+	cout<<"\nHuffman code:\n";
+	htr1->hufcode(htr1->root);
+	cout<<"\nExcept length:\n";
+	cout<<htr1->Eweight<<endl;
+}

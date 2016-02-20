@@ -1,0 +1,25 @@
+package bao;
+//以下代码演示了对数据库学生表数据的更新和新增数据，该例子使用了SqlServer2000的专用JDBC驱动
+//必须事先安装，该专用驱动程序可以从SQLServer的站点上下载
+import java.sql.*;
+public class JDBCDemol 
+{
+	public static void main(String[] args)throws Exception 
+	{
+		Class.forName("com.microsoft.jdbc.sqlserver.SQLServerDriver");
+		Connection con=DriverManager.getConnection("jcdb:microsoft:sqlserver://127.0.0.1:1433;databasename=mydb","sa","");
+		Statement st=con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+		st.execute("select*from student");
+		ResultSet rs=st.getResultSet();
+		rs.absolute(1);
+		rs.updateString(2, "王强");
+		rs.updateRow();
+		rs.moveToInsertRow();
+		rs.updateString(1,"4");
+		rs.updateString(2, "流明");
+		rs.updateInt(3, 25);
+		rs.updateString(4, "ma");
+		rs.insertRow();
+	}
+
+}

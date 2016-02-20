@@ -1,0 +1,144 @@
+#include<iostream>
+#include<ctime>
+using namespace std;
+void swap(int A[],int a,int b)
+{
+	int temp;
+	temp=A[a];
+	A[a]=A[b];
+	A[b]=temp;
+}
+void inssort(int A[],int n)
+{
+	for(int i=1;i<n;i++)
+		for(int j=i;(j>0)&&(A[j]>A[j-1]);j--)
+			swap(A,j,j-1);
+}
+void bubsort(int A[],int n)
+{
+	for(int i=0;i<n-1;i++)
+		for(int j=n-1;j>i;j--)
+			if(A[j]>A[j-1])
+				swap(A,j,j-1);
+}
+void selsort(int A[],int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		int lowindex=i;
+		for(int j=n-1;j>i;j--)
+			if(A[j]>A[lowindex])
+				lowindex=j;
+		swap(A,i,lowindex);
+	}
+}
+void inssort2(int A[],int n,int incr)
+{
+	for(int i=incr;i<n;i+=incr)
+		for(int j=i;(j>=incr)&&(A[j]>A[j-incr]);j-=incr)
+			swap(A,j,j-incr);
+}
+void shellsort(int A[],int n)
+{
+	for(int i=n/2;i>2;i/=2)
+		for(int j=0;j<i;j++)
+			inssort2(&A[j],n-j,i);
+	inssort2(A,n,1);
+}
+void mergesort(int A[],int temp[],int left,int right)
+{
+	if(left==right)return;
+	int mid=(left+right)/2;
+	mergesort(A,temp,left,mid);
+	mergesort(A,temp,mid+1,right);
+	for(int i=left;i<=right;i++)
+		temp[i]=A[i];
+	int i1=left;int i2=mid+1;
+	for(int curr=left;curr<=right;curr++)
+	{
+		if(i1==mid+1)
+			A[curr]=temp[i2++];
+		else if(i2>right)
+			A[curr]=temp[i1++];
+		else if(temp[i1]>temp[i2])
+			A[curr]=temp[i1++];
+		else A[curr]=temp[i2++];
+	}
+}
+void mergesort2(int A[],int temp[],int left,int right)
+{
+	if((right-left)<=3)
+	{
+		inssort(&A[left],right-left+1);
+		return;
+	}
+	int i,j,k,mid=(left+right)/2;
+	mergesort2(A,temp,left,mid);
+	mergesort2(A,temp,mid+1,right);
+	for(i=mid;i>=left;i--)temp[i]=A[i];
+	for(j=1;j<=right-mid;j++)temp[right-j+1]=A[j+mid];
+	for(i=left,j=right,k=left;k<=right;k++)
+		if(temp[i]>temp[j])A[k]=temp[i++];
+		else A[k]=temp[j--];
+}
+inline int findpivot(int A[],int i,int j)
+{return (i+j)/2;}
+int partition(int A[],int l,int r,int&pivot)
+{
+	do
+	{
+		while(A[++l]>pivot);
+		while((l<r)&&(pivot>A[--r]));
+		swap(A,l,r);
+	}while(l<r);
+	return l;
+}
+void qsort(int A[],int i,int j)
+{
+	if(j<=i)return;
+	int pivotindex=findpivot(A,i,j);
+	swap(A,pivotindex,j);
+	int k=partition(A,i-1,j,A[j]);
+	swap(A,k,j);
+	qsort(A,i,k-1);
+	qsort(A,k+1,j);
+}
+void getarr(int*arr)
+{
+	for(int i=0;i<10;i++)
+		arr[i]=rand()%99;
+}
+void printarr(int*arr)
+{
+	for(int i=0;i<9;i++)
+		cout<<arr[i]<<" ";
+	cout<<arr[9]<<endl;
+}
+int main()
+{
+	srand(0);
+	int arr[10];
+	getarr(arr);
+	inssort(arr,10);
+	printarr(arr);
+	getarr(arr);
+	bubsort(arr,10);
+	printarr(arr);
+	getarr(arr);
+	selsort(arr,10);
+	printarr(arr);
+	getarr(arr);
+	shellsort(arr,10);
+	printarr(arr);
+	getarr(arr);
+	int temp[10];
+	mergesort(arr,temp,0,9);
+	printarr(arr);
+	getarr(arr);
+	int temp1[10];
+	mergesort2(arr,temp1,0,9);
+	printarr(arr);
+	getarr(arr);
+	qsort(arr,0,9);
+	printarr(arr);
+}

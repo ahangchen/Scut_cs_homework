@@ -1,0 +1,66 @@
+package bao;
+import java.io.*;
+public class TestThread 
+{
+	static PrintWriter out=new PrintWriter(System.out,true);
+	public static void main(String[] args) 
+	{
+		FirstThread first=new FirstThread();
+		SecondThread second=new SecondThread();
+		first.start();
+		second.start();
+		try
+		{
+			out.println("等待线程1完成");
+			first.join();//主线程锁定first线程，first执行完后才转向另外的线程
+			out.println("长时间等待");
+			out.println("唤醒线程2");
+			synchronized(second)
+			{
+				second.notify();
+			}
+			out.println("等待线程2完成");
+			second.join();
+		}catch(InterruptedException e)
+		{
+			out.println(e);
+		}
+		out.println("主线程完成");
+	}
+
+}
+class FirstThread extends Thread
+{
+	static PrintWriter out=new PrintWriter(System.out,true);
+	public void run()
+	{
+		try
+		{
+			TestThread.out.println("线程1开始");
+			sleep(10000);
+			TestThread.out.println("线程1完成");
+		}
+		catch(InterruptedException e)
+		{
+			out.println(e);
+		}
+	}
+}
+class SecondThread extends Thread
+{
+	static PrintWriter out=new PrintWriter(System.out,true);
+	public synchronized void run()
+	{
+		try
+		{
+			TestThread.out.println("线程2开始");
+			TestThread.out.println("线程2挂起");
+			wait(); 
+			TestThread.out.println("线程2再次运行");
+		}
+		catch(InterruptedException e)
+		{
+			out.println(e);
+		}
+	}
+}

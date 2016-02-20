@@ -1,0 +1,51 @@
+package bao;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+public class Card extends Frame
+{
+	Panel main=new Panel(new CardLayout());
+	Panel control=new Panel();
+	Panel p1=new Panel();
+	Panel p2=new Panel();
+	Panel p3=new Panel();
+	Panel p4=new Panel();
+	Panel p5=new Panel();
+	Button b1=new Button("第一个");
+	Button b2=new Button("前一个");
+	Button b3=new Button("后一个");
+	Button b4=new Button("最后一个");
+	public Card()
+	{
+		p1.setBackground(Color.red);
+		p2.setBackground(Color.yellow);
+		p3.setBackground(Color.green);
+		p4.setBackground(Color.blue);
+		p5.setBackground(Color.black);
+		main.add("first",p1);
+		main.add("first",p2);
+		main.add("first",p3);
+		main.add("first",p4);
+		main.add("first",p5);
+		add(main);
+		control.add(b1);
+		control.add(b2);
+		control.add(b3);
+		control.add(b4);
+		add("South",control);
+	}
+	public static void main(String[] args) 
+	{
+		Card f=new Card();
+		f.setBounds(100,100,200,300);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

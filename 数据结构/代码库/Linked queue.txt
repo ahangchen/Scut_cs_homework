@@ -1,0 +1,48 @@
+//linked queue implementation
+template<typename E>class LQueue:public Queue<E>
+{
+private:
+	Link<E>*front;//pointer to front queue node
+	Link<E>*rear;//pointer to rear queue node
+	int size;//Number of elements in queue
+public:
+	LQueue(int sz=defaultSize)//Constructor
+	{front=rear=new Link<E>();size=0;}
+	~LQueue(){clear();delete front;}//destructor
+	void clear()
+	{
+		//clear queue
+		while(front->next!=NULL)
+		{//delete each link node
+			rear=front;
+			delete rear;
+		}
+		rear=front;
+		size=0;
+	}
+	void enqueue(const E&it)
+	{
+		rear->next=new Link<E>(it,NULL);
+		rear=rear->next;
+		size++;
+	}
+	E dequeue()
+	{
+		//remove element from front
+		Assert(size!=0,"Queue is empty");
+		E it=front->next->element;//store dequeued value
+		Link<E>*ltemp=front->next;//hold dequeued link
+		front->next=ltemp->next;//avance front
+		if(rear==ltemp)rear=front;//dequeue last element
+		delete ltemp;//delete link
+		size--;
+		return it;//return element value	
+	}
+	const E&frontValue()const
+	{
+		//GET front element
+		Assert(size!=0,"queue is empty");
+		return front->next->element;
+	}
+	virtual int length()const{return size;}
+};

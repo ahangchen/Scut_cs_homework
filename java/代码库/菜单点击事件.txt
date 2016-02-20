@@ -1,0 +1,45 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+public class Menuevent extends Frame implements ActionListener
+{
+	MenuBar mb=new MenuBar();
+	Menu display=new Menu("显示");
+	MenuItem display1=new MenuItem("欢迎进入");
+	MenuItem display2=new MenuItem("欢迎工作");
+	MenuItem display3=new MenuItem("欢迎离开");
+	Label l=new Label();
+	public Menuevent()
+	{
+		display1.addActionListener(this);
+		display2.addActionListener(this);
+		display3.addActionListener(this);
+		mb.add(display);
+		display.add(display1);
+		display.add(display2);
+		display.add(display3);
+		setMenuBar(mb);
+		l.setAlignment(Label.CENTER);
+		add("Center",l);
+	}
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource().equals(display1))l.setText("欢迎进入");
+		else if(e.getSource().equals(display2))l.setText("欢迎工作");
+		else if(e.getSource().equals(display3))l.setText("欢迎离开");
+	}
+	public static void main(String[] args) 
+	{
+		Menuevent f=new Menuevent();
+		f.setBounds(100,100,200,200);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

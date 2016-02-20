@@ -1,0 +1,16 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		int a=0;
+		while((a=System.in.read())!=-1)
+		{
+			if(a!='\r'&&a!='\n')
+			{
+				System.out.print(a-48);
+			}		
+		}
+	}
+}

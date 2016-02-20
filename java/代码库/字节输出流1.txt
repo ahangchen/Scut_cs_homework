@@ -1,0 +1,22 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		String s="java is so easy";
+		byte[]b=s.getBytes();//字符串转化为字节数组
+		FileOutputStream fout=null;
+		try
+		{
+			fout=new FileOutputStream("d:\\temp.dat",true);//向文件末尾加入数据
+			fout.write(b);
+			fout.write("面向对象技术".getBytes());
+			fout.close();//关闭输出流
+		}
+		catch(Exception e)
+		{
+			System.out.print(e);
+		}
+	}
+}

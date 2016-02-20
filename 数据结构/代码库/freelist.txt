@@ -1,0 +1,28 @@
+//singly linked list node with freelist support 
+template<typename E>class Link
+{
+private:
+	static Link<E>*freelist;//reference to freelist head
+public:
+	E element;//Value for this node
+	Link*next;//point to next node in list
+//constructors
+Link(const E&elemval,Link*nextval=NULL)
+{elemetn=elemval;next=nextval;}
+void*operator new (size_t)//
+{//overloaded new operator
+if(freelist==NULL)return ::new Link;//create space
+Link<E>*temp=freelist;///can take from freelist
+freelist=freelist->next;
+return temp;//return the link
+}
+//overloaded delete operator
+void operator delete(void*ptr)
+{
+((Link<E>*)ptr)->next=freelist;//put on freelist
+freelist=(Link<E>*)ptr;
+}
+};
+//the freelist head pointer is actually created here
+template<typename E>
+Link<E>*Link<E>::freelist=NULL;

@@ -1,0 +1,54 @@
+//stack abstract class
+template<typename E>class Stack
+{
+	private:
+	void operator=(const Stack&){}//protect assingment
+	Stack(const Stack&){}//protect copy constructor
+	public:
+	Stack(){}//default constructor
+	virtual ~Stack(){}//Base destructor
+	//reinitialize the stack.the user is responsible for reclainming the storage used by the stack elements
+	virtual void clear()=0;
+	//push an element onto the top of the stack
+	//it the element being pushed onto the stack
+	virtual void push(const E&it)=0;
+	//remove the element at the top of the stack 
+	//return:the elelment at the top of the stack
+	virtual E pop()=0;
+	//return:a copy of the top element
+	virtual const E&topValue()const=0;
+	//return:the number of elements in the stack.
+	virtual int length()const=0;
+};
+//array-based stack implementation
+template<typename E>class AStack:public Stack<E>
+{
+	private:
+	int maxSize;//maximum size of stack
+	int top;//index for top element
+	E*listArray;//array holding stack element
+	public:
+	Astack(int size=defaultSize)//constructor
+	{maxSize=size;top=0;listArray=new E[size];}
+	~AStack(){delete[]listArray;}//destructor
+	void clear(){top=0;}//reinitialize
+	{top=0;}
+	void push(const E&it)//put it on stack
+	{
+		Assert(top!=maxsize,"Stack is full");
+		listArray[top++]=it;
+	}
+	E pop()
+ 	{
+	 	//pop top element
+	 	Assert(top!=0,"Stack is empty");
+	 	return listArray[--top];
+ 	}
+ 	const E&topValue()const
+ 	{
+	 	//return top element
+	 	Assert(top!=0,"Stack is empty");
+	 	return listArray[top-1];
+	}
+	int length()const{return top;}//return length
+};

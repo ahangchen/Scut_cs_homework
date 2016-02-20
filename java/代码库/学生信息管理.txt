@@ -1,0 +1,37 @@
+package bao;
+import java.awt.*;
+public class StudentInfoFrame extends Frame
+{
+	Label ISno=new Label("学号");
+	TextField tfSno=new TextField(8);
+	Label ISname=new Label("姓名");
+	TextField tfSname=new TextField(8);
+	CheckboxGroup sex=new CheckboxGroup();
+	Checkbox male=new Checkbox("男");
+	Checkbox female=new Checkbox("女");
+	Checkbox isCardre=new Checkbox("是否干部");
+	Choice deptName=new Choice();
+	StudentInfoFrame(String title)//在构造函数中初始化
+	{
+		super(title);//调用父类构造方法
+		this.setSize(100,100);
+		this.setLocation(200,300);
+		this.setLayout(new FlowLayout());//设置流布局方式
+		this.add(ISno);
+		this.add(tfSno);
+		this.add(ISname);
+		this.add(tfSname);
+		this.add(male);
+		this.add(female);
+		this.add(isCardre);
+		deptName.add("计算机");//将选项加入下拉列表
+		this.add(deptName);//将下拉列表加入窗口
+	}
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args)
+	{
+		StudentInfoFrame f=new StudentInfoFrame("StudentInfo");
+		f.setLocation(100,100);
+		f.show();
+	}
+}

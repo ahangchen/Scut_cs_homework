@@ -1,0 +1,645 @@
+#include<iostream>
+using namespace std;
+class Graph
+{
+private:
+	void operator=(const Graph&){}
+	Graph(const Graph&){}
+public:
+	Graph(){}
+	virtual ~Graph(){}
+	virtual void Init(int n)=0;
+	virtual int n()=0;
+	virtual int e()=0;
+	virtual int first(int v)=0;
+	virtual int next(int v,int w)=0;
+	virtual void setEdge(int v1,int v2,int wgt)=0;
+	virtual void delEdge(int v1,int v2)=0;
+	virtual bool isEdge(int i,int j)=0;
+	virtual int weight(int v1,int v2)=0;
+	virtual int getMark(int v)=0;
+	virtual void setMark(int v,int val=0);
+};
+class Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+	int vertex(){return vert;}
+	int weight(){return wt;}
+};
+class Graphm:public Graph
+{
+private:
+	int numVertex,numEdge;//
+	int **matrix;//pointer to adjavency matrix
+	int *mark;//pointer to mark array
+public:
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]matrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int**)new int*[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int[numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int n(){return numVertex;}
+	int e(){return numEdge;}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int wt)
+	{
+		if(wt<=0)cout<<"illegal weight value"<<endl;
+		if(matrix[v1][v2]==0)numEdge++;
+		matrix[v1][v2]=wt;
+	}
+	void delEdge(int v1,int v2)
+	{
+		if(matrix[v1][v2]!=0)numEdge--;
+		matrix[v1][v2]=0;
+	}
+	bool isEdge(int i,int j)
+	{
+		return matrix[i][j]!=0;
+	}
+	int weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+
+class Link
+{
+public:
+	Edge element;//value for this node
+	Link*next;//pointer to next node in list
+	//constructors 
+	Link()
+	{}
+	Link(const Edge&elemval,Link*nextval=NULL)
+	{
+		element=elemval;
+		next=nextval;
+	}
+};
+//linked list implementation
+class LList:public Link
+{
+private:
+	LList*head;
+	LList*tail;
+	LList*curr;//access to current
+	int cnt;//size of list
+	void init()
+	{
+		curr=tail=head=new LList();
+		cnt=0;
+	}
+	void removeall()
+	{//return link nodes to free store
+		while(head!=NULL)
+		{
+			curr=head;
+			head=head->next;
+			delete curr;
+		}
+	}
+public:
+	LList()//constructor
+	{
+		init();
+	}
+	~LList(){removeall();}//destructor
+	void print()const;
+	void clear(){removeall();init();}//clear list
+	//insert it at current position
+	void insert(Edge it)
+	{
+		curr->next=new Link(it,curr->next);
+		if(tail==curr)tail=curr->next;//new tail
+		cnt++;
+	}
+	void append(Edge it)
+	{
+		tail=tail->next=new Link(it,NULL);
+		cnt++;
+	}
+	//remove and return current element
+	int remove()
+	{
+		if(curr->next==NULL)cout<<"no element"<<endl;
+		int it=curr->next->element;//remember value
+		int*ltemp=curr->next;//remember link node
+		if(tail==curr->next)tail=curr;//reset tail
+		curr->next=curr->next->next;//remove from list
+		delete ltemp;
+		cnt--;
+		return it;
+	}
+	void moveToStart()//place curr at list start
+	{curr=head;}
+	void moveToEnd()//place curr at list end
+	{curr=tail;}
+	void prev()
+	{
+		if(curr==head)return;
+		LList*temp=head;
+		//march down list until we find the previous element
+		while(temp->next!=curr)temp=temp->next;
+		curr=temp;
+	}
+	//move curr one step right;no change when at end
+	void next()
+	{
+		if(curr!=tail)curr=curr->next;
+	}
+	int length()const{return cnt;}
+	//return position of the current element
+	int currPos()const
+	{
+		LList*temp=head;
+		int i;
+		for(i=0;curr!=temp;i++)
+			temp=temp->next;
+		return i;
+	}
+	//move down list to pos 
+	void moveToPos(int pos)
+	{
+		if(!((pos>=0)&&(pos<=cnt)))cout<<"position out of range"<<endl;
+		curr=head;
+		for(int i=0;i<pos;i++)curr=curr->next;
+	}
+	const Edge&getValue()const
+	{
+		if(!(curr->next!=NULL))cout<<"No value"<<endl;
+		return curr->next->element;
+	}
+};
+class Graphl:public Graph
+{
+private:
+	LList**vertex;
+	int numVertex,numEdge;
+	int *mark;
+public:
+	Graphl(int numVertex){Init(numVertex);}
+	~Graphl()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]vertex[i];
+		delete[]vertex;
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)mark[i]=-1;
+		vertex=(LList**)new LList*[numVertex];
+		for(i=0;i<numVertex;i++)vertex[i]=new LList();
+	}
+	int n(){return numVertex;}
+	int e(){return numEdge;}
+	int first(int v)
+	{
+		if(vertex[v]->length()==0)return numVertex;
+		vertex[v]->moveToStart();
+		Edge it=vertex[v]->getValue();
+		return it.vertex();
+	}
+	int next(int v,int w)
+	{
+		Edge it;
+		if(isEdge(v,w))
+		{
+			if((vertex[v]->currPos()+1)<vertex[v]->length())
+			{
+				vertex[v]->next();
+				it=vertex[v]->getValue();
+				return it.vertex();
+			}
+		return n();
+		}
+	}
+	void setEdge(int i,int j,int weight)
+	{
+		if(weight<=0)cout<<"may not set weight to 0"<<endl;
+		Edge currEdge(j,weight);
+		if(isEdge(i,j))
+		{
+			vertex[i]->remove();
+			vertex[i]->insert(currEdge);
+		}
+		else 
+		{
+			numEdge++;
+			for(vertex[i]->moveToStart();vertex[i]->currPos()<vertex[i]->length;vertex[i]->next())
+			{
+				Edge temp=vertex[i]->getValue();
+				if(temp.vertex()>j)break;
+			}
+			vertex[i]->insert(currEdge);
+		}
+	}
+	void delEdge(int i,int j)
+	{
+		if(isEdge(i,j))
+		{
+			vertex[i]->remove();
+			numEdge--;
+		}
+	}
+	bool isEdge(int i,int j)
+	{
+		Edge it;
+		for(vertex[i]->moveToStart();vertex[i]->currPos()<vertex[i]->length;vertex[i]->next())
+		{
+			Edge temp=vertex[i]->getValue();
+			if(temp.vertex()==j)return true;
+		}
+		return false;
+	}
+	int weight(int i,int j)
+	{
+		Edge curr;
+		if(isEdge(i,j))
+		{
+			curr=vertex[i]->getValue();
+			return curr.weight();
+		}
+		else return 0;
+	}
+	int getMark(int v)
+	{return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+
+
+void graphTraverse(Graph*g)
+{
+	int v;
+	for(v=0;v<g->n();v++)g->setMark(v,-1);
+	for(v=0;v<g->n();v++)
+		if(g->getMark(v)==-1);//doTraverse(g,v);
+}
+void DFS(Graph*g,int v)
+{
+	//previsit(g,v);
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->n();w=g->next(v,w))
+		if(g->getMark(w)==-1)DFS(g,w);
+	//postvisit(g,v);
+}
+struct BstNode 
+{
+	int data;
+	BstNode*next;
+	BstNode(int dt){data=dt;next=NULL;}
+	BstNode(){data=0;next=NULL;}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=sz;}
+	~queue(){clear();delete front;}
+	void clear()
+	{
+		while(front->next!=NULL)rear=front;
+		delete rear;
+		rear=front;
+		size=0;
+	}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	int dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			int it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	int frontvalue()
+	{
+		return front->next->data;
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+void BFS(Graph*g,int start,queue*q)
+{
+	int v,w;
+	q=new queue(start);
+	g->setMark(start,1);
+	while(q->size!=0)
+	{
+		v=q->dequeue();
+		//previsit
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+		{
+			if(g->getMark(w)==-1)
+			{
+				g->setMark(w,-1);
+				q->enqueue(new BstNode(w));
+			}
+		}
+	}
+}
+void topsort(Graph*g)
+{
+	int i;
+	for(i=0;i<g->n();i++)g->setMark(i,-1);
+	for(i=0;i<g->n();i++)
+		if(g->getMark(i)==-1)tophelp(g,i);
+}
+void tophelp(Graph*g,int v)
+{
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->n();w=g->next(v,w))
+		if(g->getMark(w)==-1)tophelp(g,w);
+	//printout(v);
+}
+void topsort(Graph*g,queue*q)
+{
+	int*Count=new int[g->n()];
+	int v,w;
+	for(v=0;v<g->n();v++)Count[v]=0;
+	for(v=0;v<g->n();v++)
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+			Count[w]++;
+	for(v=0;v<g->n();v++)
+		if(Count[v]==0)q->enqueue(v);
+	while(q->length()!=0)
+	{
+		v=q->dequeue();
+		//printout(v);
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+		{
+			Count[w]--;
+			if(Count[w]==0)q->enqueue(w);
+		}
+	}
+}
+void Dijkstra(Graph*g,int*D,int s)
+{
+	int i,v,w;
+	for(i=0;i<g->n();i++)
+	{
+		v=minVertex(g,D);
+		if(D[v]==-1)return;
+		g->setMark(v,1);
+		for(w=g->first(v);w<g->n();w=g->next(v,w))
+			if(D[w]>(D[v]+g->weight(v,w)))
+				D[w]=D[v]+g->weight(v,w);
+	}
+}
+int minVertex(Graph*g,int*D)
+{
+	int i,v=-1;
+	for(i=0;i<g->n();i++)
+		if(g->getMark(i)==-1){v=i;break;}	
+	for(i++;i<g->n();i++)
+		if((g->getMark(i)==-1)&&(D[i]<D[v]))v=i;
+	return v;	
+}
+class DijkElem
+{
+public:
+	int vertex,distance;
+	DijkElem(){vertex=-1;distance=-1;}
+	DijkElem(int v,int d){vertex=v;distance=d;}
+};
+struct node
+{
+	int data;
+	//node(){data=0;}
+	node(int dt=0){data=dt;}
+	node(const node&it){data=it.data;}
+	~node(){data=0;}
+	static bool prior(node p,node q)//决定了这是一个最大堆还是最小堆
+	{
+		if(p.data>=q.data)return true;
+		else return false;
+	}
+};
+class heap
+{
+private:
+	node*arrayheap;//pointer to the heap array
+	int maxsize;
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&node::prior(arrayheap[rc],arrayheap[j]))
+				j=rc;
+			if(node::prior(arrayheap[pos],arrayheap[j]))return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(node*h,int num,int max)
+	{arrayheap=h;n=num;maxsize=max;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		node temp=arrayheap[pos];
+		arrayheap[pos].data=arrayheap[j].data;
+		arrayheap[j].data=temp.data;
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(node it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;//这样没问题么？
+		while((curr!=0)&&node::prior(arrayheap[curr],arrayheap[parent(curr)]))
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	node removefirst()
+	{
+		swap(0,--n);
+		if(n!=0)siftdown(0);
+		return arrayheap[n];
+	}
+	node remove(int pos)
+	{
+		if(pos==(n-1))n--;
+		else 
+		{
+			swap(pos,--n);
+			while((pos!=0)&&(node::prior(arrayheap[pos],arrayheap[parent(pos)])))
+			{
+				swap(pos,parent(pos));
+				pos=parent(pos);
+			}
+			if(n!=0)siftdown(pos);
+		}
+		return arrayheap[n];
+	}
+	void  inorderprinthelp(int pos,int level)
+	{
+		if(pos<0||pos>=n)return;
+		inorderprinthelp(leftchild(pos),level+1);
+		for(int i=0;i<level;i++)cout<<"     ";
+		cout<<arrayheap[pos].data<<endl;
+		inorderprinthelp(rightchild(pos),level+1);
+	}
+	void print()
+	{
+		if(n<=0)cout<<"empty"<<endl;
+		else inorderprinthelp(0,0);//第一个0表示树根，第二个零表示层数
+	}
+};
+void Dijkstra(Graph*G,int*D,int s)
+{
+	int i,v,w;
+	DijkElem*E=new DijkElem[G->e()];
+	DijkElem temp;
+	temp.distance=0;
+	temp.vertex=s;
+	E[0]=temp;
+	heap H(E,1,G->e());
+	for(i=0;i<G->n();i++)
+	{
+		do
+		{
+			if(H.size()==0)return;
+			temp=H.removefirst();	
+			v=temp.vertex;
+		}while(G->getMark(v)==-1);
+		G->setMark(v,1);
+		if(D[v]==-1)return;
+		for(w=G->first(v);w<G->n();w=G->next(v,w))
+			if(D[w]>(D[v]+G->weight(v,w)))
+			{
+				D[w]=D[v]+G->weight(v,w);
+				temp.distance=D[w];
+				temp.vertex=w;
+				H.insert(temp);
+			}
+	}
+}
+void Prim(Graph*G,int*D,int s)
+{
+	int V[G->n()];
+	int i,w;
+	for(i=0;w<G->n();i++)
+		{
+			int v=minVertex(G,D);
+			G->setMark(v,1);
+			if(v!=s);//AddEdgetoMST(V[v],v);
+			if(D[v]==-1)return;
+			for(w=G->first(v);w<G->n();w=G->next(v,w))
+				if(D[w]>G->weight(v,w))
+				{
+					D[w]=G->weight(v,w);
+					V[w]=v;
+				}
+		}
+}
+void Prim(Graph*G,int*D,int s)
+{
+	int v,w,i;
+	int*V=new int[G->n()];
+	DijkElem temp;
+	DijkElem*E=new DijkElem[G->e()];
+	temp.distance=0;
+	temp.vertex=s;
+	E[0]=temp;
+	heap H(E,1,G->e());
+	for(i=0;i<G->n();i++)
+	{
+		do
+		{
+			if(H.size()==0)return;
+			temp=H.removefirst();
+			v=temp.vertex;
+		}while(G->getMark(v)==1);
+		G->setMark(v,1);
+		if(v!=s);//AddEdgetoMST(V[v],v);
+		if(D[v]==-1)return;
+		for(w=G->first(v);w<G->n();w=G->next(v,w))
+			{
+				if(D[w]>G->weight(v,w))
+				{
+					D[w]=G->weight(v,w);
+					V[w]=v;
+					temp.distance=D[w];
+					temp.vertex=w;
+					H.insert(temp);
+				}
+			}
+	}
+}
+
+//Floyd's all-pairs shortest paths algorithm
+void Floyd(Graph* G) 
+{
+	int**D=new int*[G->n()];
+	for(int i=0;i<G->n();i++)
+		D[i]=new int[G->n()];  // Store distances
+	for (int i=0; i<G->n(); i++) // Initialize
+		for (int j=0; j<G->n(); j++)
+	D[i][j] = G->weight(i, j);
+  	// Compute all k paths
+	for (int k=0; k<G->n(); k++)
+    		for (int i=0; i<G->n(); i++)
+      			for (int j=0; j<G->n(); j++)
+				if (D[i][j] > (D[i][k] + D[k][j]))
+			D[i][j] = D[i][k] + D[k][j];
+}

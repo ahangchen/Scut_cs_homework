@@ -1,0 +1,30 @@
+package bao;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+public class Biankbuj extends Frame 
+{
+public Biankbuj()
+{
+	add(new Button("North1"),BorderLayout.NORTH);
+	add(new Button("North2"),BorderLayout.NORTH);
+	add(new Button("SOUTH"),BorderLayout.SOUTH);
+	add(new Button("EAST"),BorderLayout.EAST);
+	add(new Button("WEST"),BorderLayout.WEST);
+	add(new Button("CENTER"),BorderLayout.CENTER);
+}
+	public static void main(String[] args) 
+	{
+		Biankbuj f=new Biankbuj();
+		f.setBounds(700,400,500,600);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

@@ -1,0 +1,29 @@
+//the dictionary abstract class
+template<typename Key,typenaem E>
+class Dictionary
+{
+private:
+	void operator=(const Dictionary&){}
+	Dictionary(const Dictionary&){}
+public:
+	Dictionary(){}//default constructor
+	virtual ~Dictionary(){}//base destructor
+	//reinitialize dictionary
+	virtual void clear()=0;
+	//insert a record
+	//k:the key for the record being inserted
+	//e:the record being inserted
+	virtual void insert(const Key&k,const E&e)=0;
+	
+	//remove and return a record
+	//k:the key of the record to be removed
+	//return:a maching record.if multiple records match
+	//k,remove an arbitrary one.return NULL if no record
+	virtual E remove(const Key&k)=0;
+	//return: a record matching "k" (NULL if none exists).
+	//if multiple records match,return an arbitrary one.
+	//k:the key of the record to find
+	virtual E find(const Key&k)const=0;
+	//return the number of records in the dictionary
+	virtual int size()=0;
+};

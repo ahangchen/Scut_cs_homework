@@ -1,0 +1,15 @@
+package bao;
+import java.awt.*;
+import java.applet.*;
+public class Tuxing extends Applet
+{
+	public void init()
+	{
+		setBackground(new Color(230,230,230));
+	}
+	public void paint(Graphics g)
+	{
+		g.setColor(Color.cyan);
+		g.fillOval(this.getWidth()/4, this.getHeight()/4, this.getWidth()/2, this.getHeight()/2);
+	}
+}

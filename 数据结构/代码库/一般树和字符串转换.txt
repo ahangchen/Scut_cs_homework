@@ -1,0 +1,86 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+struct CSTNode
+{
+	CSTNode*child;
+	CSTNode*sibling;
+	char data;
+	CSTNode()
+	{
+		child=NULL;
+		sibling=NULL;
+		data='\0';
+	}
+};
+struct CST
+{
+	char treecode[100];
+	CSTNode*root;
+	CST()
+	{
+		treecode[0]='\0';
+		root=new CSTNode;
+	}
+	CST(CSTNode*root)
+	{
+		this->root=root;
+	}
+	CST(char*treecode)
+	{
+		strcpy_s(this->treecode,treecode);
+	}
+	void insert_for_outtree(char*str,int&i,CSTNode*&root)
+	{
+		if(str[i]=='\0')return;
+		if(str[i]==')')return;
+		else
+		{
+			root->child=new CSTNode;
+			root->sibling=new CSTNode;
+			root->data=str[i];	
+			insert_for_outtree(str,++i,root->child);
+			insert_for_outtree(str,++i,root->sibling);
+		}			
+	}
+	void insert_for_root(char*str,int&i)
+	{
+		insert_for_outtree(str,i,root);
+	}
+	void pretostr(CSTNode*root,int&i)
+	{
+		if(root->child==NULL)return;
+		treecode[i]=root->data;
+		treecode[++i]='\0';
+		pretostr(root->child,i);
+		treecode[i]=')';
+		treecode[++i]='\0';
+		pretostr(root->sibling,i);	
+	}
+	void preprint(CSTNode*root)
+	{
+		if(root->child==NULL)return;
+		cout<<root->data;
+		preprint(root->child);
+		cout<<")";
+		preprint(root->sibling);	
+	}
+};
+
+int main()
+{
+	char*str="RAC)D))BE))F))";
+	CSTNode*root=new CSTNode;
+	int i=0;
+	CST*tree=new CST;
+	tree->insert_for_root(str,i);
+	tree->preprint(tree->root);
+	cout<<endl;
+	i=0;
+	tree->insert_for_outtree(str,i,root);
+	tree->preprint(root);
+	cout<<endl;
+	i=0;
+	tree->pretostr(root,i);
+	cout<<tree->treecode<<endl;
+}

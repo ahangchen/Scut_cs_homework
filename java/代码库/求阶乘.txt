@@ -1,0 +1,15 @@
+package bao;
+import java.util.Scanner;
+public class Fac
+{
+	public static void main(String args[]) 
+	{
+		long fac=1;
+		int n=1;
+		Scanner sc = new Scanner(System.in);
+		n=sc.nextInt();
+		for(int i=1;i<=n;i++)
+			fac=fac*i;
+		System.out.println(fac);
+	}
+}

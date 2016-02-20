@@ -1,0 +1,70 @@
+#include<iostream>
+using namespace std;
+//heap class 
+class heap
+{
+private:
+	int*arrayheap;//pointer to the heap array
+	int n;
+	void siftdown(int pos)
+	{
+		while(!isLeaf(pos))
+		{
+			int j=leftchild(pos);
+			int rc=rightchild(pos);
+			if((rc<n)&&arrayheap[rc]>arrayheap[j])
+				j=rc;
+			if(arrayheap[pos]>arrayheap[j])return;
+			swap(pos,j);
+			pos=j;
+		}
+	}
+public:
+	heap(int*h,int num)
+	{arrayheap=h;n=num;buildHeap();}
+	int size(){return n;}
+	bool isLeaf(int pos){return (pos>=n/2)&&(pos<n);}
+	int leftchild(int pos){return 2*pos+1;}
+	int rightchild(int pos){return 2*pos+2;}
+	int parent(int pos){return (pos-1)/2;}
+	void swap(int pos,int j)
+	{
+		int temp=arrayheap[pos];
+		arrayheap[pos]=arrayheap[j];
+		arrayheap[j]=temp;
+	}
+	void buildHeap()
+	{
+		for(int i=n/2-1;i>=0;i--)
+			siftdown(i);
+	}
+	void insert(int it)
+	{
+		int curr=n++;
+		arrayheap[curr]=it;//这样没问题么？
+		while((curr!=0)&&arrayheap[curr]>arrayheap[parent(curr)])
+		{
+			swap(curr,parent(curr));
+			curr=parent(curr);
+		}
+	}
+	void  inorderprinthelp(int pos,int level)
+	{
+		if(pos<0||pos>=n)return;
+		inorderprinthelp(leftchild(pos),level+1);
+		for(int i=0;i<level;i++)cout<<"     ";
+		cout<<arrayheap[pos]<<endl;
+		inorderprinthelp(rightchild(pos),level+1);
+	}
+	void print()
+	{
+		if(n<=0)cout<<"empty"<<endl;
+		else inorderprinthelp(0,0);//第一个0表示树根，第二个零表示层数
+	}
+};
+int main()
+{
+	int numarray[]={10,5,12,3,2,1,8,7,9,4};//给定输入数据
+	heap hill(numarray,10);
+	hill.print();
+}

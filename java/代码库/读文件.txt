@@ -1,0 +1,14 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		byte[]b=new byte[10];
+		FileInputStream fin=new FileInputStream("e:\\chidou.txt");
+		fin.read(b);
+		fin.close();
+		String s=new String(b);
+		System.out.println(s);
+	}
+}

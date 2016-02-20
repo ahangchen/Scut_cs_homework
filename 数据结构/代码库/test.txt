@@ -1,0 +1,38 @@
+class Animal
+{
+	public void speak(){System.out.println("animal");}
+}
+class Cat extends Animal
+{
+	public void speak(){System.out.println("meow");}//OVERRIDE SPEAK
+	String name="cat";
+}
+class Dog extends Animal
+{
+	public void speak(){System.out.println("wang");}//OVERRIDE SPEAK
+	String name="dog";
+}
+class Tiger extends Animal
+{
+	public void speak(){System.out.println("howl");}//OVERRIDE SPEAK
+	String name="tiger";
+}
+class Test
+{
+	public static void main(String args[])
+	{
+		Animal*ptr=new Animal();
+		ptr=new Cat();//上转型
+		ptr->speak();
+		Cat*cptr=(Cat*)ptr;//强制下转型
+		System.out.println(cptr->name);
+		ptr=new Dog();//上转型
+		ptr->speak();
+		Dog*dptr=(Dog*)ptr;//强制下转型
+		System.out.println(dptr->name);
+		ptr=new Tiger();//上转型
+		ptr->speak();
+		Cat*tptr=(Cat*)ptr;//强制下转型
+		System.out.println(tptr->name);
+	}
+}

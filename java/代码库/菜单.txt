@@ -1,0 +1,43 @@
+package bao;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+public class Testmenu extends Frame
+{
+	MenuBar mb=new MenuBar();
+	Menu mf=new Menu("文件");
+	MenuItem mfo=new MenuItem("文件");
+	MenuItem mfe=new MenuItem("退出");
+	CheckboxMenuItem mio=new CheckboxMenuItem("打开新文件是否提示保存");
+	Menu me=new Menu("编辑");
+	MenuItem mfc=new MenuItem("复制");
+	MenuItem mfj=new MenuItem("剪切");
+	MenuItem mfp=new MenuItem("粘贴");
+	public Testmenu()
+	{
+		mf.add(mfo);
+		mf.add(mio);
+		me.add(mfc);
+		me.add(mfj);
+		me.add(mfp);
+		mf.add(me);
+		mf.addSeparator();
+		mf.add(mfe);
+		mb.add(mf);
+		setMenuBar(mb);
+	}
+	public static void main(String[] args) 
+	{
+		Testmenu f=new Testmenu();
+		f.setBounds(100,100,300,200);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

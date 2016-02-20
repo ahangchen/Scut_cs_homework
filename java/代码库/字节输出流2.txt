@@ -1,0 +1,14 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		FileOutputStream fout=new FileOutputStream("d:\\0.dat");//定义文件流
+		PrintStream out=new PrintStream(fout);//包装成PrintStream
+		out.println(3.14159);
+		out.println("welcome");
+		out.println(46);
+		out.println(true);
+	}
+}

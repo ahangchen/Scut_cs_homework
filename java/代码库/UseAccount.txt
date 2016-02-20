@@ -1,0 +1,47 @@
+class Account
+{
+	private String account;
+	private String type;
+	private String password;
+	String openbank;
+	String opendate;
+	String openperson;
+	String address;
+	private double balance;
+	public Account (String uid,String pwd,double m)
+	{
+		account=uid;
+		password=pwd;
+		balance=m;
+	}
+	public double getBalance()
+	{
+		return balance;
+	}
+	public void setPassword(String pwd)
+	{
+		password=pwd;
+	}
+	public boolean verifypassword(String pwd)
+	{
+		return password.equals(pwd);
+	}
+	public void draw(double m)
+	{
+		if(balance-m>0)balance-=m;
+	}
+	public void save(double m)
+	{
+		balance+=m;
+	}
+}
+public class Main
+{
+	public static void main(String args[])
+	{
+		Account acc1=new Account("95001","123",100);
+		acc1.save(1000);
+		acc1.draw(500);
+		System.out.println(acc1.getBalance());
+	}
+}

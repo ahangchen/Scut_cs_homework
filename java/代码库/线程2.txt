@@ -1,0 +1,18 @@
+package bao;
+class MyThread implements Runnable
+{
+	public void run()
+	{
+		System.out.println(Thread.currentThread().getName());
+	}
+}
+public class SimpleThread {
+	public static void main(String[] args) 
+	{
+		Thread t1=new Thread(new MyThread());
+		System.out.println(Thread.activeCount());
+		t1.start();
+		System.out.println(Thread.activeCount());
+		System.out.println(Thread.currentThread().getName());
+	}
+}

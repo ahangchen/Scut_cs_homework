@@ -1,0 +1,36 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+public class Btnevent extends Frame
+{
+	Button b=new Button("Click me");
+	Label l=new Label();
+	public Btnevent()
+	{
+		l.setAlignment(Label.CENTER);
+		b.addActionListener(new BtnClick());
+		add("South",b);
+		add("Center",l);
+	}
+	public static void main(String[] args) 
+	{
+		Btnevent f=new Btnevent();
+		f.setBounds(100,100,100,100);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class BtnClick implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			l.setText("no one will defeat me");
+		}
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}

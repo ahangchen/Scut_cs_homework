@@ -1,0 +1,11 @@
+package bao;
+import java.io.*;
+public class Test 
+{
+	public static void main(String[] args)throws IOException
+	{
+		int ch;
+		 while((ch=System.in.read())!=-1)//输入字符，遇到回车时逐个输出，遇到ctrl+z时结束输入
+			 System.out.println((char)ch);
+	}
+}

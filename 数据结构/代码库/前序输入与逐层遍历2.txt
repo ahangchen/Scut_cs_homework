@@ -1,0 +1,100 @@
+#include<iostream>
+#include<string>
+using namespace std;
+struct BstNode 
+{
+    char data;
+	BstNode*left;
+	BstNode*right;
+	BstNode*next;
+	BstNode(){left=right=NULL;}
+	BstNode(char data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=0;}
+	~queue(){delete front;delete rear;size=0;}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	char dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			char it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	int counti;
+	BST(){root=NULL;nodecount=0;counti=0;}
+	BstNode*insert(BstNode*&root,char*c)
+	{
+        if(c[counti]!= '\0')
+		{
+            root=new BstNode(c[counti],NULL,NULL); 
+            if(c[counti]>= 'A' && c[counti]<= 'Z')
+                return root;
+        counti++;
+        root->left = insert(root->left,c);
+        counti++;
+        root->right = insert(root->right,c);
+        }
+        return root;
+    }      
+};
+int main()
+{
+	int n;
+	cin>>n;
+	cin.get();
+	while(n--)
+	{
+		char str[1000];
+		cin.getline(str,1000,'\n');
+		BST*tree=new BST;
+		tree->insert(tree->root,str);
+		queue*treenodequeue=new queue;
+		treenodequeue->enqueue(tree->root);
+		cout<<treenodequeue->frontNode()->data;
+		if (treenodequeue->frontNode()->left)
+			treenodequeue->enqueue(treenodequeue->frontNode()->left);
+		if (treenodequeue->frontNode()->right)
+			treenodequeue->enqueue(treenodequeue->frontNode()->right);
+		treenodequeue->dequeue();
+		while(treenodequeue->size>0)
+		{
+			cout<<" "<<treenodequeue->frontNode()->data;
+			if (treenodequeue->frontNode()->left)
+				treenodequeue->enqueue(treenodequeue->frontNode()->left);
+			if (treenodequeue->frontNode()->right)
+				treenodequeue->enqueue(treenodequeue->frontNode()->right);
+			treenodequeue->dequeue();
+		}
+		cout<<endl;
+	}
+}

@@ -1,0 +1,68 @@
+package bao;
+import java.awt.*;
+//import java.awt.Color;
+//import java.awt.Component;
+//import java.awt.Dimension;
+//import java.awt.Frame;
+//import java.awt.Toolkit;
+import java.awt.event.*;
+//import java.awt.event.WindowEvent;
+//import java.awt.event.WindowAdapter;
+public class Frame2 extends Frame
+{
+	public Frame2(String string)
+	{
+		super(string);//父类构造方法
+	}
+	public static void main(String args[])
+	{
+		Frame2 f=new Frame2("test");
+		f.setSize(500,600);
+		Dimension S1=Toolkit.getDefaultToolkit().getScreenSize();
+		Dimension f1=f.getSize();
+	    	f.setLocation((S1.width-f1.width)/2,(S1.height-f1.height)/2);
+		f.setBackground(Color.WHITE);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+		Component c=new Button();
+		if(!c.isVisible())c.setVisible(true);
+		c.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		f.add(c);
+		//f.addMouseMotionListener(new MyMouseListener());
+		Container con=new Panel();
+		con.setLayout(new FlowLayout());
+		for(int i=0;i<4;i++)
+			con.add(new Button(String.valueOf(i)));
+		f.add(con);
+		Container con1=new Panel();
+		con1.setLayout(new BorderLayout());
+		con1.add("East",new Button("East"));
+		con1.add("West",new Button("west"));
+		con1.add("South",new Button("south"));
+		con1.add("North",new Button("north"));
+		f.add(con1);
+		Menu m=new Menu("menu");
+		MenuItem mi1=new MenuItem("part 1");
+		MenuItem mi2=new MenuItem("part 2");
+		m.add(mi1);
+		m.add(mi2);
+		MenuBar mb=new MenuBar();
+		mb.add(m);
+		f.setMenuBar(mb);
+		ScrollPane sp=new ScrollPane(ScrollPane.SCROLLBARS_ALWAYS);
+		f.add(sp);
+		Dialog dlg=new Dialog(f,"a dialog",true);
+		dlg.show();
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+	/*class MyMouseListener extends ...
+	{
+		...
+	}*/
+}

@@ -1,0 +1,15 @@
+Public class Student
+{
+	String sno;
+	String name;
+	String sex;
+	int age;
+	public void setSno(String sn)
+	{
+		sno=sn;
+	}
+	public String getSno()
+	{
+		return sno;
+	}
+}

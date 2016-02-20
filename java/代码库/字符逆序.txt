@@ -1,0 +1,17 @@
+package bao;
+import java.util.Scanner;
+public class Name
+{
+	public static void main(String[] args)
+	{
+		Scanner cin=new Scanner(System.in);
+		String getword;
+		getword=cin.next();
+		StringBuffer s1=new StringBuffer(getword);
+		StringBuffer s2=new StringBuffer(getword);
+		int i;
+		for(i=0;i<s1.length();i++)
+			s2.setCharAt(i,s1.charAt(s1.length()-i-1));
+		System.out.println(s2);
+	}
+}

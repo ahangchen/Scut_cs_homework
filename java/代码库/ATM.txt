@@ -1,0 +1,88 @@
+package bao£»
+import java.awt.*;
+import java.applet.*;
+import java.awt.event.*;
+class OverdrawException extends Exception
+{
+	private String reason;
+	public OverdrawException()
+	{
+		this("OverDraw");
+	}
+	public OverdrawException(String s)
+	{
+		reason=s;
+	}
+	public  String getReason()
+	{
+		return reason;
+	}
+}
+class BankCard
+{
+	String id;
+	private String password;
+	private double balance;
+	BankCard(String uid,double m,String pwd)
+	{
+		id=uid;
+		balance=m;
+		password=pwd;
+	}
+	public double getBalance()
+	{
+		return balance;
+	}
+	public void draw(double m)throws OverdrawException
+	{
+		if(balance<m)throw new OverdrawException("Not enough money");
+		balance-=m;
+	}
+	public void save(double m)
+	{
+		balance+=m;
+	}
+}
+public class BankCardMain extends Applet implements ActionListener
+{
+	TextField input=new TextField(10);
+	Button saveButton=new Button("save");
+	Button drawButton=new Button("draw");
+	BankCard userCard;
+	boolean errorFlag=true;
+	String errorReason;
+	public void init()
+	{
+		userCard=new BankCard("10001",2000,"666666");
+		add(input);
+		add(saveButton);
+		add(drawButton);
+		saveButton.addActionListener(this);
+		drawButton.addActionListener(this);
+	}
+	public void paint(Graphics g)
+	{
+		g.drawString("your id is"+userCard.id,50,60);
+		g.drawString("your balance is"+userCard.getBalance(), 50, 60);
+		if(errorFlag)
+		{
+			g.drawString(errorReason ,50, 60);
+			errorFlag=false;
+		}
+	}
+	public void actionPerformed(ActionEvent e)
+	{
+		double x;
+		x=Double.valueOf(input.getText()).doubleValue();
+		if(e.getSource()==saveButton)
+			userCard.save(x);
+		else 
+			try{userCard.draw(x);}
+		catch(OverdrawException e1)
+		{
+			errorFlag=true;
+			errorReason=e1.getReason();
+		}
+		repaint();
+	}
+}

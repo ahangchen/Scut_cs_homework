@@ -1,0 +1,32 @@
+package bao;
+import java.io.*;
+class MyFilter implements FilenameFilter
+{
+	public boolean accept(File dir,String name)
+	{
+		if(name.endsWith(".txt"))return true;
+		return false;
+	}
+}
+public class TestFile {
+	public static void main(String[] args) 
+	{
+		try
+		{
+			RandomAccessFile rf=new RandomAccessFile("c:\\0.dat","rw");
+			for(int i=0;i<10;i++)
+				rf.writeDouble(i*1.414);
+			rf.seek(5*8);
+			rf.writeDouble(47.001);
+			for(int i=0;i<10;i++)
+				System.out.println("Value"+i+":"+rf.readDouble());
+			rf.close();
+		}catch(FileNotFoundException e)
+		{
+			System.out.println("File Not Found:"+args[0]);
+		}catch(IOException e)
+		{
+			System.out.println("IOEXCEPTION");
+		}
+	}
+}

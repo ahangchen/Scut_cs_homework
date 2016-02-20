@@ -1,0 +1,229 @@
+#include<iostream>
+using namespace std;
+int max(int a,int b)
+{return a>b?a:b;}
+class BstNode
+{
+public:
+	int data;
+	BstNode*left;
+	BstNode*right;
+	BstNode(){left=right=NULL;}
+	BstNode(int data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+	~BstNode(){}
+	void setleft(BstNode*b){left=b;}
+	void setright(BstNode*b){right=b;}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	BstNode*inserthelp(BstNode*root,int item)
+	{
+		if(root==NULL)return new BstNode(item,NULL,NULL);
+		if(item<root->data)root->setleft(inserthelp(root->left,item));
+		else root->setright(inserthelp(root->right,item));
+		return root;
+	}
+	BST(){root=NULL;nodecount=0;}
+	void insert(const int item)
+	{
+		root=inserthelp(root,item);
+		nodecount++;
+	}
+	int height(BstNode*root)
+	{
+		if(root==NULL)return 0;
+		else return 1+max(height(root->left),height(root->right));
+	}
+};
+int main()
+{
+	int elem;
+	char kon;
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		kon='\0';
+		BST*tree=new BST;
+		while(kon!='\n')
+		{
+			cin>>elem;
+			cin.get(kon);
+			tree->insert(elem);
+		}
+		cout<<tree->height(tree->root)<<endl;
+	}
+}
+
+
+#include<iostream>
+#include<string>
+#include<cmath>
+using namespace std;
+struct BstNode 
+{
+    char data;
+	BstNode*left;
+	BstNode*right;
+	BstNode*next;
+	BstNode(){left=right=NULL;}
+	BstNode(char data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+	bool isleaf(){return(left==NULL)&&(right==NULL);}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	int counti;
+	BST(){root=NULL;nodecount=0;counti=0;}
+	BstNode*insert(BstNode*&root,char*c)
+	{
+        if(c[counti]!= '\0')
+		{
+            root=new BstNode(c[counti],NULL,NULL); 
+            if(c[counti]>= 'A' && c[counti]<= 'Z')
+                return root;
+        counti++;
+        root->left = insert(root->left,c);
+        counti++;
+        root->right = insert(root->right,c);
+        }
+        return root;
+    }      
+	int height(BstNode*root)
+	{
+		if(root==NULL)return 0;
+		else return 1+max(height(root->left),height(root->right));
+	}
+	bool isbalance(BstNode*root)
+	{
+		if(root->isleaf())return true;
+		int h1=height(root->left);
+		int h2=height(root->right);
+		if(abs(h1-h2)>1)return false;
+		else return isbalance(root->left);
+		return isbalance(root->right);
+	}
+};
+
+int main()
+{
+	int n;
+	cin>>n;
+	cin.get();
+	while(n--)
+	{
+		char str[1000];
+		cin.getline(str,1000,'\n');
+		BST*tree=new BST;
+		tree->insert(tree->root,str);
+		if(tree->isbalance(tree->root))cout<<"B"<<endl;
+		else cout<<"N"<<endl;
+	}
+}
+
+
+#include<iostream>
+#include<string>
+using namespace std;
+struct BstNode 
+{
+    char data;
+	BstNode*left;
+	BstNode*right;
+	BstNode*next;
+	BstNode(){left=right=NULL;}
+	BstNode(char data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=0;}
+	~queue(){delete front;delete rear;size=0;}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	char dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			char it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	int counti;
+	BST(){root=NULL;nodecount=0;counti=0;}
+	BstNode*insert(BstNode*&root,char*c)
+	{
+        if(c[counti]!= '\0')
+		{
+            root=new BstNode(c[counti],NULL,NULL); 
+            if(c[counti]>= 'A' && c[counti]<= 'Z')
+                return root;
+        counti++;
+        root->left = insert(root->left,c);
+        counti++;
+        root->right = insert(root->right,c);
+        }
+        return root;
+    }      
+};
+int main()
+{
+	int n;
+	cin>>n;
+	cin.get();
+	while(n--)
+	{
+		char str[1000];
+		cin.getline(str,1000,'\n');
+		BST*tree=new BST;
+		tree->insert(tree->root,str);
+		queue*treenodequeue=new queue;
+		treenodequeue->enqueue(tree->root);
+		while(treenodequeue->size>0)
+		{
+			cout<<treenodequeue->frontNode()->data;
+			if (treenodequeue->frontNode()->left)
+				treenodequeue->enqueue(treenodequeue->frontNode()->left);
+			if (treenodequeue->frontNode()->right)
+				treenodequeue->enqueue(treenodequeue->frontNode()->right);
+			treenodequeue->dequeue();
+		}
+		cout<<endl;
+	}
+}

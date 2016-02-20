@@ -1,0 +1,51 @@
+//node implementation with the composite design pattern
+class VarBinNode
+{
+//node abstract base class
+public:
+	virtual ~VarBinNode(){}//generic destructor
+	virtual bool isLeaf()=0;
+	virtual void traverse()=0;
+};
+
+class LeafNode:public VarBinNode
+{
+//leaf node
+private:
+	Operand var;//operand value
+public:
+	LeafNode(const Operand&val){var=val;}//constructor
+	bool isLeaf(){return true;}//isleaf for Leafnode
+	Operand value(){return var;}//return node value
+	void traverse(){cout<<"leaf:"<<value()<<endl;}
+};
+
+class IntlNode:public VarBinNode
+{
+//Internal node
+private:
+	VarBinNode*lc;
+	VarBinNode*rc;
+	Operator opx;
+public:
+	IntlNode(const Operator&op,VarBinNode*l,VarBinNode*r)
+	{opx=op;lc=l;rc=r;}//constructor
+	bool isLeaf(){return false;}//isLeaf for IntlNode
+	VarBinNode*left(){return lc;}//left child
+	VarBinNode*right(){return rc;}//right child
+	Operator value(){return opx;}//value
+	
+	void traverse()
+	{
+	//traversal behavior for internal nodes
+	cout<<"Internal:"<<value()<<endl;
+	if(left!=NULL)left()->traverse();
+	if(right()!=NULL)right()->traverse();
+	}
+};
+
+//do a preorder traversal
+void traverse(VarBinNode*root)
+{
+	if(root!=NULL)root->traverse();
+}

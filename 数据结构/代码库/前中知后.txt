@@ -1,0 +1,68 @@
+#include<string.h>
+#include<iostream>
+using namespace std;
+struct tree{
+	char data;
+	tree *l,*r;
+};
+tree * create(char pre[],char in[]){
+	tree *root;
+	if(strlen(pre)==0) {root=NULL;}
+	else
+	{
+		root=new tree;
+		root->data=pre[0];
+		char pre1[20];pre1[0]='\0';
+		char pre2[20];pre2[0]='\0';
+		char in1[20];in1[0]='\0';
+		char in2[20];in2[0]='\0';
+		int n=1;
+		for(int i=0;i<strlen(in);i++)
+		{
+			if(in[i]!=pre[0]&&n==1)
+			{
+				in1[i]=in[i];
+				in1[i+1]='\0';
+			}
+			if(in[i]==pre[0]) n=2;
+			if(in[i]!=pre[0]&&n==2)
+			{
+				in2[i-strlen(in1)-1]=in[i];
+				in2[i-strlen(in1)+1]='\0';
+			}
+		} 
+		for(int i=1;i<strlen(pre);i++){
+			if(i<strlen(in1)+1)
+			{ 
+				pre1[i-1]=pre[i];
+				pre1[i]='\0';
+			}
+			else 
+			{
+				pre2[i-1-strlen(pre1)]=pre[i];
+				pre2[i-strlen(pre1)]='\0';
+			}
+		}
+		root->l=create(pre1,in1);
+		root->r=create(pre2,in2);
+	}
+	return root;
+}
+void post(tree * root){
+	if(root==NULL) return;
+	else {
+		post(root->l);
+		post(root->r);
+		cout<<root->data;
+	}
+}
+int main()
+{
+	char pre[100];
+	char in[100];
+	cin>>pre;
+	cin>>in;
+	tree * root=create(pre,in);
+	post(root);
+	return 0;
+}

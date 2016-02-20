@@ -1,0 +1,145 @@
+#include<iostream>
+#include<string>
+using namespace std;
+struct BstNode 
+{
+    char data;
+	BstNode*left;
+	BstNode*right;
+	BstNode*next;
+	BstNode(){left=right=NULL;}
+	BstNode(char data1,BstNode*left1=NULL,BstNode*right1=NULL)
+	{
+		data=data1;left=left1;right=right1;
+	}
+	~BstNode(){}
+	void setvalue(char e){data=e;}
+	void setleft(BstNode*b){left=b;}
+	void setright(BstNode*b){right=b;}
+	bool isleaf(){return(left==NULL)&&(right==NULL);}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=0;}
+	~queue(){clear();delete front;}
+	void clear()
+	{
+		while(front->next!=NULL)rear=front;
+		delete rear;
+		rear=front;
+		size=0;
+	}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	char dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			char it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	char frontvalue()
+	{
+		return front->next->data;
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+class BST:public BstNode
+{
+public:
+	BstNode*root;
+	int nodecount;
+	int counti;
+	BST(){root=NULL;nodecount=0;counti=0;}
+	BstNode*insert(BstNode*&root,char*c)
+	{
+        if(c[counti] != '\0')
+		{
+            root=new BstNode(c[counti],NULL,NULL); 
+            if(c[counti] >= 'A' && c[counti] <= 'Z')
+                return root;
+        counti++;
+        root->left = insert(root->left,c);
+        counti++;
+        root->right = insert(root->right,c);
+        }
+        return root;
+    }      
+	void preorderprinthelp(BstNode*root,int level)
+	{
+		if(root==NULL)return;
+		for(int i=0;i<level;i++)cout<<" ";
+		cout<<root->data<<endl;
+		preorderprinthelp(root->left,level+1);
+		preorderprinthelp(root->right,level+1);
+	}
+	void  inorderprinthelp(BstNode*root,int level)
+	{
+		if(root==NULL)return;
+		inorderprinthelp(root->left,level+1);
+		for(int i=0;i<level;i++)cout<<" ";
+		cout<<root->data<<endl;
+		inorderprinthelp(root->right,level+1);
+	}
+	void postorderprinthelp(BstNode*root,int level)
+	{
+		if(root==NULL)return;
+		for(int i=0;i<level;i++)cout<<" ";
+		cout<<root->data<<endl;
+		postorderprinthelp(root->left,level+1);
+		postorderprinthelp(root->right,level+1);
+	}
+	void print()
+	{
+		if(root==NULL)cout<<"empty"<<endl;
+		else 
+		{
+			preorderprinthelp(root,0);
+			inorderprinthelp(root,0);
+			postorderprinthelp(root,0);
+		}
+	}
+};
+int main()
+{
+	int n;
+	cin>>n;
+	cin.get();
+	while(n--)
+	{
+		char str[1000];
+		cin.getline(str,1000,'\n');
+		BST*tree=new BST;
+		tree->insert(tree->root,str);
+		queue*treenodequeue=new queue;
+		treenodequeue->enqueue(tree->root);
+		while(treenodequeue->size>0)
+		{
+			cout<<treenodequeue->frontNode()->data;
+			if (treenodequeue->frontNode()->left)
+				treenodequeue->enqueue(treenodequeue->frontNode()->left);
+			if (treenodequeue->frontNode()->right)
+				treenodequeue->enqueue(treenodequeue->frontNode()->right);
+			treenodequeue->dequeue();
+		}
+		cout<<endl;
+		//tree->print();
+	}
+}

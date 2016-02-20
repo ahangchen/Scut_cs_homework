@@ -1,0 +1,43 @@
+package bao;
+import java.awt.*;
+import java.util.Scanner;
+interface Shape
+{
+	int MAXNUMBER=10;
+	void draw(Graphics g);
+	double area();
+}
+public class Circle implements Shape
+{
+	int centerX,centerY;
+	int radius;
+	public Circle()
+	{
+		this(0,0,0);
+	}
+	public Circle(int x,int y,int r)
+	{
+		centerX=x;
+		centerY=y;
+		radius=r;
+	}
+	public double area()
+	{
+		return Math.PI*radius*radius;
+	}
+	public void draw(Graphics g)
+	{
+		g.drawOval(centerX-radius,centerY-radius,2*radius,2*radius);
+	}
+	public static void main(String args[])
+	{
+		int x,y,r;
+		Scanner cin=new Scanner(System.in);
+		x=cin.nextInt();
+		y=cin.nextInt();
+		r=cin.nextInt();
+		Circle yuan=new Circle(x,y,r);
+		System.out.println(yuan.area());
+		//yuan.draw(g=new Graphics);
+	}
+}

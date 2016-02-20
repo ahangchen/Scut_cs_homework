@@ -1,0 +1,46 @@
+import java.net.*;
+import java.util.Scanner;
+import java.io.*;
+public class SimpleCient {
+	public static void main(String[] args) 
+	{
+		try
+		{
+			Socket socket=new Socket(InetAddress.getByName(null),8080);
+			BufferedReader in=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			PrintWriter out=new PrintWriter(new OutputStreamWriter(socket.getOutputStream()),true);
+			String s0=new String();
+			 do{
+				 s0=in.readLine();//读取服务器端传过来的数据
+				 Scanner cin=new Scanner(System.in);
+					System.out.println("");
+					String str1=cin.next();
+					//System.out.println(str1);
+					String str2=cin.next();//cin.next();
+					out.println(str1);//不会输出，但可以传给服务器端输出
+					out.flush();//似乎必须这样服务器才能检测到out
+					out.println(str2);
+					out.flush();
+					String s1=in.readLine();//读取服务器端传过来的数据
+					if(s1.equals("Illegal User!"))
+					{
+						System.out.println(s1);//输出服务器端输出的Registration Successful!
+						System.exit(0);
+					}
+					else if(s1.equals("PassWord Wrong!"))
+						{
+							System.out.println("PassWord Wrong!");
+						}
+					else if(s1.equals("Registration Successful!"))break;
+			}while(s0.equals("Verifying Server!"));
+			 if(!s0.equals("Verifying Server!"))
+				{
+					System.out.println("Server Wrong!");
+					Thread.sleep(3000);
+					System.exit(0);
+				}
+			System.out.println("Registration Successful!");
+			socket.close();
+		}catch(Exception e){}
+	}
+}

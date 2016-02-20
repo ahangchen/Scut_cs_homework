@@ -1,0 +1,36 @@
+class Product
+{
+	String id;
+	String name;
+	String type;
+	String price;
+	String factory;
+	String saler;
+	String city;
+	public String getFactory()
+	{
+		return factory;
+	}
+}
+public class Cart
+{
+	Product[]products=new Product[100];
+	int[]qty=new int[100];
+	int count;
+	public void add(Product p,double qty)
+	{
+		//
+	}
+	public void remove(Product p,double qty)
+	{
+		//
+	}
+	public double calculatemoney()
+	{
+		//
+	}
+	public void displayProducts()
+	{
+		//
+	}
+}

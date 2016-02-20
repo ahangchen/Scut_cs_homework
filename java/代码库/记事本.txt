@@ -1,0 +1,38 @@
+package bao;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+public class Notepad extends JFrame 
+{
+	Container cp=this.getContentPane();
+	JToolBar jtb=new JToolBar();
+	JButton jbnew=new JButton();
+	JButton jbopen=new JButton();
+	JButton jbsave=new JButton();
+	JLabel status=new JLabel("this is status bar");
+	//要把图片放在Notepad所在文件夹
+	ImageIcon icon1=new ImageIcon("new.gif");
+	ImageIcon icon2=new ImageIcon("open.gif");
+	ImageIcon icon3=new ImageIcon("save.gif");
+	TextArea ta=new TextArea();
+	public Notepad()
+	{
+		jbnew.setIcon(icon1);
+		jbopen.setIcon(icon2);
+		jbsave.setIcon(icon3);
+		jtb.add(jbnew);
+		jtb.add(jbopen);
+		jtb.add(jbsave);
+		cp.setLayout(new BorderLayout());
+		cp.add("North",jtb);
+		cp.add("Center",ta);
+		cp.add("South",status);
+	}
+	public static void main(String[] args) 
+	{
+		Notepad np=new Notepad();
+		np.setBounds(100,100,300,400);
+		np.setVisible(true);
+	}
+
+}

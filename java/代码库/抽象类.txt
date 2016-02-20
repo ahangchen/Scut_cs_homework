@@ -1,0 +1,67 @@
+package bao;
+abstract class Shape
+{
+	public abstract double area();
+}
+class Rectangle extends Shape
+{
+	double width,height;
+	public Rectangle(double w,double h)
+	{
+		width=w;
+		height=h;
+	}
+	public double area()
+	{
+		return width*height;
+	}
+}
+class Triangle extends Shape
+{
+	double side,height;
+	public Triangle(double s,double h)
+	{
+		side=s;
+		height=h;
+	}
+	public double area()
+	{
+		return 0.5*side*height;
+	}
+}
+class Circle extends Shape
+{
+	double radius;
+	public Circle(double r)
+	{
+		radius=r;
+	}
+	public double area()
+	{
+		return Math.PI*radius*radius;
+	}
+}
+
+public class Main 
+{
+	public static double totalArea(Shape[]s)
+	{
+		double sum=0.0;
+		for(int i=0;i<s.length;i++)
+		{
+			sum+=s[i].area();
+		}
+		return sum;
+	}
+	public static void main(String[]args)
+	{
+		Shape[]s=new Shape[6];
+		s[0]=new Rectangle(2,3);
+		s[1]=new Triangle(5,3.5);
+		s[2]=new Triangle(7,8);
+		s[3]=new Circle(20);
+		s[4]=new Circle(1.5);
+		s[5]=new Circle(7.8);
+		System.out.print(totalArea(s));
+	}
+}

@@ -1,0 +1,17 @@
+package bao;
+import java.awt.Frame;
+public class SimpleFrame1 extends Frame
+{
+	public SimpleFrame1(String title)
+	{
+		super(title);
+		setSize(300,200);
+	}
+	public static void main(String[] args)
+	{
+		SimpleFrame1 f=new SimpleFrame1("Welcome to java!");
+		f.setLocation(100,100);
+		f.setVisible(true);
+	}
+
+}

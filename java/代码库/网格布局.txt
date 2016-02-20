@@ -1,0 +1,43 @@
+package bao;
+import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+
+public class Wanggebuju extends Frame
+{
+	TestGridPanel panel=new TestGridPanel();
+	public Wanggebuju()
+	{
+		add(panel);
+	}
+	public static void main(String args[])
+	{
+		Wanggebuju f=new Wanggebuju();
+		f.setBounds(100,100,250,300);
+		f.setVisible(true);
+		f.addWindowListener(f.new Mywindowadapter());
+	}
+	class Mywindowadapter extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent we)
+		{
+			System.exit(0);
+		}
+	}
+}
+class TestGridPanel extends Panel
+{
+	GridLayout grid=new GridLayout(4,4);
+	public TestGridPanel()
+	{
+		setLayout(grid);
+		for(int i=0;i<10;i++)
+			add(new Button(String.valueOf(i)));
+		add(new Button("+"));
+		add(new Button("-"));
+		add(new Button("*"));
+		add(new Button("/"));
+		add(new Button("="));
+	}
+	
+}

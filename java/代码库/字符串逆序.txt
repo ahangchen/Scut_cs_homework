@@ -1,0 +1,18 @@
+package bao;
+import java.util.Scanner;
+public class Name
+{
+	public static void main(String[] args)
+	{
+		Scanner cin=new Scanner(System.in);
+		String temp;
+		StringBuffer s=new StringBuffer();
+		while (cin.hasNext())
+		{
+			temp=cin.next();
+			temp=temp.concat(" ");
+			s.insert(0,temp);
+		}
+		System.out.println(s);
+	}
+}

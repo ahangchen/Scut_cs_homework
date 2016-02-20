@@ -1,0 +1,19 @@
+package bao;
+import java.io.*;
+public class BasicOutApplication
+{
+	public static void main(String args[])
+	{
+		char c=' ';//赋初值
+		System.out.print("ENTER A CHARACTER");
+		try
+		{
+			//将所读给c
+			c=(char)System.in.read();
+		}catch(IOException e)
+		{//输入错误时的操作
+			System.out.println(e);
+		}
+		System.out.println("you enter:"+c);
+	}
+}

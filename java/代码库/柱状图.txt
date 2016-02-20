@@ -1,0 +1,45 @@
+package bao;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.JFrame;
+public class Myframe1 extends JFrame{
+	private static final long serialVersionUID = 1L;
+	public Myframe1()
+	{
+		setSize(400,600);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	public void paint(Graphics g)
+	{
+		super.paint(g);
+		Graphics2D g2=(Graphics2D)g;
+		g2.setStroke(new BasicStroke(4.0f));
+		g2.setColor(Color.RED);
+		g2.fillRect(100, 100, 30, 300);
+		g2.setColor(Color.blue);
+		g2.fillRect(160, 300, 30, 100);
+		g2.setColor(Color.YELLOW);
+		g2.fillRect(220, 350, 30, 50);
+		g2.setColor(Color.GREEN);
+		g2.fillRect(280, 350, 30, 50);
+		g2.setFont(new Font("Yahei",2,24));
+		g2.setColor(Color.BLACK);
+		g2.drawLine(50, 50, 50, 400);
+		g2.drawLine(50, 400, 400, 400);
+		g2.setFont(new Font("Yahei",2,18));
+		g2.drawString("A:60%", 100, 80);
+		g2.drawString("B:20%", 160, 280);
+		g2.drawString("C:10%", 220, 330);
+		g2.drawString("D:10%", 280, 330);
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Myframe1 mf1=new Myframe1();
+		mf1.setVisible(true);
+		
+	}
+
+}

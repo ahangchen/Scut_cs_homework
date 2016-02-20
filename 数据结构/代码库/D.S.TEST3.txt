@@ -1,0 +1,471 @@
+#include<iostream>
+using namespace std;
+struct Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+};
+struct Graphm
+{
+	int numVertex,numEdge;
+	int **matrix;
+	int *mark;
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]matrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int**)new int*[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int[numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int wt)
+	{
+		if(matrix[v1][v2]==0)numEdge++;
+		matrix[v1][v2]=wt;
+	}
+	int weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+struct BstNode
+{
+	int data;
+	BstNode*next;
+	BstNode(){data=0;next=NULL;}
+	BstNode(int dt){data=dt;next=NULL;}
+};
+struct queue
+{
+	BstNode*front;
+	BstNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new BstNode;size=sz;}
+	~queue(){clear();delete front;}
+	void clear()
+	{
+		while(front->next!=NULL)rear=front;
+		delete rear;
+		rear=front;
+		size=0;
+	}
+	void enqueue(BstNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	int dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			int it=front->next->data;
+			BstNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	int frontvalue()
+	{
+		return front->next->data;
+	}
+	BstNode*frontNode()
+	{
+		return front->next;
+	}
+};
+void tophelp(Graphm*g,int v)
+{
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->numVertex;w=g->next(v,w))
+		if(g->getMark(w)==-1)tophelp(g,w);
+}
+void swap(int*a,int i,int j)
+{
+	int tmp;
+	tmp=a[i];
+	a[i]=a[j];
+	a[j]=tmp;
+}
+void selsort(int a[],int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		int lowindex=i;
+		for(int j=n-1;j>i;j--)
+		{
+			if(a[j]>a[lowindex])lowindex=j;
+		}
+		swap(a,i,lowindex);
+	}
+}
+void topsort(Graphm*g)
+{
+	queue*q=new queue(0);
+	int*Count=new int[g->numVertex];
+	int v,w;
+	for(v=0;v<g->numVertex;v++)
+		Count[v]=0;
+	for(v=0;v<g->numVertex;v++)
+		for(w=g->first(v);w<g->numVertex;w=g->next(v,w))
+			Count[w]++;
+	for(v=0;v<g->numVertex;v++)
+		if(Count[v]==0)q->enqueue(new BstNode(v));
+	selsort(Count,g->numVertex);
+	cout<<Count[0]<<endl;
+}
+int main()
+{
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		int numvert;
+		int numedge;
+		cin>>numvert;
+		cin>>numedge;
+		Graphm*g=new Graphm(numvert);
+		int i;
+		for(i=0;i<numedge;i++)
+		{
+			int from,to;
+			cin>>from>>to;
+			g->setEdge(from-1,to-1,1);
+		}
+		topsort(g);
+	}
+}
+
+
+#include<iostream>
+using namespace std;
+class Edge
+{
+	int vert,wt;
+public:
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int w){vert=v;wt=w;}
+};
+struct Graphm
+{
+	int numVertex,numEdge;
+	int **matrix;
+	int *mark;
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]matrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int**)new int*[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int[numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int wt)
+	{
+		if(wt<=0)cout<<"illegal weight value"<<endl;
+		if(matrix[v1][v2]==0)numEdge++;
+		matrix[v1][v2]=wt;
+	}
+	int weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+struct QNode
+{
+	int data;
+	QNode*next;
+	QNode(){data=0;next=NULL;}
+	QNode(int dt){data=dt;next=NULL;}
+};
+struct queue
+{
+	QNode*front;
+	QNode*rear;
+	int size;
+	queue(int sz=0){front=rear=new QNode;size=sz;}
+	~queue(){clear();delete front;}
+	void clear()
+	{
+		while(front->next!=NULL)rear=front;
+		delete rear;
+		rear=front;
+		size=0;
+	}
+	void enqueue(QNode*in)
+	{
+		rear->next=in;
+		rear=rear->next;
+		size++;
+	}
+	int dequeue()
+	{
+		if(size==0)return NULL;
+		else 
+		{
+			int it=front->next->data;
+			QNode*temp=front->next;
+			front->next=temp->next;
+			if(rear==temp)rear=front;
+			delete temp;
+			size--;
+			return it;
+		}
+	}
+	int frontvalue()
+	{
+		return front->next->data;
+	}
+	QNode*frontNode()
+	{
+		return front->next;
+	}
+};
+void tophelp(Graphm*g,int v)
+{
+	g->setMark(v,1);
+	for(int w=g->first(v);w<g->numVertex;w=g->next(v,w))
+		if(g->getMark(w)==-1)tophelp(g,w);
+}
+void swap(int*a,int i,int j)
+{
+	int tmp;
+	tmp=a[i];
+	a[i]=a[j];
+	a[j]=tmp;
+}
+void selsort(int a[],int n)
+{
+	for(int i=0;i<n-1;i++)
+	{
+		int lowindex=i;
+		for(int j=n-1;j>i;j--)
+		{
+			if(a[j]>a[lowindex])lowindex=j;
+		}
+		swap(a,i,lowindex);
+	}
+}
+void topsort(Graphm*g,int numvert)
+{
+	queue*q=new queue(0);
+	int*Count=new int[g->numVertex];
+	int v,w;
+	for(v=0;v<g->numVertex;v++)
+		Count[v]=0;
+	for(v=0;v<g->numVertex;v++)
+		for(w=g->first(v);w<g->numVertex;w=g->next(v,w))
+			Count[w]++;
+	for(v=0;v<g->numVertex;v++)
+		if(Count[v]==0)q->enqueue(new QNode(v));
+	int setcount=0;
+	while(q->size!=0)
+	{
+		v=q->dequeue();
+		setcount++;
+		for(w=g->first(v);w<g->numVertex;w=g->next(v,w))
+		{
+			Count[w]--;
+			if(Count[w]==0)q->enqueue(new QNode(w));
+		}
+	}
+	if(setcount>=numvert)cout<<"NO"<<endl;
+	else cout<<"YES"<<endl;
+}
+int main()
+{
+	int n;
+	cin>>n;
+	while(n--)
+	{
+		int numvert;
+		int numedge;
+		cin>>numvert;
+		cin>>numedge;
+		Graphm*g=new Graphm(numvert);
+		int i;
+		for(i=0;i<numedge;i++)
+		{
+			int from,to;
+			cin>>from>>to;
+			g->setEdge(from-1,to-1,1);
+		}
+		topsort(g,numvert);
+	}
+}
+
+
+#include<iostream>
+using namespace std;
+struct Edge
+{
+	int vert;
+	int wt;
+	Edge(){vert=-1;wt=-1;}
+	Edge(int v,int  w){vert=v;wt=w;}
+};
+struct Graphm
+{
+	int numVertex,numEdge;
+	int **matrix;
+	int *mark;
+	Graphm(int numVert){Init(numVert);}
+	~Graphm()
+	{
+		delete[]mark;
+		for(int i=0;i<numVertex;i++)delete[]matrix[i];
+		delete[]matrix;	
+	}
+	void Init(int n)
+	{
+		int i;
+		numVertex=n;
+		numEdge=0;
+		mark=new int[n];
+		for(i=0;i<numVertex;i++)
+			mark[i]=-1;
+		matrix=(int **)new int *[numVertex];
+		for(i=0;i<numVertex;i++)
+			matrix[i]=new int [numVertex];
+		for(i=0;i<numVertex;i++)
+			for(int j=0;j<numVertex;j++)
+				matrix[i][j]=0;		
+	}
+	int first(int v)
+	{
+		for(int i=0;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	int next(int v,int w)
+	{
+		for(int i=w+1;i<numVertex;i++)
+			if(matrix[v][i]!=0)return i;
+		return numVertex;
+	}
+	void setEdge(int v1,int v2,int  wt)
+	{
+		if(matrix[v1][v2]==0)numEdge++;
+		if(wt<matrix[v1][v2])
+		{
+			matrix[v1][v2]=wt;
+			matrix[v2][v1]=wt;
+		}
+		if((matrix[v1][v2]==0)&&(wt>0))
+		{
+			matrix[v2][v1]=wt;
+			matrix[v1][v2]=wt;
+		}
+	}
+	void delEdge(int v1,int v2)
+	{
+		if(matrix[v1][v2]!=0)numEdge--;
+		matrix[v1][v2]=0;
+	}
+	bool isEdge(int i,int j)
+	{
+		return matrix[i][j]!=0;
+	}
+	int  weight(int v1,int v2){return matrix[v1][v2];}
+	int getMark(int v){return mark[v];}
+	void setMark(int v,int val){mark[v]=val;}
+};
+int minVertex(Graphm*G,int*D)
+{
+	int i,v=-1;
+	for(i=0 ;i<G->numVertex;i++)
+		if(G->getMark(i)==-1){v=i;break;}
+		for(i++;i<G->numVertex;i++)
+			if((G->getMark(i)==-1)&&(D[i]<D[v]))v=i;
+		return v;
+}
+void Dijkstra(Graphm*g,int*D,int s)
+{
+	int i,v=s,w;
+	for(i=0;i<g->numVertex;i++)
+	{
+		v=minVertex(g,D);
+		if(D[v]==1159)return;
+		g->setMark(v,1);
+		for(w=g->first(v);w<g->numVertex;w=g->next(v,w))
+			if(D[w]>(D[v]+g->weight(v,w)))
+				D[w]=D[v]+g->weight(v,w);
+	}
+}
+int main()
+{
+	int numvert=0;
+	int numedge=0,begin=0,end=0;
+	cin>>numvert;
+	cin>>numedge;
+	cin>>begin;
+	cin>>end;
+	Graphm*g=new Graphm(numvert);
+	int i=0;
+	int from=0,to=0,weight=0;
+	for(i=0;i<numedge;i++)
+	{
+		cin>>from>>to>>weight;
+		g->setEdge(from-1,to-1,weight);
+	}
+	int *D=new int  [g->numVertex];
+	for(i=0;i<g->numVertex;i++)D[i]=1159;
+	D[begin-1]=0;
+	Dijkstra(g,D,begin-1);
+	cout<<D[end-1]<<endl;
+}

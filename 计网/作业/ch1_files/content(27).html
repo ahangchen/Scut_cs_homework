@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)http://222.16.42.161/eol/common/ckeditor/content.html?name=421 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"><title>内容显示</title>
+    <link type="text/css" rel="stylesheet" href="contents.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+    </script>
+    <script type="text/javascript">
+
+       function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+		}
+
+		var intervalProcess ;
+
+        function loadContent(){
+            if(document.getElementById("body").innerHTML=='内容读取中...'){
+                document.getElementById("body").innerHTML=window.parent.document.getElementById(getQueryString('name')+"_content").value;
+            }
+			intervalProcess = setInterval(autoHeight,1000);
+            document.getElementById("body").onresize = autoHeight;
+        }
+
+		function autoHeight(){
+			window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height=document.getElementById("body").scrollHeight + 13;
+			if(window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height ==document.documentElement.scrollHeight){
+				clearInterval(intervalProcess);
+                //console.log("clear");
+			}
+			//console.log("autoHeight"+getQueryString('name')+":"+document.documentElement.scrollHeight);
+		}
+
+      
+
+    </script>
+	<style type="text/css">
+		html,.cke_show_borders{background:transparent;margin:0;padding:0;}
+	</style>
+
+
+</head>
+
+
+<body class="cke_show_borders" onload="loadContent()" marginheight="0">
+<div id="body"><p style="margin-bottom:0pt;margin-top:0pt;">
+<span style="font-family:calibri;"><span style="font-size:12.0000pt;">1GB=2^30B=2^30*8</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">位，</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">1Mbps=10^6</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">位</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">/</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">秒，</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">18Kkm/hour=0.005km/s</span></span></p>
+<p style="margin-bottom:0pt;margin-top:0pt;">
+<span style="font-family:calibri;"><span style="font-size:12.0000pt;">18</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">公里</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">/</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">小时</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">=0.005</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">公里</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">/</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">秒，狗走过</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">x</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">公里需要时间为<img alt="" src="openfile.jsp" style="width: 56px; height: 41px;"></span></span><span style="line-height: 1.5; font-family: calibri;"><span style="font-size:12.0000pt;">200*x</span></span><span style="line-height: 1.5; font-family: calibri;"><span style="font-size:12.0000pt;">秒</span></span></p>
+<p style="margin-bottom:0pt;margin-top:0pt;">
+<span style="font-family:calibri;"><span style="font-size:12.0000pt;">则狗</span></span><span style="font-family:新宋体;"><span style="font-size:12.0000pt;">传输数据的</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">速率为：</span></span><img src="openfile(1).jsp" style="width: 186px; height: 42px;"></p>
+<p style="margin-bottom:0pt;margin-top:0pt;">
+<span style="font-family:calibri;"><span style="font-size:12.0000pt;">当</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">x&lt;901.9/150=6.013</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">公里，即狗在</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">6.013</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">公里范围内，速率将超过</span></span><span style="font-family:calibri;"><span style="font-size:12.0000pt;">150Mbps</span></span></p></div>
+
+</body></html>

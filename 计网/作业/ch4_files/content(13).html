@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)http://222.16.42.161/eol/common/ckeditor/content.html?name=498 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"><title>内容显示</title>
+    <link type="text/css" rel="stylesheet" href="contents.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+    </script>
+    <script type="text/javascript">
+
+       function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+		}
+
+		var intervalProcess ;
+
+        function loadContent(){
+            if(document.getElementById("body").innerHTML=='内容读取中...'){
+                document.getElementById("body").innerHTML=window.parent.document.getElementById(getQueryString('name')+"_content").value;
+            }
+			intervalProcess = setInterval(autoHeight,1000);
+            document.getElementById("body").onresize = autoHeight;
+        }
+
+		function autoHeight(){
+			window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height=document.getElementById("body").scrollHeight + 13;
+			if(window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height ==document.documentElement.scrollHeight){
+				clearInterval(intervalProcess);
+                //console.log("clear");
+			}
+			//console.log("autoHeight"+getQueryString('name')+":"+document.documentElement.scrollHeight);
+		}
+
+      
+
+    </script>
+	<style type="text/css">
+		html,.cke_show_borders{background:transparent;margin:0;padding:0;}
+	</style>
+
+
+</head>
+
+
+<body class="cke_show_borders" onload="loadContent()" marginheight="0">
+<div id="body"><p align="left" style="line-height:150%;background:white;">
+<span style="font-family:宋体;">在经典以太网中，采用CSMA/CD&nbsp;</span>和&nbsp;BEB（二进制指数回退算法）。站点&nbsp;A、&nbsp;B&nbsp;和&nbsp;C使用经典以太网协议发送帧。假设所有站点都未开始发送消息。当下面这些事件按顺序发生之后，哪些说法是正确的？（多选）</p>
+<p align="left" style="line-height:150%;background:white;">
+<span style="font-family:宋体;">你观察这些事件的顺序：</span></p>
+<p align="left" style="line-height:150%;background:white;">
+<span style="font-family:宋体;">（1</span>）A&nbsp;成功发送了一帧</p>
+<p align="left" style="line-height:150%;background:white;">
+<span style="font-family:宋体;">（2</span>）A&nbsp;和&nbsp;B&nbsp;都发送了帧，出现冲突</p>
+<p align="left" style="line-height:150%;background:white;">
+<span style="font-family:宋体;">（3</span>）A&nbsp;成功地重新发送了一帧</p></div>
+
+</body></html>

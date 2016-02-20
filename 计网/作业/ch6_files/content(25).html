@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)http://222.16.42.161/eol/common/ckeditor/content.html?name=627 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"><title>内容显示</title>
+    <link type="text/css" rel="stylesheet" href="contents.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+    </script>
+    <script type="text/javascript">
+
+       function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+		}
+
+		var intervalProcess ;
+
+        function loadContent(){
+            if(document.getElementById("body").innerHTML=='内容读取中...'){
+                document.getElementById("body").innerHTML=window.parent.document.getElementById(getQueryString('name')+"_content").value;
+            }
+			intervalProcess = setInterval(autoHeight,1000);
+            document.getElementById("body").onresize = autoHeight;
+        }
+
+		function autoHeight(){
+			window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height=document.getElementById("body").scrollHeight + 13;
+			if(window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height ==document.documentElement.scrollHeight){
+				clearInterval(intervalProcess);
+                //console.log("clear");
+			}
+			//console.log("autoHeight"+getQueryString('name')+":"+document.documentElement.scrollHeight);
+		}
+
+      
+
+    </script>
+	<style type="text/css">
+		html,.cke_show_borders{background:transparent;margin:0;padding:0;}
+	</style>
+
+
+</head>
+
+
+<body class="cke_show_borders" onload="loadContent()" marginheight="0">
+<div id="body"><div>
+&nbsp;发生超时，则阈值＝发生超时时拥塞窗口值/2＝18KB/2＝9KB；&nbsp;&nbsp;&nbsp;<br>
+拥塞窗口＝1个TCP报文＝1KB。&nbsp;<br>
+重新发送，&nbsp;第1次，&nbsp;&nbsp;&nbsp;发送窗口＝1KB，得到确认后拥塞窗口＝2KB；&nbsp;第2次，&nbsp;&nbsp;&nbsp;发送窗口＝2KB，得到确认后拥塞窗口＝4KB；&nbsp;第3次，&nbsp;&nbsp;&nbsp;发送窗口＝4KB，得到确认后拥塞窗口＝8KB；&nbsp;第4次，&nbsp;&nbsp;&nbsp;发送窗口＝8KB，得到确认后拥塞窗口＝9KB；&nbsp;<br>
+则4次发送后，拥塞窗口＝8KB。&nbsp;</div>
+<div>
+&nbsp;</div>
+<div>
+<div>
+&nbsp;之后超过阈值，线性增长，因为没有丢包，所以不需要减小拥塞窗口，第五次，拥塞窗口为9KB,第六次，拥塞窗口为10KB，</div>
+<div>
+则6次发送后，拥塞窗口=10kB</div>
+</div>
+<p>
+&nbsp;</p>
+</div>
+
+</body></html>

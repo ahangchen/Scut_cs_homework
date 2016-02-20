@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)http://222.16.42.161/eol/common/ckeditor/content.html?name=603 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"><title>内容显示</title>
+    <link type="text/css" rel="stylesheet" href="contents.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+    </script>
+    <script type="text/javascript">
+
+       function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+		}
+
+		var intervalProcess ;
+
+        function loadContent(){
+            if(document.getElementById("body").innerHTML=='内容读取中...'){
+                document.getElementById("body").innerHTML=window.parent.document.getElementById(getQueryString('name')+"_content").value;
+            }
+			intervalProcess = setInterval(autoHeight,1000);
+            document.getElementById("body").onresize = autoHeight;
+        }
+
+		function autoHeight(){
+			window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height=document.getElementById("body").scrollHeight + 13;
+			if(window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height ==document.documentElement.scrollHeight){
+				clearInterval(intervalProcess);
+                //console.log("clear");
+			}
+			//console.log("autoHeight"+getQueryString('name')+":"+document.documentElement.scrollHeight);
+		}
+
+      
+
+    </script>
+	<style type="text/css">
+		html,.cke_show_borders{background:transparent;margin:0;padding:0;}
+	</style>
+
+
+</head>
+
+
+<body class="cke_show_borders" onload="loadContent()" marginheight="0">
+<div id="body"><p style="margin-top:0pt;margin-bottom:0pt;line-height:150%;">
+<span style="font-family:宋体;"><span style="font-size:10.5000pt;">以下</span></span><span style="font-family:宋体;"><span style="font-size:10.5000pt;">哪一个</span></span><span style="font-family:宋体;"><span style="font-size:10.5000pt;">序列的数据段</span></span><span style="font-family:宋体;"><span style="font-size:10.5000pt;">最好的描述了当A想与B建立TCP连接时使用到的第一组消息集</span></span><span style="font-family:宋体;"><span style="font-size:10.5000pt;">？（假定</span></span>&nbsp;<span style="font-family:宋体;"><span style="font-size:10.5000pt;">B</span></span>&nbsp;<span style="font-family:宋体;"><span style="font-size:10.5000pt;">不会同时连接到</span></span>&nbsp;<span style="font-family:宋体;"><span style="font-size:10.5000pt;">A，没有数据段丢失）</span></span></p></div>
+
+</body></html>

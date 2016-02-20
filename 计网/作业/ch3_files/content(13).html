@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0062)http://222.16.42.161/eol/common/ckeditor/content.html?name=473 -->
+<html dir="ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=GBK"><title>内容显示</title>
+    <link type="text/css" rel="stylesheet" href="contents.css">
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+        showProcessingMessages: false,
+        tex2jax: { inlineMath: [['$','$'],['\\(','\\)']] }
+        });
+    </script>
+    <script type="text/javascript">
+
+       function getQueryString(name) {
+		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+		var r = window.location.search.substr(1).match(reg);
+		if (r != null) return unescape(r[2]);
+		return null;
+		}
+
+		var intervalProcess ;
+
+        function loadContent(){
+            if(document.getElementById("body").innerHTML=='内容读取中...'){
+                document.getElementById("body").innerHTML=window.parent.document.getElementById(getQueryString('name')+"_content").value;
+            }
+			intervalProcess = setInterval(autoHeight,1000);
+            document.getElementById("body").onresize = autoHeight;
+        }
+
+		function autoHeight(){
+			window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height=document.getElementById("body").scrollHeight + 13;
+			if(window.parent.document.getElementById("_rtf_content"+getQueryString('name')).height ==document.documentElement.scrollHeight){
+				clearInterval(intervalProcess);
+                //console.log("clear");
+			}
+			//console.log("autoHeight"+getQueryString('name')+":"+document.documentElement.scrollHeight);
+		}
+
+      
+
+    </script>
+	<style type="text/css">
+		html,.cke_show_borders{background:transparent;margin:0;padding:0;}
+	</style>
+
+
+</head>
+
+
+<body class="cke_show_borders" onload="loadContent()" marginheight="0">
+<div id="body"><p align="left" style="line-height:150%;">
+<span style="font-family:宋体;">利用本章中介绍的标准 CRC </span>方法来传输位流 10011101。生成多项式为X<sup>3</sup>+1。</p>
+<p align="left" style="line-height:150%;">
+<span style="font-family:宋体;">（1</span>）试问实际被传输的位串是什么？</p>
+<p align="left" style="line-height:150%;">
+<span style="font-family:宋体;">（2</span>）假设在传输过程中从左边数第三位变反了。请说明这个错误可以在接收端能否被检测出来。</p>
+<p>
+<span style="font-family:宋体;"><span style="font-size:10.5pt;">（3</span>）给出一个该比特流传输错误的实例,</span>使得接受方无法检测出该错误。</p></div>
+
+</body></html>

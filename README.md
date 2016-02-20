@@ -4,7 +4,7 @@
 
   - 老师没有告诉你们的二三事，咳咳，跟你们剧透一下好了
 
-  > 如果你没用过github，我建议你还是注册一个账户玩一下，毕竟是全球最大代码开源平台
+  > 如果你没用过github，我建议你还是[注册](https://github.com/join?source=header-home)一个账户玩一下，毕竟是全球最大代码开源平台
 
   > 如果你只是来找代码的，那么点击 download zip 按钮（在工程目录右上方），找不到就点这个[下载](https://github.com/ahangchen/Scut_cs_homework/archive/master.zip)吧orz
 

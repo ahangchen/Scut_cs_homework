@@ -1,0 +1,53 @@
+#include<iostream>
+using namespace std;
+#include<cstring>
+class name
+{
+public:
+	name(char*pn="\0");
+	name(const name&);
+	~name();
+	name&operator=(name);
+protected:
+	char*pname;
+	int size;
+};
+name::name(char*pn)
+{
+	cout<<"constructing"<<pn<<endl;
+	size=strlen(pn);
+	pname=new char[size+1];
+	if(pname!=0)
+		strcpy_s(pname,size+1,pn);
+}
+name::name(const name&obj)
+{
+	cout<<"copying"<<obj.pname<<"intto its own block\n";
+	size=obj.size ;
+	pname=new char[size+1];
+	if(pname!=0)
+		strcpy_s(pname,size+1,obj.pname);
+}
+name&name::operator=(name obj)
+{
+	delete[]pname;
+	size=obj.size;
+	pname=new char[size+1];
+	if(pname!=0)
+		strcpy_s(pname,size+1,obj.pname);
+	return *this;
+}
+name::~name()
+{
+	cout<<"destructing"<<pname<<endl;
+	delete[]pname;
+	pname=NULL;
+	size=0;
+}
+int main()
+{
+	name obj1("zhangsan");
+	name obj2=obj1;
+	name obj3("noname");
+	obj3=obj2=obj1;
+}

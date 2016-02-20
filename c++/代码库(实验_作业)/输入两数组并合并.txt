@@ -1,0 +1,23 @@
+int main()
+{
+int i,j,k,temp,m,n;
+//输入两数组
+cout<<"length1?";
+cin>>n;
+int *p1=new int[n];
+cout<<"数组？";
+for(i=0;i<n;i++)
+cin>>p1[i];
+cout<<"length2?";
+cin>>m;
+int *p2=new int[m];
+cout<<"数组？";
+for(i=0;i<m;i++)
+cin>>p2[i];
+//合并两数组
+int *p=new int[n+m];
+for(i=0;i<n;i++)
+p[i]=p1[i];
+for(j=0;j<m;j++,i++)
+p[i]=p2[j];
+}

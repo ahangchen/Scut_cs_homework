@@ -1,0 +1,110 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	char a[50];
+	int b[4];
+	while(cin.getline(a,50,'\n'))
+	{
+		int i,j=0;
+		int flag=1;
+		for(i=0;i<strlen(a);i++)
+			if(a[i]=='.'&&j<3)
+			{
+				b[j]=i;
+				j++;
+			}
+		b[3]=i+1;
+		if(j!=3)flag=0;
+		else
+		{
+			char*a1=new char[b[0]+1];
+		char*a2=new char[b[1]-b[0]];
+		char*a3=new char[b[2]-b[1]];
+		char*a4=new char[b[3]-b[2]];	
+		i=0;
+		while(i!=b[0])
+		{
+			a1[i]=a[i];
+			i++;
+		}
+		a1[i]='\0';
+		int n1=strlen(a1);
+		for(i=b[0]+1;i<b[1];i++)
+		{a2[i-b[0]-1]=a[i];}
+		a2[i-b[0]-1]='\0';
+		int n2=strlen(a2);
+		for(i=b[1]+1;i<b[2];i++)
+		{a3[i-b[1]-1]=a[i];}
+		a3[i-b[1]-1]='\0';
+		int n3=strlen(a3);
+		for(i=b[2]+1;i<strlen(a);i++)
+		{a4[i-b[2]-1]=a[i];}
+		a4[i-b[2]-1]='\0';
+		int n4=strlen(a4);
+		if(n1>3||n2>3||n3>3||n4>3)flag=0;
+		else
+		{
+			for(i=0;i<n1;i++)
+			if(a1[i]>57||a1[i]<48)
+			{
+				flag=0;break;
+			}
+			else 
+			{
+				switch (n1)
+				{
+				case 1:if(a1[0]-48>255)flag=0;break;
+				case 2:if((a1[0]-48)*10+(a1[1]-48)>255)flag=0;break;
+				case 3:if((a1[0]-48)*100+(a1[1]-48)*10+(a1[2]-48)>255)flag=0;break;
+				}
+			}
+			for(i=0;i<n2;i++)
+			if(a2[i]>57||a2[i]<48)
+			{
+				flag=0;break;
+			}
+			else 
+			{
+				switch (n2)
+				{
+				case 1:if(a2[0]-48>255)flag=0;break;
+				case 2:if((a2[0]-48)*10+(a2[1]-48)>255)flag=0;break;
+				case 3:if((a2[0]-48)*100+(a2[1]-48)*10+(a2[2]-48)>255)flag=0;break;
+				}
+			}
+			for(i=0;i<n3;i++)
+			if(a3[i]>57||a3[i]<48)
+			{
+				flag=0;break;
+			}
+			else 
+			{
+				switch (n3)
+				{
+				case 1:if(a3[0]-48>255)flag=0;break;
+				case 2:if((a3[0]-48)*10+(a3[1]-48)>255)flag=0;break;
+				case 3:if((a3[0]-48)*100+(a3[1]-48)*10+(a3[2]-48)>255)flag=0;break;
+				}
+			}
+			for(i=0;i<n4;i++)
+			if(a4[i]>57||a4[i]<48)
+			{
+				flag=0;break;
+			}
+			else 
+			{
+				switch (n4)
+				{
+				case 1:if(a4[0]-48>255)flag=0;break;
+				case 2:if((a4[0]-48)*10+(a4[1]-48)>255)flag=0;break;
+				case 3:if((a4[0]-48)*100+(a4[1]-48)*10+(a4[2]-48)>255)flag=0;break;
+				}
+			}
+		}	
+		}	
+	if(flag==0)cout<<'N'<<endl;
+	else cout<<'Y'<<endl;
+	}	
+}

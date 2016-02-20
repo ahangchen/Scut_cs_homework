@@ -1,0 +1,19 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int x,i,n=0;
+	int p[2000];
+	while(cin>>x)
+	{
+		p[n]=x;
+		n++;
+	}
+	int *q=new int [n];
+	for(i=0;i<n;i++)
+	{
+		q[i]=p[i];
+	}
+	for(i=0;i<n;i++)
+	cout<<q[i];
+}

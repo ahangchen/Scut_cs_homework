@@ -1,0 +1,117 @@
+#include<iostream>
+using namespace std;
+template<typename t>
+class vec
+{
+private:
+	t*s;
+	int len;
+public:
+	vec(){s=NULL;len=0;}
+	vec(t*str,int n){s=str;len=n;}
+	void set(t*str,int n){s=str;len=n;}
+	~vec(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len-1;i++)cout<<s[i]<<" ";
+		cout<<s[len-1]<<endl;
+	}
+	
+	template<typename t1>
+	friend vec<t1> operator+(vec<t1>&a,vec<t1>&b)
+	{
+		int x=a.gl();
+		t1*p=new t1[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		/*vec<t1> m;
+		set(p,x);
+		return m;*/
+		return vec<t1>(p,x);
+	}
+	template<typename t2>
+	friend vec<t2> operator-(vec<t2>&a,vec<t2>&b)
+	{
+		int x=a.gl();
+		t2*p=new t2[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		/*vec<t1> m;
+		set(p,x);
+		return m;*/
+		return vec<t2>(p,x);
+	}
+};
+template<typename t0>
+class mart
+{
+private:
+	vec<t0>*s;
+	int len;
+public:
+	mart(vec<t0>*str,int n){s=str;len=n;}
+	~mart(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len;i++)s[i].print();
+	}	
+	template<typename t3>
+	friend mart<t3> operator+(mart<t3>&a,mart<t3>&b)
+	{
+		int x=a.gl();
+		vec<t3>*p=new vec<t3>[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		return mart(p,x);
+	}
+	template<typename t4>
+	friend mart<t4> operator-(mart<t4>&a,mart<t4>&b)
+	{
+		int x=a.gl();
+		vec<t4>*p=new vec<t4>[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		return mart(p,x);
+	}
+};
+int main()
+{
+	int n,m,i,j;
+	char s;
+	while(cin>>s>>n>>m)
+	{
+		int**x=new int*[n];
+		for(i=0;i<n;i++)
+		{x[i]=new int[m];}
+		
+		int**y=new int*[n];
+		for(i=0;i<n;i++)
+		{y[i]=new int[m];}
+		vec<int>*A=new vec<int>[m];
+		vec<int>*B=new vec<int>[m];
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+				cin>>x[i][j];
+			A[i].set(x[i],j);
+		}
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+				cin>>y[i][j]; 
+			B[i].set(y[i],j);
+		}
+		mart<int>X(A,n),Y(B,n),Z(NULL,n);
+		if(s=='+')Z=X+Y;
+		if(s=='-')Z=X-Y;
+		Z.print();
+	}
+}

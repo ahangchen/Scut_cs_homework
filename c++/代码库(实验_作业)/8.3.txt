@@ -1,0 +1,91 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	char s;
+	int x;
+	double a,b,t;
+	while(cin>>s)
+	{
+		cin>>x>>a>>b;
+		switch(s)
+		{
+		case '+':t=a+b;break;
+		case '-':t=a-b;break;
+		}
+		if(x==0)cout<<int(t)<<endl;
+		else cout<<setiosflags(ios::fixed)<<setprecision(2)<<t<<endl;
+	}
+	
+}
+
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class integer
+{
+public:
+	integer(int x,int y){i=x;j=y;}
+	~integer(){i=0;}
+	integer(const integer&);
+	void pi(){cout<<i+j<<endl;}
+	void mi(){cout<< i-j<<endl;}
+protected:
+	int i,j;
+};
+integer::integer(const integer&a)
+{
+	i=a.i;
+}
+class real
+{
+public:
+	real(double x,double y){i=x;j=y;}
+	~real(){i=0;}
+	real(const real&);
+	void pi(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<i+j<<endl;}
+	void mi(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<i-j<<endl;}
+protected:
+	double i,j;
+};
+real::real(const real&a)
+{
+	i=a.i;
+}
+class intreal:public integer,public real
+{
+public:
+	intreal(int a,int b,double c,double d):integer(a,b),real(c,d){}
+};
+int main()
+{
+	char s;
+	int x;
+	while(cin>>s)
+	{
+		int a,b;
+		cin>>x;
+		if(x==0)
+		{
+			cin>>a>>b;
+			intreal t(a,b,0,0);
+			switch(s)
+			{
+			case '+':t.integer::pi();break;
+			case '-':t.integer::mi();break;
+			}
+		}
+		else if(x==1)
+		{
+			double a,b;
+			cin>>a>>b;
+			intreal t(0,0,a,b);
+			switch(s)
+			{
+			case '+':t.real::pi();break;
+			case '-':t.real::mi();break;
+			}
+		}
+	}
+}

@@ -1,0 +1,42 @@
+#include<iostream>
+#include<ctime>
+using namespace std;
+void swap(int A[],int a,int b)
+{
+	int temp;
+	temp=A[a];
+	A[a]=A[b];
+	A[b]=temp;
+}
+void inssort(int A[],int n)
+{
+	for(int i=1;i<n;i++)
+		for(int j=i;(j>0)&&(A[j]<A[j-1]);j--)
+		{
+			swap(A,j,j-1);
+		}
+}
+int main()
+{
+	int n;
+	cin>>n;
+	int*x=new int[n];
+	int i,j;
+	for(i=0;i<n;i++)
+		cin>>x[i];
+	inssort(x,n);
+	for(i=0;i<n-1;i++)
+	{
+		if(x[i]==x[i+1])
+		{
+			for(j=i;j<n-1;j++)
+				x[j]=x[j+1];
+			n--;
+			i--;
+		}
+	}
+	cout<<n<<endl;
+	for(i=0;i<n-1;i++)
+		cout<<x[i]<<" ";
+	cout<<x[i];
+}

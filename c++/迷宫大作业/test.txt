@@ -1,0 +1,8 @@
+char*test(char*p,int n)
+{
+	int y;
+	for(y=0;y<n*n;y++)
+	if((y>n*(n-1))||(((y+1)%n)==0))
+		p[y]='o';
+	return p;
+}

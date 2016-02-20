@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+class base
+{
+public:
+	base(char c){x=c;}
+	virtual void who()
+	{cout<<"base class:"<<x<<endl;}
+protected:
+	char x;
+};
+class firstd:public base
+{
+public:
+	firstd(char c,char d):base(c){y=d;}
+	void who()//默认为虚函数，要求参数和返回类型完全相同
+	{cout<<"firstd class:"<<x<<", "<<y<<endl;}
+protected:
+	char y;
+};
+class secondd:public firstd
+{
+public:
+	secondd(char c,char d,char e):firstd(c,d){z=e;}
+	void who()
+	{cout<<"secondd class:"<<x<<", "<<y<<", "<<z<<endl;}
+protected:
+	char z;
+};
+int main()
+{
+	base bobj('a');
+	base*p;
+	firstd fobj('t','o');
+	secondd sobj('e','n','d');
+	p=&bobj;
+	p->who();
+	p=&fobj;
+	p->who();
+	p=&sobj;
+	p->who();
+}

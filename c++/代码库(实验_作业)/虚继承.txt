@@ -1,0 +1,50 @@
+#include<iostream>
+using namespace std;
+class B
+{
+public:
+	B(int x=10)
+	{
+		b=x;
+		cout<<"constructor called:B"<<endl;
+	}
+	~B(){cout<<"destructor called:B"<<endl;}
+	int b;
+};
+class B1:virtual public B
+{
+public:
+	B1(int x1=11,int y1=21):B(x1)
+	{
+		b1=y1;cout<<"constructor called:B1"<<endl;
+	}
+	~B1(){cout<<"destructor called:B1"<<endl;}
+	int b1;
+};
+class B2:virtual public B
+{
+public:
+	B2(int x2=12,int y2=22):B(x2)
+	{b2=y2;cout<<"constructor called:B2"<<endl;}
+	~B2(){cout<<"destructor called:B2"<<endl;}
+	int b2;
+};
+class D:public B1,public B2
+{
+public:
+	D(int i=1,int j1=2,int j2=3,int k=4):B(i),B1(j1),B2(j2)
+	{d=k;cout<<"constructor called:D"<<endl;}
+	~D(){cout<<"destructor called:D"<<endl;}
+	int d;
+};
+int main()
+{
+	D objD;
+	cout<<"objD.b"<<objD.b<<endl;
+	cout<<"objD.b1"<<objD.b1<<endl;
+	cout<<"objD.b2="<<objD.b2<<endl
+		<<"objD.d="<<objD.d<<endl;
+	B1 objB1;
+	cout<<"objB1.b="<<objB1.b<<endl
+		<<"objB1.b1="<<objB1.b1<<endl;
+}

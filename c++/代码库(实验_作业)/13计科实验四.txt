@@ -1,0 +1,164 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	double x,y;
+	while(cin>>x>>y&&(x!=0)&&(y!=0))
+	{
+		cout<<2.0*x*y/(x+y)<<endl;
+	}
+}
+
+#include<iostream>
+#include<cmath>
+using namespace std;
+bool issu(int m)
+{
+	int k,i;
+	k=int(sqrt(double(m)));
+	i=2;
+	while(m%i&&i<=k)i++;
+	if(i>k)return true;
+	return false;
+}
+int max(int a,int b)
+{return a>b?a:b;}
+int main()
+{
+	int x,y,z;
+	while(cin>>x>>y>>z)
+	{
+		if(issu(x))
+		{
+			int max1=x;
+			if(issu(y))
+			{
+				max1=max(x,y);
+				if(issu(z))max1=max(max1,z);
+			}
+			else if(issu(z))max1=max(x,z);
+			cout<<max1<<endl;
+		}
+		else 
+		{
+			int max1=0;
+			if(issu(y))
+			{
+				max1=max(x,y);
+				if(issu(z))max1=max(max1,z);
+			}
+			else if(issu(z))max1=max(x,z);
+			cout<<max1<<endl;
+		}
+	}
+}
+
+#include<iostream>
+#include<cmath>
+using namespace std;
+bool issu(int m)
+{
+	int k,i;
+	k=int(sqrt(double(m)));
+	i=2;
+	while(m%i&&i<=k)i++;
+	if(i>k)return true;
+	return false;
+}
+int max(int a,int b)
+{return a>b?a:b;}
+int main()
+{
+	int x[3];
+	while(cin>>x[0]>>x[1]>>x[2])
+	{
+		int result=0;
+		for(int i=0;i<3;i++)
+		{
+			if(issu(x[i]))result=max(result,x[i]);
+		}
+		cout<<result<<endl;
+	}
+}
+
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	char str[200];
+	cin.getline(str,200,'\n');
+	int a=0,b=0,c=0;
+	for(int i=0;i<strlen(str);i++)
+	{
+		if(str[i]>64&&str[i]<91)a++;
+		if(str[i]>96&&str[i]<123)b++;
+		if(str[i]>47&&str[i]<58)c++;
+	}
+	cout<<a<<endl<<b<<endl<<c<<endl;
+}
+
+#include<iostream>
+#include<ctime>
+using namespace std;
+int daydist(int mon,int day)
+{
+	int dist;
+	switch(mon)
+	{
+	case 1:dist=0;break;
+	case 2:dist=31;break;
+	case 3:dist=59;break;
+	case 4:dist=90;break;
+	case 5:dist=120;break;
+	case 6:dist=151;break;
+	case 7:dist=181;break;
+	case 8:dist=212;break;
+	case 9:dist=243;break;
+	case 10:dist=273;break;
+	case 11:dist=304;break;
+	case 12:dist=334;break;
+	}
+	dist+=day;
+	return dist+1;
+}
+int main()
+{
+	int m,d;
+	while(cin>>m>>d)
+	{
+		if(daydist(m,d)%7==0)
+			cout<<daydist(m,d)%7+7<<endl;
+		else cout<<daydist(m,d)%7<<endl;
+	}
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n;
+	cin>>n;
+	int**p=new int*[n];
+	for(int i=0;i<n;i++)
+		p[i]=new int[n];
+	for(int i=0;i<=(n/2+n%2)-1;i++)
+	{
+		for(int j=i;j<n-i;j++)
+		{
+			p[i][j]=i+1;
+			p[n-i-1][j]=i+1;		
+		}		
+		for(int j=i;j<n-i;j++)
+		{
+			p[j][i]=i+1;
+			p[j][n-i-1]=i+1;
+		}	
+	}
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<n;j++)
+			cout<<p[i][j];
+		cout<<endl;
+	}
+}

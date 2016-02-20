@@ -1,0 +1,32 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+class aclass
+{
+	char name[20];
+public:
+	void putname(char*s){strcpy(name,s);}
+	void showname()const{cout<<name<<endl;}
+};
+class bclass:public aclass
+{
+	char phonenum[20];
+public:
+	void putphone(char*num){strcpy(phonenum,num);}
+	void showphone()const
+	{cout<<phonenum<<endl;}
+};
+int main()
+{
+	aclass*ap;
+	aclass aobj;
+	bclass bobj;
+	ap=&aobj;
+	ap->putname("wang");
+	ap->showname();
+	ap=&bobj;
+	ap->putname("chen");
+	ap->showname();//基类指针调用派生类继承自基类的成员函数
+	bobj.putphone("39380123");
+	((bclass*)ap)->showphone();//对基类指针强制类型转换，访问派生类成员函数
+}

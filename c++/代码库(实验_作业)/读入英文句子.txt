@@ -1,0 +1,58 @@
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+using namespace std;
+struct word
+{
+	char s[20];
+	word*next;
+};
+word*create()
+{
+	word*head,*p;
+	char c;
+	int i=0;
+	head=new word;
+	c=cin.get();
+	while(c!=' '&&c!='\n')
+		{
+			head->s[i]=c;
+			i++;
+			c=cin.get();
+		}
+	head->s[i]='\0';
+	p=head;
+	while(c!='\n')
+	{
+		p->next=new word;
+		p=p->next;
+		i=0;
+		c=cin.get();
+		while(c!=' '&&c!='\n')
+		{
+			p->s[i]=c;
+			i++;
+			c=cin.get();
+		}
+		p->s[i]='\0';
+	}
+	p->next=NULL;
+	return head;
+}
+void show(word*head)
+{
+	while(head->next!=NULL)
+	{
+		cout<<head->s<<" ";
+		head=head->next;
+	}
+	cout<<head->s<<endl;
+
+}
+/*word*change()
+{}*/
+int main()
+{
+	word*head=create();
+	show(head);
+}

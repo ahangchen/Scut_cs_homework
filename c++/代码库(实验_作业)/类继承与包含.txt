@@ -1,0 +1,44 @@
+#include<iostream>
+using namespace std;
+class point
+{
+public:
+	point(double t1,double t2){x=t1;y=t2;}
+	void outpoint()
+	{cout<<"point:x="<<x<<"y="<<y<<endl;}
+protected:
+	double x,y;
+};
+class circle:public point
+{
+public:
+	circle(double t1,double t2,double t3):point(t1,t2){radius=t3;}
+	void outcircle()
+	{
+		point::outpoint();
+		cout<<"radius="<<radius<<endl;
+	}
+protected:
+	double radius;
+};
+class circle1
+{
+public:
+	circle1(double t1,double t2,double t3):centre(t1,t2){radius=t3;}
+	void outcircle()
+	{
+		centre.outpoint();
+		cout<<"radius="<<radius<<endl;
+	}
+	point centre;
+protected:
+	double radius;
+};
+int main()
+{
+	circle c(0,0,12.5);
+	c.outpoint();
+	c.outcircle();
+	circle1 d(0,0,12.5);
+	d.outcircle();
+}

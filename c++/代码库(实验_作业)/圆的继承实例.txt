@@ -1,0 +1,78 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class point
+{
+	friend ostream&operator<<(ostream&,const point&);
+public:
+	point(int a=0,int b=0){setpoint(a,b);}
+	void setpoint(int a,int b){x=a;y=b;}
+	int getx()const{return x;}
+	int gety()const{return y;}
+protected:
+	int x,y;
+};
+ostream &operator<<(ostream&output,const point&p)
+{
+	output<<'['<<p.x<<","<<p.y<<"]";
+	return output;
+}
+class circle:public point
+{
+	friend ostream&operator<<(ostream&,const circle&);
+public:
+	circle(double r=0.0,int x=0,int y=0):point(x,y)
+	{
+		setradius(r);
+	}
+	void setradius(double r){radius=(r>=0?r:0);}
+	double getradius()const{return radius;}
+	double area()const{return 3.14159*radius*radius;}
+protected:
+	double radius;
+};
+ostream&operator<<(ostream&output,const circle&c)
+{
+	output<<"center="<<"["<<c.x<<","<<c.y<<"]"
+		<<";radius="<<setiosflags(ios::fixed|ios::showpoint)
+		<<setprecision(2)<<c.radius;
+	return output;
+}
+class cylinder:public circle
+{
+	friend ostream&operator<<(ostream&,const cylinder&);
+public:
+	cylinder(double h=0.0,double r=0.0,int x=0,int y=0):circle(r,x,y)
+	{setheight(h);}
+	void setheight(double h){height=(h>=0?h:0);}
+	double getheight()const{return height;}
+	double area()const{return 2*circle::area()+2*3.141592*radius*height;}
+	double volume()const{return circle::area()*height;}
+protected:
+	double height;
+};
+ostream &operator<<(ostream&output,const cylinder &cy)
+{
+	output<<"center="<<'['<<cy.x<<","<<cy.y<<"]"
+		<<";radius="<<setiosflags(ios::fixed|ios::showpoint)
+		<<setprecision(2)<<cy.radius<<";height="<<cy.height<<endl;
+	return output;
+}
+int main()
+{
+	point p(72,115);
+	cout<<"location of p:"<<p<<endl;
+	p.setpoint(10,10);
+	cout<<"\nthe new location of p:"<<p<<endl;
+	circle c(2.5,37,43);
+	cout<<"\nlocation and radius of c:"<<c
+		<<"\narea="<<c.area()<<endl;
+	c.setradius(4.25);
+	c.setpoint(2,2);
+	cout<<"\nnew location and radius of c:"<<endl;
+	cout<<c<<"\narea="<<c.area()<<"\n";
+	cylinder cyl(5.7,2.5,12,23);
+	cout<<endl<<"the initial location,radius and height of cyl :"<<endl;
+	cout<<cyl<<"area="<<cyl.area()<<"\nvolume="<<cyl.volume()<<"\n";
+	return 0;
+} 

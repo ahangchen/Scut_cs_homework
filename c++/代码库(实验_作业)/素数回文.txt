@@ -1,0 +1,41 @@
+#include<iostream>
+using namespace std;
+#include<cmath>
+bool  cyc(int m)
+{
+	int a[100],b,c=0;
+	b=m;
+	int i=0;
+	while (m)
+	{
+		a[i++]=m%10;
+		m=m/10;
+	}
+	int j;
+	for(j=0;j<i;j++)
+	{
+		c+=a[j]*pow(10,i-j-1);
+	}
+	if(b==c)return true;
+	return false;
+}
+void ss(int y,int x)
+{
+	int m,i,k,n=0;
+	for(m=y;m<=x;m++)
+	{
+		k=int(sqrt(double(m)));
+		i=2;
+		while(m%i&&i<=k)i++;
+		if(i>k)
+		{
+			if(cyc(m))cout<<m<<endl;
+		}
+    }
+}
+int main()
+{
+	int x,y;
+	cin>>x>>y;
+	ss(x,y);
+}

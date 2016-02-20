@@ -1,0 +1,90 @@
+//四则运算
+#include<iostream>
+#include<cmath>
+using namespace std;
+//求随机数
+int num(int k)
+{static int r;
+do 
+{
+r=(25173*r+13849)%65536;
+}//用do-while避免无法求第二个随机数
+while((r<=0)||(r>=(pow(10.0,k)-1)));
+return r;
+}
+void plus(int a,int b,int k,int n,double &s,double average)//减法函数
+{int y;
+if(a>=b)
+{
+cout<<a<<"-"<<b<<"="<<endl;
+cin>>y;
+if(y==a-b){cout<<"right!";s+=average;}else cout<<"wrong!";
+}
+else {a=num(k);b=num(k);plus(a,b,k,n,s,average);}
+}
+double divide(int a,int b,int k,int n,double &s,double average)//除法函数
+{int y;
+if(a%b==0)
+{
+cout<<a<<"/"<<b<<"="<<endl;
+cin>>y;
+if(y==a/b){cout<<"right!";s+=average;}else cout<<"wrong!";
+}
+else {a=num(k);b=num(k);divide(a,b,k,n,s,average);}
+return s;
+}
+void calculate(int n,int k,int a,int b,double sum,double average)//运算部份
+{int y,i;char op;
+for(i=1;i<=n;i++){
+/*位数k,待运算数a,b,题数n，运算结果y,计数器i，运算类型op,总分sum,各题分值average*/
+	a=num(k);
+    b=num(k);
+cout<<"请选择运算类型（+，-，*，/）"<<endl;
+cin>>op;
+switch(op)
+{
+case '+':
+{
+cout<<a<<"+"<<b<<"="<<endl;
+cin>>y;
+if(y==a+b){cout<<"right!"<<endl;sum+=average;}else cout<<"wrong!"<<endl;
+}
+break;
+case '-':
+{plus(a,b,k,n,sum,average);}
+break;
+case '*':
+{
+cout<<a<<"*"<<b<<"="<<endl;
+cin>>y;
+if(y==a*b){cout<<"right!"<<endl;sum+=average;}else cout<<"wrong!";
+}
+break;
+case '/':
+{divide(a,b,k,n,sum,average);}
+break;
+default:{cout<<"输入错误，请重新输入"<<endl;calculate(n,k,a,b,sum, average);}
+}
+}
+cout<<"分数"<<sum;
+}
+void entrance()
+{
+int k,a,b,n;double sum=0,average;/*位数k,待运算数a,b,题数n，,计数器i，总分sum,各题分值average*/
+cout<<"请选择题数"<<endl;
+cin>>n;
+average=100.0/n;
+cout<<"请选择难度，一位数请输入，两位数请输入"<<endl;
+cin>>k;
+if(k!=1&&k!=2){cout<<"输入错误！请重新输入";entrance();}//输入错误返回entrance入口
+else 
+{
+a=num(k);
+b=num(k);
+calculate(n,k,a,b,sum,average);
+}
+}
+int main()
+{
+entrance();
+}

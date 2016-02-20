@@ -1,0 +1,81 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+struct jonse
+{
+	int code;
+	jonse *next;
+};
+jonse *create(int);
+void showlist(jonse*);
+void out(jonse*,int,int,int);
+int main()
+{
+	jonse*head;
+	int num,val,beg;
+	while(cin>>num)
+	{
+		head=create(num);
+		beg=1;
+		val=2;
+		out(head,beg,val,num);
+	}
+}
+jonse*create(int n)
+{
+	jonse*h,*p;
+	int i;
+	h=new jonse;
+	p=h;
+	for(i=1;i<=n;i++)
+	{
+		p->code=i;
+		if(i<n)
+		{
+			p->next=new jonse;
+			p=p->next;
+		}
+	}
+	p->next=h;
+	return h;
+}
+void showlist(jonse*h)
+{
+	jonse*p;
+	p=h;
+	do
+	{
+		cout<<p->code<<"  ";
+		p=p->next;
+	}while(p!=h);
+}
+void out(jonse*h,int i,int d,int num)
+{
+		jonse*p,*q;
+		int k;
+		p=h;
+		for(k=1;k<i;k++)
+		{
+			q=p;
+			p=p->next;
+		}
+		int s=0;
+		while(p!=p->next)
+		{
+			for(k=1;k<d;k++)
+			{
+				q=p;
+				p=p->next;
+				s++;
+			}
+			if(s==num-2)cout<<p->code<<endl;
+			else cout<<p->code<<" ";
+			q->next=p->next;
+			delete p;
+			p=NULL;
+			p=q->next;
+		}
+		cout<<p->code<<endl;
+		delete p;
+		p=NULL;
+}

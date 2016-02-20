@@ -1,0 +1,1964 @@
+#include<iostream>
+#include<fstream>
+#include<cstring>
+#include<iomanip>
+using namespace std;
+//用于实现控制台的清屏，写为函数缩短代码长度
+void gacls()
+{
+	cin.get();
+	cin.get();
+	system("cls");
+}
+//枚举常量daypart,用于描述电子设备的借用时段
+enum daypart{morning,afternoon,night,不申请};
+//goods类，所有物资类的基类，具有描述物资数量的int型成员num
+//构造函数goods，显示物资数量的函数print,设置物资数量函数set
+class goods
+{
+protected:
+	int num;
+public:
+	goods(){num=0;}
+	 void print(){cout<<"借用数："<<num<<endl;}
+	void set(int n){num=n;}
+};
+//继承自goods的普通物资类normal
+class normal:public goods
+{
+public:
+	void print(){}
+	normal(){}
+};
+//继承自goods的电子物资类electric
+class electric:public goods
+{
+public:
+	electric(){}
+	void print()
+	{
+		cout<<"领取地点：C1-118团工委办公室\n每次限借：1\n";
+		goods::print();
+	}
+};
+//继承自normal的胶凳类chair，拥有print函数显示物资领取信息
+class chair:public normal
+{
+	friend class activity;//activity中包含chair的对象a，故声明为友元
+public:
+	chair(){}
+	void print()
+	{
+		cout<<"领取地点：体育馆或C9东\n每次限借：无\n";
+		goods::print();
+	}
+};
+//desk类与chair类相似，不同点在于他们在date中的上限不同
+class desk:public normal
+{
+	friend class activity;
+public:
+	desk(){}
+	void print()
+	{
+		cout<<"领取地点：C3学生会办公室\n借用上限：20\n";
+		goods::print();
+	}
+};
+//继承自electric类的无线麦类micp
+//拥有枚举类型的成员part，用于描述借用时段
+//拥有setdetail函数，设置part的值
+//print函数，显示物资领取帮助信息
+class micp:public electric
+{
+	friend class activity;
+protected:
+	daypart part;
+public:
+	micp(){part=morning;}
+	void setdetail(daypart a){part=a;}
+	void print()
+	{
+		electric::print();
+		switch(part)
+		{
+		case morning:cout<<"使用时间：早上\n";break;
+		case afternoon:cout<<"使用时间：下午\n";break;
+		case night:cout<<"使用时间：晚上\n";break;
+		case 不申请:cout<<"不申请\n";break;
+		}
+	}
+};
+//audio类与micp类相似
+class audio:public electric
+{
+	friend class activity;
+protected:
+	daypart part;
+public:
+	audio(){part=morning;}
+	void setdetail(daypart a){part=a;}
+	void print()
+	{
+		electric::print();
+		switch(part)
+		{
+		case morning:cout<<"使用时间：早上\n";break;
+		case afternoon:cout<<"使用时间：下午\n";break;
+		case night:cout<<"使用时间：晚上\n";break;
+		case 不申请:cout<<"不申请\n";break;
+		}
+	}
+};
+//活动类activity，在manageactivity，date,manage类中被调用
+//为了节省调用开支声明为友元
+class activity
+{
+	friend class manageactivity;
+	friend class date;
+	friend class manage;
+protected:
+	char holder[50];//主办方
+	char actname[50];//活动名
+	char place[50];//活动地点
+	long phone;//联系方式
+	char reasponser[30];//负责人名
+	chair a;//胶凳
+	desk b;//桌子
+	micp c;//无线麦
+	audio d;//音响
+public:
+	//构造函数activity中phone设置为0，作为空记录
+	activity()
+	{
+		strcpy_s(holder,"");
+		strcpy_s(actname,"");
+		strcpy_s(place,"");
+		strcpy_s(reasponser,"");
+		phone=0;
+	}
+	//set函数设置activity的所有成员信息
+	void set
+		(char*hd,char*an,char*pl,char*rs,long ph,
+		int na,int nb,int nc,int nd,
+		daypart micppart,daypart audiopart)
+	{
+		strcpy_s(holder,hd);
+		strcpy_s(actname,an);
+		strcpy_s(place,pl);
+		strcpy_s(reasponser,rs);
+		phone=ph;
+		a.set(na);
+		b.set(nb);		
+		c.set(nc);
+		c.setdetail(micppart);
+		d.set(nd);
+		d.setdetail(audiopart);
+	}
+	//以下六个函数返回物资的信息，待调用
+	int chairnum(){return a.num;}
+	int desknum(){return b.num;}
+	int micpnum(){return c.num;}
+	int audionum(){return d.num;}
+	daypart micppart(){return c.part;}
+	daypart audiopart(){return d.part;}
+	//print函数显示活动的具体信息
+	void print()
+	{
+		cout<<"活动名称："<<actname
+			<<"    主办方："<<holder
+			<<"    活动地点："<<place
+			<<"    负责人："<<reasponser
+			<<"    联系方式"<<phone;
+		cout<<"\n胶凳：\n";
+		a.print();
+		cout<<"桌子：\n";
+		b.print();
+		cout<<"无线麦：\n";
+		c.print();	
+		cout<<endl;
+		cout<<"音响：\n";
+		d.print();
+		cout<<endl<<endl;		
+	}
+};
+//用于存放某一日期对应的dat,txt文件的地址
+class address
+{
+public:
+	int year;
+	int month;
+	int day;
+	char route[100];	//二进制文件地址
+	char txt[100];//txt文件地址
+};
+const address adrmark={0,0,0,"endaddress","endtxt"};//地址文件空记录
+const char*filetxt="d:\\物资管理系统文件\\dateroutefile.txt";//管理地址文件的txt
+const char*filedat="d:\\物资管理系统文件\\dateroute.dat";//管理地址文件的dat
+const activity actmark;//活动的空记录
+//操作日期地址文件的类managedate
+class managedate
+{
+public:
+	//初始化
+	void initial(const char*filedat)
+	{
+		fstream fdat(filedat,ios::out|ios::binary);//
+		cout<<"**********初始化**********\n";
+		cout<<"若活动资料存在，将删除原有数据，要进行初始化吗?（Y/N）\n";
+		char answer;
+		cin>>answer;
+		if(answer=='Y'||answer=='y')
+		{
+			fdat.seekp(0,ios::beg);//
+			fdat.write((char*)&adrmark,sizeof(address));//
+			cout<<"日期存放地址文件已经初始化\n";
+		}
+		else 
+		{
+			cout<<"取消操作\n";
+		}
+		fdat.close();//
+		cout<<"按回车键返回主菜单";
+		gacls();
+	}
+	//写入或修改address的数据
+	void append(const char*filedat,int flag)
+	{
+		address obj;
+		int key;
+		char choice; 
+		fstream fdat(filedat,ios::in|ios::out|ios::binary);//
+		if(!fdat)//
+		{
+			cout<<"活动资料文件不存在，请进行初始化操作\n";
+			return;
+		}
+		cout<<"**********日期文件存储路径写入**********\n";
+		while(1)
+		{
+			if(flag==1)choice='1';
+			else if(flag==2)choice='2';
+			else 
+				{
+					cout<<"选择操作，1:追加记录    2：修改记录    Q：返回主菜单\n";
+					cin>>choice;
+			}
+			system("cls");
+		cout<<"**********日期文件存储路径写入**********\n";
+			switch(choice)
+			{
+			case '1':
+				{
+					fdat.seekg(0,ios::beg);//
+					do//
+					{
+						fdat.read((char*)&obj,sizeof(address));//
+					}while(!endmark(obj));//
+					fdat.seekp(-long(sizeof(address)),ios::cur);//
+					cout<<"输入年、月、日，与对应的存储地址，txt地址\n";
+					cin>>obj.year;
+					cin>>obj.month;
+					cin>>obj.day;
+					cin>>obj.route;
+					cin>>obj.txt;
+					fdat.write((char*)&obj,sizeof(address));//
+					fdat.write((char*)&adrmark,sizeof(address));//
+					flag=0;
+					cout<<"请按回车键返回路径写入菜单";
+					gacls();
+					break;
+				};
+			case '2':
+				{
+					fdat.seekg(0,ios::beg);
+					cout<<"请选择检索方式：\n1.按地址\n2.按日期\n3.取消\n";
+					cin>>key;
+					system("cls");
+					switch(key)
+					{
+						char a[100];
+					case 1:
+						cout<<"请输入该日期文件的存储路径：\n";
+						cin>>a;
+						system("cls");
+						do
+						{
+						fdat.read((char*)&obj,sizeof(address));//
+						}while(strcmp(obj.route,a)&&!endmark(obj));
+						if(!strcmp(obj.route,a))
+						{
+							cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+							cout<<"修改日期存放地址：\n";
+							cin>>a;
+							strcpy_s(obj.route,a);
+							cout<<"修改txt地址：\n";
+							cin>>a;
+							strcpy_s(obj.txt,a);
+							fdat.seekp(-long(sizeof(address)),ios::cur);//
+							fdat.write((char*)&obj,sizeof(address));//
+							cout<<"修改后的日期与其存放地址：\n";
+							cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+						}
+						else 
+							cout<<"路径输入错误\n";
+						flag=0;
+						cout<<"请按回车键返回路径写入菜单";
+						gacls();
+						break;
+					case 2:
+						cout<<"请输入该日期文件的年 月 日：\n";
+						int y,m,d;
+						cin>>y>>m>>d;
+						system("cls");
+						do
+						{
+						fdat.read((char*)&obj,sizeof(address));//
+						}while((y!=obj.year||m!=obj.month||d!=obj.day)&&!endmark(obj));
+						if(!(y!=obj.year||m!=obj.month||d!=obj.day))
+						{
+							cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+							cout<<"修改日期存放地址：\n";
+							cin>>a;
+							strcpy_s(obj.route,a);
+							cout<<"修改txt地址：\n";
+							cin>>a;
+							strcpy_s(obj.txt,a);
+							fdat.seekp(-long(sizeof(address)),ios::cur);//
+							fdat.write((char*)&obj,sizeof(address));//
+							cout<<"修改后的日期与其存放地址：\n";
+							cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+						}
+						else 
+							cout<<"日期输入错误\n";
+						flag=0;
+						cout<<"请按回车键返回路径写入菜单";
+						gacls();
+						break;
+					}
+				case '3':
+					system("cls");
+					flag=0;
+					break;
+				}
+			case 'Q':
+			case 'q':
+				system("cls");
+				flag=0;
+				return;//
+			}
+		}
+		fdat.close();
+	}
+	//批量建立txt和dat文件，通过计算每个月的天数生成对应的文件与记录
+	void createlist(const char*filedat)
+	{
+		address obj;
+		fstream fdat(filedat,ios::in|ios::out|ios::binary);//
+		if(!fdat)//
+		{
+			cout<<"活动资料文件不存在，请进行初始化操作\n";
+			return;
+		}
+		fdat.seekp(0,ios::beg);//
+		fdat.write((char*)&adrmark,sizeof(address));//
+		int year1,month1,year2,month2;
+		cout<<"请输入希望建立的工作表包含的起始时间的年月：";
+		cin>>year1>>month1;
+		cout<<"请输入希望建立的工作表包含的结束时间的年月：";
+		cin>>year2>>month2;
+		system("cls");
+		int sum;
+		int y,m,d;
+		for(y=year1;y<=year2;y++)
+			for(m=month1;m<=month2;m++)
+			{
+				//设置每月对应天数
+				switch(m)
+				{
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				case 8:
+				case 10:
+				case 12:sum=31;break;
+				case 2:if(year1%4==0&&year1%100!=0||year1%400==0)sum=29;
+						 else sum=28;break;
+				default:sum=30;break;
+				}
+				for(d=1;d<=sum;d++)
+				{
+					fdat.seekg(0,ios::beg);//
+					do//
+					{
+						fdat.read((char*)&obj,sizeof(address));//
+					}while(!endmark(obj));//
+					fdat.seekp(-long(sizeof(address)),ios::cur);//
+					obj.year=y;
+					obj.month=m;
+					obj.day=d;
+					char riqi[10];
+					char*houzui1=".dat";
+					char*houzui2=".txt";
+					//链接日期生成路径名和txt名
+					sprintf_s(riqi, "%d-%d-%d",y,m,d);
+					strcpy_s(obj.route,"d:\\物资管理系统文件\\");
+					strcat_s(obj.route,riqi);
+					strcat_s(obj.route,houzui1);
+					strcpy_s(obj.txt,"d:\\物资管理系统文件\\");
+					strcat_s(obj.txt,riqi);
+					strcat_s(obj.txt,houzui2);
+					fdat.write((char*)&obj,sizeof(address));//
+					fdat.write((char*)&adrmark,sizeof(address));//					
+				}			
+			}
+			fdat.close();//
+			for(y=year1;y<=year2;y++)
+			for(m=month1;m<=month2;m++)
+			{
+				switch(m)
+				{
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				case 8:
+				case 10:
+				case 12:sum=31;break;
+				case 2:if(year1%4==0&&year1%100!=0||year1%400==0)sum=29;
+						 else sum=28;break;
+				default:sum=30;break;
+				}
+				for(d=1;d<=sum;d++)
+				{
+					obj.year=y;
+					obj.month=m;
+					obj.day=d;
+					char riqi[10];
+					char*houzui1=".dat";
+					char*houzui2=".txt";
+					sprintf_s(riqi, "%d-%d-%d",y,m,d);
+					strcpy_s(obj.route,"d:\\物资管理系统文件\\");
+					strcat_s(obj.route,riqi);
+					strcat_s(obj.route,houzui1);
+					strcpy_s(obj.txt,"d:\\物资管理系统文件\\");
+					strcat_s(obj.txt,riqi);
+					strcat_s(obj.txt,houzui2);
+					//逐个建立dat与txt文件
+					fstream actdat;
+					actdat.open(obj.route,ios::out|ios::binary);//
+					actdat.seekp(0,ios::beg);//
+					actdat.write((char*)&actmark,sizeof(address));
+					actdat.close();	
+					fstream acttxt;
+					acttxt.open(obj.txt,ios::out|ios::binary);//
+					acttxt.seekp(0,ios::beg);//
+					acttxt.write((char*)&actmark,sizeof(address));
+					acttxt.close();	
+				}			
+			}
+			fdat.close();//
+			cout<<"已批量建立工作表\n";
+			cout<<"按回车键返回主菜单";
+			gacls();
+}
+	//查询日期dat,txt地址
+	void inquire(const char*filedat)
+	{
+		char choice;
+		address obj;
+		fstream fdat(filedat,ios::in|ios::binary);
+		cout<<"**********查询**********";
+		cout<<endl;
+		while(1)
+		{
+			cout<<"请输入操作选择\n"
+				<<"1:按日期查询\n2:遍历\n3:按存储地址查询\nQ:退出\n";
+			cin>>choice;
+			system("cls");
+			switch(choice)
+			{
+			case '1':
+				{
+					fdat.seekg(0,ios::beg);
+					cout<<"请输入该日期文件的年 月 日：\n";
+					int y,m,d;
+					cin>>y>>m>>d;
+					system("cls");
+					do
+					{
+					fdat.read((char*)&obj,sizeof(address));//
+					}while((y!=obj.year||m!=obj.month||d!=obj.day)&&!endmark(obj));
+					if(!(y!=obj.year||m!=obj.month||d!=obj.day))
+					{
+						cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+					}
+					cout<<"请按回车键返回路径查询菜单";
+					gacls();
+					break;
+				}
+			case '2':
+				{
+					fdat.seekg(0,ios::beg);
+					do
+					{
+						fdat.read((char*)&obj,sizeof(address));
+						if(!endmark(obj))
+							cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+					}while(!endmark(obj));
+					cout<<"请按回车键返回路径查询菜单";
+					gacls();
+					break;
+				}
+			case '3':
+				{
+					fdat.seekg(0,ios::beg);
+					char a[100];
+					cout<<"请输入该日期文件的存储路径：\n";
+					cin>>a;
+					system("cls");
+					do
+					{
+						fdat.read((char*)&obj,sizeof(address));//
+					}while(strcmp(obj.route,a)&&!endmark(obj));
+					if(!strcmp(obj.route,a))
+					{
+						cout<<obj.year<<" "<<obj.month<<" "<<obj.day<<" "<<obj.route<<" "<<obj.txt<<endl;
+					}
+					else cout<<"路径输入错误，请重试\n";
+					cout<<"请按回车键返回路径查询菜单";
+					gacls();
+					break;
+				}
+			case 'q':
+			case 'Q':
+				system("cls");
+				return;
+			}
+		}
+		fdat.close();
+	}
+	//建立整个管理日期地址文件的txt存档dateroutefile.txt
+	void createtxt(const char*filedat)
+	{
+		fstream fdat(filedat,ios::in|ios::binary);//
+		fstream ftxt(filetxt,ios::out);
+		fdat.seekp(0,ios::beg);
+		address obj;
+		cout<<"**********建立文本文档**********\n";
+		do
+		{
+			fdat.read((char*)&obj,sizeof(address));//
+			if(!endmark(obj))
+				ftxt<<obj.year<<'\t'<<obj.month<<'\t'<<obj.day<<'\t'<<obj.route<<'\t'<<obj.txt<<endl;
+		}while(!endmark(obj));
+		ftxt<<"the end";
+		ftxt.close();
+		cout<<"文本文件已建立，请在以下目录中浏览文档：d:\\物资管理系统文件\\dateroutefile.txt\n";
+		cout<<"按回车键返回主菜单";
+		gacls();
+		fdat.close();//
+	}
+	//判断是否达到结束标志
+	int endmark(address obj)
+	{
+		if(obj.day==0)
+			return 1;
+		return 0;
+	}
+};
+//日期类date，拥有int数据成员chair,desk,micp,audio，描述物资余量
+//int数据成员year,month,day，描述日期
+class date
+{
+	friend class manageactivity;
+protected:
+	int chair;
+	int desk;
+	int micp;
+	int audio;
+	int year;
+	int month;
+	int day;
+public:
+	//构造函数date设置原始物资数量（上限）与日期
+	date()
+	{
+		chair=year=month=day=0;
+		desk=20;
+		micp=2;
+		audio=1;
+	}
+	//根据日期通过查找filedat里的内容返回txt和dat的路径
+	char*dateroute(const char*filedat,int year,int month,int day)
+	{
+		address obj;
+		fstream fdat(filedat,ios::in|ios::binary);
+		do
+				{
+				fdat.read((char*)&obj,sizeof(address));//
+				}while((year!=obj.year||month!=obj.month||day!=obj.day));
+				if(!(year!=obj.year||month!=obj.month||day!=obj.day))
+				{
+					return obj.route;
+				}
+		else return NULL;
+	}
+	char*datetxt(const char*filedat,int year,int month,int day)
+	{
+		address obj;
+		fstream fdat(filedat,ios::in|ios::binary);
+		do
+				{
+					fdat.read((char*)&obj,sizeof(address));//
+				}while((year!=obj.year||month!=obj.month||day!=obj.day));
+		if(!(year!=obj.year||month!=obj.month||day!=obj.day))
+			{
+				return obj.txt;
+			}
+		else return NULL;
+	}
+	//设置日期
+	void set(int y,int m,int d)
+	{
+		year=y;month=m;day=d;	
+	}
+	//余量统计函数
+	void setnum(const char*dateroute)
+	{
+		activity obj;
+		fstream regoods(dateroute,ios::in|ios::binary);
+		do
+		{
+			regoods.read((char*)&obj,sizeof(activity));
+			if(obj.phone!=0)
+			{
+				chair+=obj.chairnum();
+				desk-=obj.desknum();
+				micp-=obj.micpnum();
+				audio-=obj.audionum();
+			}			
+		}while(obj.phone!=0);
+		regoods.close();
+	}
+	//检查活动所申请的物资是否超出借用上限
+	void check(activity p,int&flag)
+	{
+		//先减去已借数目
+		chair+=p.chairnum();
+		desk-=p.desknum();
+		micp-=p.micpnum();
+		audio-=p.audionum();
+		flag=1;
+		//如果超出就还原
+		if(desk<0)
+		{
+			cout<<"桌子已经借满，请返回主菜单，按桌子查询，并与相关活动组织者联系共用\n";
+			desk+=p.desknum();
+			flag=0;
+		}
+		else if(micp<0)
+		{
+			cout<<"无线麦已经借满，请返回主菜单，请按无线麦查询并与相关活动组织者联系共用\n";
+			micp+=p.micpnum();
+			flag=0;
+		}
+		else if(audio<0)
+		{
+			cout<<"音响已借出，请返回主菜单，请按音响查询并与相关活动组织者联系共用\n";
+			audio+=p.audionum();
+			flag=0;
+		}
+		else cout<<"各项物资均有剩余\n申请通过！\n";
+	}
+	//输出当天余量信息
+	void print()
+	{
+		cout<<year<<"年"<<month<<"月"<<day<<"日\t"
+			<<"胶凳\t（已借出："<<chair<<"张）\t桌子（20） 余量："<<desk
+			<<"\t无线麦（2） 余量："<<micp<<"\t音响（1） 余量："<<audio<<endl;
+	}
+};
+//对活动信息进行管理的函数
+class manageactivity
+{
+public:
+	//初始化
+	void initial(const char*filedat)
+	{
+		fstream fdat(filedat,ios::out|ios::binary);//
+		cout<<"**********初始化**********\n";
+		cout<<"若当天活动资料存在，将删除原有数据，要进行初始化吗?（Y/N）\n";
+		char answer;
+		cin>>answer;
+		if(answer=='Y'||answer=='y')
+		{
+			fdat.seekp(0,ios::beg);//
+			fdat.write((char*)&actmark,sizeof(activity));//
+			cout<<"当天的活动管理文件已经初始化\n";
+		}
+		else 
+		{
+			cout<<"取消操作\n";
+		}
+		fdat.close();//
+		cout<<"按回车键返回主菜单";
+		gacls();
+	}
+	//插入或修改活动信息
+	void append(const char*filedat,date b)
+	{
+		activity obj;
+		int key;
+		char choice; 
+		fstream fdat(filedat,ios::in|ios::out|ios::binary);//
+		if(!fdat)//
+		{
+			cout<<"活动资料文件不存在，请进行初始化操作\n";
+			return;
+		}
+		cout<<"**********活动写入**********\n";
+		while(1)
+		{
+			cout<<"请选择操作\n1:登记活动    2：修改活动    Q：返回主菜单\n";
+			cin>>choice;
+			int flag=1,mark=0;
+			system("cls");
+			switch(choice)
+			{
+			case '1':
+				{
+					cout<<"**********活动登记**********\n";		
+					fdat.seekg(0,ios::beg);//
+					do//
+					{
+						fdat.read((char*)&obj,sizeof(activity));//	
+					}while(!endmark(obj));//
+					fdat.seekp(-long(sizeof(activity)),ios::cur);//
+					cout<<"请依序填写以下信息：\n主办方    活动名称    举办地点    负责人    联系方式"
+						<<"    胶凳    桌子    无线麦    借用时段    音响    借用时段\n";
+					char hd[50],an[50],pl[50],rs[30];
+					long ph;
+					int na,nb,nc,nd;
+					daypart micppart,audiopart;
+					char s1[20],s2[20];
+					cin>>hd>>an>>pl>>rs>>ph>>na>>nb>>nc>>s1>>nd>>s2;
+					system("cls");
+					if(!strcmp(s1,"morning"))micppart=morning;
+					else if(!strcmp(s1,"afternoon"))micppart=afternoon;
+					else if(!strcmp(s1,"night"))micppart=night;
+					else micppart=不申请;
+					if(!strcmp(s2,"morning"))audiopart=morning;
+					else if(!strcmp(s2,"afternoon"))audiopart=afternoon;
+					else if(!strcmp(s2,"night"))audiopart=night;
+					else audiopart=不申请;
+					obj.set(hd,an,pl,rs,ph,na,nb,nc,nd,micppart,audiopart);
+					b.check(obj,flag);
+					if(flag==1)
+					{
+						fdat.write((char*)&obj,sizeof(activity));//
+						fdat.write((char*)&actmark,sizeof(activity));//
+						cout<<"您所申请的活动情况如下：\n";
+						obj.print();
+						cout<<"请按回车键返回活动写入菜单";
+						gacls();	
+					}				
+					cout<<"请按回车键返回活动写入菜单";
+					gacls();	
+					break;
+				};
+			case '2':
+				{	
+					cout<<"**********活动修改**********\n";			
+					cout<<"请选择检索方式：\n1.按主办方\n2.按活动名\n3.按负责人\n4.按联系方式\n5.返回活动申请菜单\n";
+					cin>>key;
+					system("cls");				
+					switch(key)
+					{
+						char a[50];
+					case 1:
+						cout<<"请输入活动主办方：\n";
+						cin>>a;
+						system("cls");
+						fdat.seekg(0,ios::beg);
+						//两层循环实现对同名条件的搜索结果的排查
+						do
+						{
+							do
+							{
+							fdat.read((char*)&obj,sizeof(activity));//
+							}while(strcmp(obj.holder,a)&&!endmark(obj));
+							if(!strcmp(obj.holder,a))
+							{
+								cout<<"活动详情如下，请确认是否为所需修改的活动：\n";
+								obj.print();
+								cout<<"请按回车键继续";
+								gacls();
+								cout<<"是否为所需修改的活动：是：Y    否：N\n";
+								char s;
+								cin>>s;
+								if(s=='y'||s=='Y')
+								{
+									mark=1;
+									cout<<"请选择修改项:\n0.主办方\n1.活动名\n2.负责人\n3.联系方式\n4.活动地点\n5.物资\n6.返回活动写入菜单\n";
+									int xuan;
+									cin>>xuan;
+									system("cls");
+									switch(xuan)
+									{
+										case 0:
+										cout<<"新主办方\n";
+										cin>>a;
+										strcpy_s(obj.holder,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 1:
+										cout<<"新活动名：\n";
+										cin>>a;
+										strcpy_s(obj.actname,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 2:
+										cout<<"新负责人名：\n";
+										cin>>a;
+										strcpy_s(obj.reasponser,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 3:
+										cout<<"新联系方式：\n";
+										long f;
+										cin>>f;
+										obj.phone=f;
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 4:
+										cout<<"新地点\n";
+										cin>>a;
+										strcpy_s(obj.place,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 5:
+									cout<<"请选择要修改的物资：\n"
+										<<"1.桌子    2.无线麦    3.音响    4.返回\n";
+									int wu;
+									cin>>wu;
+									switch(wu)
+									{
+										int number;
+									case 1:
+										cout<<"请输入桌子的新数量：\n";
+										cin>>number;
+										obj.b.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+										break;
+									case 2:
+										cout<<"请输入无线麦的新数量：\n";
+										cin>>number;
+										obj.c.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+									break;
+									case 3:
+										cout<<"请输入音响的新数量：\n";
+										cin>>number;
+										obj.d.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+									}
+									break;
+									}
+								case 6:
+									cout<<"请按回车键返回活动写入菜单";
+									gacls();
+									}
+								}							
+						}					
+					}while(!endmark(obj)&&mark==0);
+					if(mark==0)
+					{
+						cout<<"主办方输入错误\n";
+						cout<<"请按回车键返回活动写入菜单";
+						gacls();
+					}
+					break;
+					case 2:
+						cout<<"请输入活动名：\n";
+						cin>>a;
+						system("cls");
+						fdat.seekg(0,ios::beg);
+						do
+						{
+							do
+							{
+							fdat.read((char*)&obj,sizeof(activity));//
+							}while(strcmp(obj.actname,a)&&!endmark(obj));
+							if(!strcmp(obj.actname,a))
+							{
+								cout<<"活动详情如下，请确认是否为所需修改的活动：\n";
+								obj.print();
+								cout<<"请按回车键继续";
+								gacls();
+								cout<<"是否为所需修改的活动：是：Y    否：N\n";
+								char s;
+								cin>>s;
+								if(s=='y'||s=='Y')
+								{
+									mark=1;
+									cout<<"请选择修改项:\n0.主办方\n1.活动名\n2.负责人\n3.联系方式\n4.活动地点\n5.物资\n6.返回活动写入菜单\n";
+									int xuan;
+									cin>>xuan;
+									system("cls");
+									switch(xuan)
+									{
+										case 0:
+										cout<<"新主办方\n";
+										cin>>a;
+										strcpy_s(obj.holder,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 1:
+										cout<<"新活动名：\n";
+										cin>>a;
+										strcpy_s(obj.actname,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 2:
+										cout<<"新负责人名：\n";
+										cin>>a;
+										strcpy_s(obj.reasponser,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 3:
+										cout<<"新联系方式：\n";
+										long f;
+										cin>>f;
+										obj.phone=f;
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 4:
+										cout<<"新地点\n";
+										cin>>a;
+										strcpy_s(obj.place,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 5:
+									cout<<"请选择要修改的物资：\n"
+										<<"1.桌子    2.无线麦    3.音响    4.返回\n";
+									int wu;
+									cin>>wu;
+									switch(wu)
+									{
+										int number;
+									case 1:
+										cout<<"请输入桌子的新数量：\n";
+										cin>>number;
+										obj.b.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+										break;
+									case 2:
+										cout<<"请输入无线麦的新数量：\n";
+										cin>>number;
+										obj.c.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+									break;
+									case 3:
+										cout<<"请输入音响的新数量：\n";
+										cin>>number;
+										obj.d.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+									}
+									break;
+									}
+								case 6:
+									cout<<"请按回车键返回活动写入菜单";
+									gacls();
+									}
+								}							
+						}					
+					}while(!endmark(obj)&&mark==0);
+					if(mark==0)
+					{
+						cout<<"活动名输入错误\n";
+						cout<<"请按回车键返回活动写入菜单";
+						gacls();
+					}
+					break;
+				case 3:
+					cout<<"请输入活动负责人名：\n";
+						cin>>a;
+						system("cls");
+						fdat.seekg(0,ios::beg);
+						do
+						{
+							do
+							{
+							fdat.read((char*)&obj,sizeof(activity));//
+							}while(strcmp(obj.reasponser,a)&&!endmark(obj));
+							if(!strcmp(obj.reasponser,a))
+							{
+								cout<<"活动详情如下，请确认是否为所需修改的活动：\n";
+								obj.print();
+								cout<<"请按回车键继续";
+								gacls();
+								cout<<"是否为所需修改的活动：是：Y    否：N\n";
+								char s;
+								cin>>s;
+								if(s=='y'||s=='Y')
+								{
+									mark=1;
+									cout<<"请选择修改项:\n0.主办方\n1.活动名\n2.负责人\n3.联系方式\n4.活动地点\n5.物资\n6.返回活动写入菜单\n";
+									int xuan;
+									cin>>xuan;
+									system("cls");
+									switch(xuan)
+									{
+										case 0:
+										cout<<"新主办方\n";
+										cin>>a;
+										strcpy_s(obj.holder,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 1:
+										cout<<"新活动名：\n";
+										cin>>a;
+										strcpy_s(obj.actname,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 2:
+										cout<<"新负责人名：\n";
+										cin>>a;
+										strcpy_s(obj.reasponser,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 3:
+										cout<<"新联系方式：\n";
+										long f;
+										cin>>f;
+										obj.phone=f;
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 4:
+										cout<<"新地点\n";
+										cin>>a;
+										strcpy_s(obj.place,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 5:
+									cout<<"请选择要修改的物资：\n"
+										<<"1.桌子    2.无线麦    3.音响    4.返回\n";
+									int wu;
+									cin>>wu;
+									switch(wu)
+									{
+										int number;
+									case 1:
+										cout<<"请输入桌子的新数量：\n";
+										cin>>number;
+										obj.b.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+										break;
+									case 2:
+										cout<<"请输入无线麦的新数量：\n";
+										cin>>number;
+										obj.c.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+									break;
+									case 3:
+										cout<<"请输入音响的新数量：\n";
+										cin>>number;
+										obj.d.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+									}
+									break;
+									}
+								case 6:
+									cout<<"请按回车键返回活动写入菜单";
+									gacls();
+									}
+								}							
+						}					
+					}while(!endmark(obj)&&mark==0);
+					if(mark==0)
+					{
+						cout<<"负责人名输入错误\n";
+						cout<<"请按回车键返回活动写入菜单";
+						gacls();
+					}
+					break;	
+					case 4:
+						cout<<"请输入联系方式：\n";
+						long g;
+						cin>>g;
+						system("cls");
+						fdat.seekg(0,ios::beg);
+						do
+						{
+							do
+							{
+							fdat.read((char*)&obj,sizeof(activity));//
+							}while(g!=obj.phone&&!endmark(obj));
+							if(g==obj.phone)
+							{
+								cout<<"活动详情如下，请确认是否为所需修改的活动：\n";
+								obj.print();
+								cout<<"请按回车键继续";
+								gacls();
+								cout<<"是否为所需修改的活动：是：Y    否：N\n";
+								char s;
+								cin>>s;
+								if(s=='y'||s=='Y')
+								{
+									mark=1;
+									cout<<"请选择修改项:\n0.主办方\n1.活动名\n2.负责人\n3.联系方式\n4.活动地点\n5.物资\n6.返回活动写入菜单\n";
+									int xuan;
+									cin>>xuan;
+									system("cls");
+									switch(xuan)
+									{
+										case 0:
+										cout<<"新主办方\n";
+										cin>>a;
+										strcpy_s(obj.holder,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 1:
+										cout<<"新活动名：\n";
+										cin>>a;
+										strcpy_s(obj.actname,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+									case 2:
+										cout<<"新负责人名：\n";
+										cin>>a;
+										strcpy_s(obj.reasponser,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 3:
+										cout<<"新联系方式：\n";
+										long f;
+										cin>>f;
+										obj.phone=f;
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 4:
+										cout<<"新地点\n";
+										cin>>a;
+										strcpy_s(obj.place,a);
+										fdat.seekp(-long(sizeof(activity)),ios::cur);//
+										fdat.write((char*)&obj,sizeof(activity));//
+										cout<<"修改后的活动详情：\n";
+										obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+										break;
+								case 5:
+									cout<<"请选择要修改的物资：\n"
+										<<"1.桌子    2.无线麦    3.音响    4.返回\n";
+									int wu;
+									cin>>wu;
+									switch(wu)
+									{
+										int number;
+									case 1:
+										cout<<"请输入桌子的新数量：\n";
+										cin>>number;
+										obj.b.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+										break;
+									case 2:
+										cout<<"请输入无线麦的新数量：\n";
+										cin>>number;
+										obj.c.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+											cout<<"请按回车键继续";
+											gacls();
+										}
+									break;
+									case 3:
+										cout<<"请输入音响的新数量：\n";
+										cin>>number;
+										obj.d.set(number);
+										b.check(obj,flag);
+										if(flag==1)
+										{
+											fdat.seekp(-long(sizeof(activity)),ios::cur);//
+											fdat.write((char*)&obj,sizeof(activity));//
+											cout<<"修改后的活动详情：\n";
+											obj.print();
+										cout<<"请按回车键继续";
+										gacls();
+									}
+									break;
+									}
+								case 6:
+									cout<<"请按回车键返回活动写入菜单";
+									gacls();
+									}
+								}							
+						}					
+					}while(!endmark(obj)&&mark==0);
+					if(mark==0)
+					{
+						cout<<"主办方输入错误\n";
+						cout<<"请按回车键返回活动写入菜单";
+						gacls();
+					}
+					break;		
+				case 5:
+					system("cls");
+					break;
+				}break;
+			case 'Q':
+			case 'q':
+				system("cls");
+				return;//
+			}
+		}
+		}
+		fdat.close();
+	}
+	//查询活动信息
+	void inquire(const char*filedat)
+	{
+		activity obj;
+		int key;
+		int flag;
+		fstream fdat(filedat,ios::in|ios::out|ios::binary);//
+		if(!fdat)//
+		{
+			cout<<"活动资料文件不存在，请进行初始化操作\n";
+			return;
+		}
+		cout<<"请选择检索方式：\n0.遍历当天活动记录\n1.按主办方\n2.按活动名\n3.按负责人\n4.按联系方式查询\n"
+			<<"5.按举办地点查询\n6.按物资查询\n7.返回申请系统主菜单\n";
+		cin>>key;
+		system("cls");
+		switch(key)
+		{
+			char a[50];
+		case 0:
+			cout<<"当天全部活动详情如下"<<endl;
+			fdat.seekg(0,ios::beg);
+			do
+			{
+				fdat.read((char*)&obj,sizeof(activity));//
+				if(obj.phone!=0)
+				{
+					obj.print();						
+				}
+				if(obj.phone==0)
+					cout<<"the end\n";
+			}while(!endmark(obj));			
+			cout<<"请按回车键返回活动写入菜单";
+			cin.get();
+			cin.get();
+			system("cls");
+			break;
+		case 1:
+			flag=0;
+			cout<<"请输入活动主办方：\n";
+			cin>>a;
+			system("cls");
+			fdat.seekg(0,ios::beg);
+			do
+			{
+				do
+				{
+				fdat.read((char*)&obj,sizeof(activity));//
+				}while(strcmp(obj.holder,a)&&!endmark(obj));	
+				if(!strcmp(obj.holder,a))
+				{
+					cout<<"活动详情如下：\n";
+					obj.print();			
+					flag=1;			
+				}	
+				else break;
+			}while(!endmark(obj));		
+			if(flag==0)
+			{
+				cout<<"主办方输入错误\n";
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			else 
+			{
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			break;
+		case 2:
+			cout<<"请输入活动名称：\n";
+			cin>>a;
+			system("cls");
+			fdat.seekg(0,ios::beg);
+			do
+			{
+				do
+				{
+				fdat.read((char*)&obj,sizeof(activity));//
+				}while(strcmp(obj.actname,a)&&!endmark(obj));	
+				if(!strcmp(obj.actname,a))
+				{
+					cout<<"活动详情如下：\n";
+					obj.print();			
+					flag=1;			
+				}	
+				else break;
+			}while(!endmark(obj));		
+			if(flag==0)
+			{
+				cout<<"活动名称输入错误\n";
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			else 
+			{
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			break;		
+			case 3:
+			cout<<"请输入负责人名：\n";
+			cin>>a;
+			system("cls");
+			fdat.seekg(0,ios::beg);
+			do
+			{				
+				do
+				{
+				fdat.read((char*)&obj,sizeof(activity));//
+				}while(strcmp(obj.reasponser,a)&&!endmark(obj));	
+				if(!strcmp(obj.reasponser,a))
+				{
+					cout<<"活动详情如下：\n";
+					obj.print();			
+					flag=1;			
+				}	
+				else break;
+			}while(!endmark(obj));		
+			if(flag==0)
+			{
+				cout<<"负责人名输入错误\n";
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			else 
+			{
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			break;		
+			case 4:
+			long g;
+			cout<<"请输入联系方式：\n";
+			cin>>g;
+			system("cls");
+			fdat.seekg(0,ios::beg);
+			do
+			{
+				do
+				{
+				fdat.read((char*)&obj,sizeof(activity));//
+				}while((obj.phone!=g)&&!endmark(obj));
+				if(obj.phone ==g)
+				{
+					cout<<"活动详情如下：\n";
+					obj.print();			
+					flag=1;			
+				}	
+				else break;
+			}while(!endmark(obj));		
+			if(flag==0)
+			{
+				cout<<"联系方式输入错误\n";
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			else 
+			{
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			break;	
+			case 5:
+			cout<<"请输入活动地点：\n";
+			cin>>a;
+			system("cls");
+			fdat.seekg(0,ios::beg);
+			do
+			{
+				do
+				{
+				fdat.read((char*)&obj,sizeof(activity));//
+				}while(strcmp(obj.place,a)&&!endmark(obj));	
+				if(!strcmp(obj.place,a))
+				{
+					cout<<"活动详情如下：\n";
+					obj.print();			
+					flag=1;			
+				}	
+				else break;
+			}while(!endmark(obj));		
+			if(flag==0)
+			{
+				cout<<"负责人名输入错误\n";
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			else 
+			{
+				cout<<"请按回车键返回活动写入菜单";
+				cin.get();
+				cin.get();
+				system("cls");
+			}
+			break;	
+			case 6:
+				cout<<"请选择要查询的物资：\n"
+							<<"1.桌子    2.无线麦    3.音响    4.返回\n";
+				int wu;
+				cin>>wu;
+				system("cls");
+				int sign=0;
+				switch(wu)
+				{
+				case 1:
+					fdat.seekg(0,ios::beg);
+					do
+					{
+						do
+						{
+						fdat.read((char*)&obj,sizeof(address));//
+						if(obj.desknum()!=0)
+						{
+							cout<<"活动详情如下：\n";
+							obj.print();		
+							sign=1;
+						}
+						}while((obj.desknum()!=0)&&!endmark(obj));					
+					}while(!endmark(obj));	
+					if(sign==0)
+					{
+						cout<<"当天没有使用桌子的活动\n请按回车键返回\n";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					else 
+					{
+						cout<<"请按回车键返回活动写入菜单";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					break;
+				case 2:
+					fdat.seekg(0,ios::beg);
+					do
+					{
+						do
+						{
+						fdat.read((char*)&obj,sizeof(activity));//
+						if(obj.micpnum()!=0)
+						{
+							cout<<"活动详情如下：\n";
+							obj.print();		
+							sign=1;
+						}
+						}while((obj.micpnum()!=0)&&!endmark(obj));					
+					}while(!endmark(obj));	
+					if(sign==0)
+					{
+						cout<<"当天没有使用无线麦的活动\n请按回车键返回\n";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					else 
+					{
+						cout<<"请按回车键返回活动写入菜单";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					break;
+				case 3:
+					fdat.seekg(0,ios::beg);
+					do
+					{
+						do
+						{
+						fdat.read((char*)&obj,sizeof(activity));//
+						if(obj.audionum()!=0)
+						{
+							cout<<"活动详情如下：\n";
+							obj.print();		
+							sign=1;
+						}
+						}while((obj.audionum()!=0)&&!endmark(obj));					
+					}while(!endmark(obj));
+					if(sign==0)
+					{
+						cout<<"当天没有使用音响的活动\n请按回车键返回\n";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					else 
+					{
+						cout<<"请按回车键返回活动写入菜单";
+						cin.get();
+						cin.get();
+						system("cls");
+					}
+					break;
+				}
+		}
+		fdat.close();
+	}
+	//建立当天的txt文件
+	void createtxt(const char*filedat,const char*datetxt,int year,int month,int day)
+	{
+		fstream fdat(filedat,ios::in|ios::binary);//
+		fstream ftxt(datetxt,ios::out);
+		fdat.seekp(0,ios::beg);
+		activity obj;
+		cout<<"**********建立文本文档**********\n";
+		do 
+		{
+			fdat.read((char*)&obj,sizeof(activity));//
+			if(!endmark(obj))
+				ftxt<<obj.holder<<"    "<<obj.actname<<"    "<<obj.place<<"    "<<obj.phone<<"    "<<obj.reasponser<<"    "
+				<<obj.chairnum()<<"    "<<obj.desknum()<<"    "
+				<<obj.micpnum()<<"    "<<obj.micppart()<<"    "<<obj.audionum()<<"    "<<obj.audiopart()<<endl;
+		}while(!endmark(obj));
+		ftxt<<"the end";
+		ftxt.close();
+		date b;
+		cout<<"文本文件已建立，请在以下目录中浏览文档："<<datetxt<<endl;
+		cout<<"按回车键返回主菜单";
+		cin.get();
+		cin.get();
+		system("cls");
+		fdat.close();//
+	}
+	//判断是否达到当天的活动结束标志phone==0
+	int endmark(activity obj)
+	{
+		if(obj.phone==0)
+			return 1;
+		return 0;
+	}
+};
+class manage
+{
+public:
+	//将各天的活动按月合并
+	void createsheet()
+	{
+		fstream fdat(filedat,ios::in|ios::binary);
+		fstream sheetdat("d:\\物资管理系统文件\\sheet.dat",ios::out|ios::in|ios::binary);
+		fstream sheettxt("d:\\物资管理系统文件\\校园活动物资管理系统存档.txt",ios::out);
+		address obj;
+		activity obj1;
+		managedate a;
+		manageactivity b;
+		cout<<"请输入起始日期和结束日期：\n____年__月——____年__月\n";
+		int year1,month1,year2,month2;
+		cin>>year1>>month1>>year2>>month2;
+		fdat.seekg(0,ios::beg);
+		sheetdat.seekg(0,ios::beg);
+		sheettxt.seekg(0,ios::beg);
+		sheettxt<<"**********校园活动物资管理系统**********\n";
+		do
+		{
+			fdat.read((char*)&obj,sizeof(address));
+			if(!a.endmark(obj))
+			{
+				fstream datedat(obj.route,ios::in|ios::out|ios::binary);
+				datedat.seekg(0,ios::beg);
+				sheettxt<<obj.year<<"年"<<obj.month<<"月"<<obj.day<<"日\n"
+				<<"主办方    活动名称    举办地点    负责人    联系方式    胶凳    桌子    无线麦    借用时段    音响    借用时段\n";
+				do
+				{
+					datedat.read((char*)&obj1,sizeof(activity));
+					sheetdat.write((char*)&obj1,sizeof(activity));
+					sheettxt<<obj1.holder<<"    "<<obj1.actname<<"    "<<obj1.place<<"    "<<obj1.phone<<"    "<<obj1.reasponser
+				<<obj1.chairnum()<<"    "<<obj1.desknum()<<"    "
+				<<obj1.micpnum()<<"    "<<obj1.micppart()<<"    "<<obj1.audionum()<<"    "<<obj1.audiopart()<<endl;
+				}while(!b.endmark(obj1));
+				datedat.close();
+			}
+		}while(!a.endmark(obj));
+		sheettxt<<"the end\n";
+		sheetdat.close();
+		sheettxt.close();
+		fdat.close();
+		cout<<"已合并工作表并建立存档d:\\物资管理系统文件\\校园活动物资管理系统存档.txt\n";
+		cout<<"请按回车键返回";
+		cin.get();
+		cin.get();
+		system("cls");
+	}
+	//检查用户名和密码，输入错误三次不能再进入
+	bool password()
+	{
+		int flag=0,sign=0;
+		char name[30],pass[30];
+		//先检索用户名
+		cout<<"请输入用户名：\n";
+		while(flag<3)
+		{
+			cin>>name;
+			if(strcmp(name,"C1-118"))
+			{
+				cout<<"用户名输入错误，请重新输入：\n";
+				flag++;
+			}
+			else 
+			{
+				cout<<"请输入密码：\n";		
+				//再检索密码
+				while(sign<3)
+				{
+					cin>>pass;
+					if(strcmp(pass,"39380123"))
+					{
+						cout<<"密码错误，请重新输入：\n";
+						sign++;
+					}
+					else 
+					{
+						cout<<"**********欢迎**********"<<endl;
+						cout<<"请按回车键继续"<<endl;
+						gacls();
+					return true;
+					}
+				}	
+				cout<<"密码输入错误三次，将退出管理者系统\n";
+				cout<<"请按回车键返回";
+				gacls();
+				return false;
+			}
+		}
+		cout<<"用户名输入错误三次，将退出管理者系统\n";
+		cout<<"请按回车键返回";
+		gacls();
+		return false;
+	}
+};
+int main()
+{
+	int xuan;
+	int mark=1;
+	manage p;
+	cout<<"请选择用户：\n1：申请者\n2：管理员\n3：退出系统\n";
+	cin>>xuan;
+	system("cls");
+	while(xuan!=3)
+	{
+		if(xuan==1)
+		{
+			int year,month,day;
+			char choice;
+			int flag=1;			
+			while(flag)
+			{	
+				cout<<"***********活动申请**********"<<endl;
+				cout<<"若要退出申请者系统，请输入0 0 0\n";
+				cout<<"否则，请输入活动举办时间，如果活动持续多天，请分几天登记\n";
+				cout<<"____年__ 月__日\n";				
+				cin>>year>>month>>day;		
+				if(year==0)
+					{
+						flag=0;
+						system("cls");
+						break;
+					}
+				manageactivity a;
+				date b;
+				b.set(year,month,day);
+				char datedat[100],datetxt[100];
+				strcpy(datedat,b.dateroute(filedat,year,month,day));
+				strcpy(datetxt,b.datetxt(filedat,year,month,day));
+				b.setnum(datedat);
+				cout<<"***********请输入操作选择**********\n";
+				cout<<"1:活动写入\n2:查询\n3:存档\n0:初始化\nQ:退出并选择其他日期\n";
+				cin>>choice;
+				system("cls");
+				switch(choice)
+				{
+				case '1':a.append(datedat,b);break;
+				case '2':a.inquire(datedat);break;
+				case '3':a.createtxt(datedat,datetxt,year,month,day);break;
+				case '0':a.initial(datedat);break;
+				case 'q':
+				case 'Q':cout<<"**********退出申请者系统**********\n";
+						   	 flag=0;
+							 cout<<"请按回车键继续";
+							 gacls();
+							 break;
+				default:cout<<"输入错误，请再输入\n";
+				}	
+			}
+		}
+		if(xuan==2)
+		{	
+			if(mark!=0)
+			{
+				if(p.password())
+				{
+					char choice;
+					int flag=1;
+					while(flag)
+					{
+						cout<<"***********地址管理**********"<<endl;
+						cout<<"***********请输入操作选择**********\n";
+						cout<<"1:日期地址录入\n2:修改日期地址\n3:查询\n4:存档\n5:批量建立日期地址文件\n6:合并所有日期的工作表并生成存档\n0:初始化\nQ:退出\n";
+						cin>>choice;
+						system("cls");
+						managedate a;
+						switch(choice)
+						{
+						case '1':a.append(filedat,1);break;
+						case '2':a.append(filedat,2);break;
+						case '3':a.inquire(filedat);break;
+						case '4':a.createtxt(filedat);break;
+						case '5':a.createlist(filedat);break;
+						case '6':p.createsheet();break;
+						case '0':a.initial(filedat);break;
+						case 'q':
+						case 'Q':cout<<"**********退出管理者系统**********\n";
+									 flag=0;
+									 cout<<"请按回车键继续";
+									gacls();
+									 break;
+						default:cout<<"输入错误，请再输入\n";
+						}	
+					}
+				}	
+				else mark=0;
+			}
+			else 
+			{
+				if(mark==0)
+				{
+					cout<<"您已经输入错误三次，不能再使用管理员账号"<<endl;
+					cout<<"请按回车键返回";
+					gacls();
+				}
+				mark=0;			
+			}								
+		}
+		cout<<"请选择用户：\n1：申请者\n2：管理员\n3：退出系统\n";
+		cin>>xuan;
+		system("cls");		
+	}
+	cout<<"**********退出系统**********\n";
+	return 0;
+}

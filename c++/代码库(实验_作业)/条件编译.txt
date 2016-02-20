@@ -1,0 +1,15 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+const int i=1;
+#if 0
+cout<<i;
+#else
+cout<<i-1<<endl;
+#endif
+#ifndef j
+#define j 'a'
+#endif
+cout<<j<<endl;
+}

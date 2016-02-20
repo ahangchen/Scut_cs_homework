@@ -1,0 +1,19 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int k;
+	int n,m,x=0,y=0;
+	int i,j;
+	cin>>k;
+	for(j=0;j<k;j++)
+	{
+		cin>>n>>m;
+		for(i=1;i<n;i++)
+			if(n%i==0)x+=i;
+		for(i=1;i<m;i++)
+			if(m%i==0)y+=i;
+		if(n==y&&m==x)cout<<"YES"<<endl;
+		else cout<<"NO"<<endl;
+	}
+}

@@ -1,0 +1,13 @@
+#include<iostream>
+using namespace std;
+template<typename t>
+t max(const t a,const t b)
+{return a>b?a:b;}
+int max(const char a,const int b)
+{return a>b?a:b;}
+int main()
+{
+	int i;char c;
+	cin>>i>>c;
+	cout<<max(i,c)<<endl;
+}

@@ -1,0 +1,66 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class circle
+{
+protected:
+	double radius;
+public:
+	circle(double r){radius=r;}
+	virtual void area(){}
+	virtual void volume(){}
+};
+class sphere:public circle
+{
+public:
+	sphere(double r):circle(r){}
+	void area()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<4*3.14*radius*radius<<endl;
+	}
+	void volume()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<4.0/3.0*radius*radius*radius*3.14<<endl;
+	}
+};
+class column:public circle
+{
+protected:
+	double height;
+public:
+	column(double r,double h):circle(r){height=h;}
+	void area()
+	{
+		cout<<3.14*2*radius*radius+3.14*2*radius*height<<endl;
+	}
+	void volume()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<3.14*radius*radius*height<<endl;
+	}
+};
+int main()
+{
+	int n;
+	double r,h;
+	while(cin>>n)
+	{
+		if(n==0)
+		{
+			cin>>r;
+			sphere a(r);
+			a.area();
+			a.volume();
+		}
+		else if(n==1)
+		{
+			cin>>r>>h;
+			column a(r,h);
+			a.area();
+			a.volume();
+		}
+	}
+
+}

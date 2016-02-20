@@ -1,0 +1,19 @@
+#include<iostream>
+#include<time.h>
+using namespace std;
+int main()
+{
+	time_t t=time(0);
+	tm tim=*localtime(&t);
+	int d,m,y,w,h,min,s,xia;
+	d=tim.tm_mday;
+	m=tim.tm_mon;
+	y=tim.tm_year;
+	w=tim.tm_wday;//0 is sunday
+	tim.tm_isdst=0;
+	h=tim.tm_hour;
+	min=tim.tm_min;
+	s=tim.tm_sec;
+	cout<<"local time:"<<ctime(&t)<<endl;
+	cout<<y+1900<<"年"<<m<<"月"<<d<<"日"<<h<<"时"<<min<<"分"<<s<<"秒"<<endl;
+}

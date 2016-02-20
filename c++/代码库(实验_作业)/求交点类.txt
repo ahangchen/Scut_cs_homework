@@ -1,0 +1,66 @@
+#include<iostream>
+using namespace std;
+class point
+{
+	friend class setpoint;
+public:
+	point(double m,double n):x(m),y(n){};
+private:
+	double x, y;
+};
+class line
+{
+	friend class setpoint;
+public:
+	line(double i,double j):a(i),b(j){};
+	void print()
+	{
+		cout<<"y=("<<a<<")x+("<<b<<")"<<endl;
+	}
+private:
+	double a,b;
+};
+class setpoint
+{
+public:
+	setpoint(double k):l1(k,k),l2(k,k),p0(k,k){};
+	void set1(double i,double j)
+	{
+		l1.a=i;
+		l1.b=j;
+	}
+	void set2(double i,double j)
+	{
+		l2.a=i;
+		l2.b=j;
+	}
+	void cross()
+	{
+		p0.x=(l2.b-l1.b)/(l1.a-l2.a);
+		p0.y=(l1.a*l2.b-l2.a*l1.b)/(l1.a-l2.a);
+		cout<<"交点坐标：（"<<p0.x<<","<<p0.y<<")"<<endl;
+	}
+	void display()
+	{
+		l1.print();
+		l2.print();
+	}
+private:
+	line l1,l2;
+	point p0;
+};
+int main()
+{
+	double a1,b1,a2,b2;
+	setpoint A(0);
+	cout<<"请依次输入直线1的斜率，截距\n";
+	cin>>a1>>b1;
+	A.set1(a1,b1);
+	cout<<"请依次输入直线2的斜率，截距\n";
+	cin>>a2>>b2;
+	A.set2(a2,b2);
+	cout<<"这是两直线的方程：\n";
+	A.display();
+	cout<<"这是两直线的交点坐标：";
+	A.cross();
+}

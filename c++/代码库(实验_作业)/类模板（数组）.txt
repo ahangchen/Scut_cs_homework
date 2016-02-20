@@ -1,0 +1,46 @@
+#include<iostream>
+using namespace std;
+template<typename t>
+class array
+{
+public:
+	array(int s);
+	virtual ~array(){delete[]ele;}
+	virtual const t&entry(int index)const;
+	virtual void enter(int index,const t&value);
+protected:
+	int size;
+	t*ele;
+};
+template<typename t>
+array<t>::array(int s)
+{
+	if(s>1)size=s;
+	else size=1;
+	ele=new t[size];
+}
+//析构函数类外定义格式
+/*
+template<typename t>array<t>::~array()
+{delete[]ele;}
+*/
+template<typename t>const t&array<t>::entry(int index)const
+{return ele[index];}
+template<typename t>void array<t>::enter(int index,const t&value)
+{ele[index]=value;}
+int main()
+{
+	array<int>intary(5);
+	int i;
+	for(i=0;i<5;i++)intary.enter(i,i);
+	cout<<"int array:"<<endl;
+	for(i=0;i<5;i++)
+		cout<<intary.entry(i)<<'\t';
+	cout<<endl;
+	array<double>douary(5);
+	for(i=0;i<5;i++)douary.enter(i,(i+1)*0.35);
+	cout<<"double array:"<<endl;
+	for(i=0;i<5;i++)
+		cout<<douary.entry(i)<<'\t';
+	cout<<endl;
+}

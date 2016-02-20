@@ -1,0 +1,61 @@
+#include<iostream>
+using namespace std;
+template<typename t>
+class complex
+{
+public:
+	/*template<typename t>
+	complex operator-(complex<t> v);*///会导致负号重载（不安全），应当用友元函数对两个类操作
+	complex(t r=0,t i=0);//前面不用加template<typename t>
+private:
+	t real,image;
+template<typename t>
+friend complex<t>operator+(const complex<t>c1,const complex<t>c2);
+template<typename t>
+friend complex<t>operator-(const complex<t>c1,const complex<t>c2);
+template<typename t>
+friend complex<t>operator-(const complex<t>&c);
+template<typename t>
+friend ostream&operator<<(ostream&output,const complex<t>&c);
+};
+template<typename t>
+complex<t>::complex(t r,t i)
+{real=r;image=i;}
+template<typename t>
+complex<t>operator+(const complex<t>c1,const complex<t>c2)
+{
+	t r=c1.real+c2.real;
+	t i=c1.image+c2.image;
+	return complex<t>(r,i);
+}
+/*template<typename t>
+complex operator-(complex<t> c)
+{
+	real-=c.real;
+	image-=c.image;
+	return*this;
+};*/
+template<typename t>
+complex<t>operator-(const complex<t>c1,const complex<t>c2)
+{
+	t r=c1.real-c2.real;
+	t i=c1.image-c2.image;
+	return complex<t>(r,i);
+}
+template<typename t>
+complex<t>operator-(const complex<t>&c)
+{return complex<t>(-c.real,-c.image);}
+template<typename t>
+ostream&operator<<(ostream&out,const complex<t>&c)
+{
+	out<<'('<<c.real<<","<<c.image<<')';
+	return out;
+}
+int main()
+{
+	complex<double>c1(2.5,3.7),c2(4.2,6.5);
+	cout<<"c1="<<c1<<endl<<"c2="<<c2<<endl;
+	cout<<"c1+c2="<<c1+c2<<endl;
+	cout<<"c1-c2="<<c1-c2<<endl;
+	cout<<"-c1"<<-c1<<endl;
+}

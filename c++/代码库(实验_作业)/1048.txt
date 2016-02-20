@@ -1,0 +1,11 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	int n;
+	double i,s=0;
+	cin>>n;
+	for(i=2;i<=n;i++)s+=1/(i*i);
+	cout<<setiosflags(ios::fixed)<<setprecision(6)<<1-s;
+}

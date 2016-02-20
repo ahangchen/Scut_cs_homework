@@ -1,0 +1,47 @@
+#include<iostream>
+#include<cstdlib>
+#include<iomanip>
+#include<ctime>
+using namespace std;
+
+void inssort(int A[],int n)
+{
+		for(int i=1;i<n;i++)
+for(int j=i;(j>0)&&(A[j]<A[j-1]);j--)
+{
+   int temp;
+   temp=A[j];
+    A[j]=A[j-1];
+    A[j-1]=temp;
+}
+	
+}
+int main()
+{int n;
+
+  cout<<"输入数据的个数：";
+  cin>>n;
+int*A=new int [n];
+srand(int(time(0)));
+for (int k=0;k<n;k++)
+{
+	
+A[k]=rand()%100;
+}
+/*cout<<"原数据顺序为："<<endl;
+for(int i=0;i<n;i++)
+	if((i!=0)&&(i%10)==0)
+		cout<<A[i]<<endl;
+	else cout<<A[i]<<" ";*/
+	clock_t one,two;
+	one=clock();
+	inssort(A,n);
+	two=clock();
+	cout<<"运行时间："<<(double)(two-one)/CLOCKS_PER_SEC<<"秒"<<endl;
+	/*cout<<"排序后的顺序为："<<endl;
+	for(int a=0;a<n;a++)
+	if((a!=0)&&(a%10)==0)
+		cout<<A[a]<<endl;
+	else cout<<A[a]<<" ";*/
+
+}

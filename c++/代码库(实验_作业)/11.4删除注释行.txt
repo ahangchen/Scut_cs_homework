@@ -1,0 +1,107 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+class str
+{
+public:
+	char a[300];
+	str* next;
+};
+void showlist(str*head)
+{
+	while(head!=NULL)
+	{
+		cout<<head->a<<endl;
+		head=head->next;
+	}
+}
+int main()
+{
+	int flag=0;
+	str*head=new str,*p=head;
+	char a[300];
+	/*cin.getline(a,300,'\n');
+	while(a[0]=='/'&&a[1]=='/')
+	{
+		flag=1;
+		cin.getline(a,300,'\n');
+	}
+	strcpy(head->a,a);
+	head->next=new str;*/
+	while(cin.getline(a,300,'\n'))
+	{
+		if(a[0]!='/'||a[1]!='/')
+		{
+			strcpy(head->a,a);
+			head->next=new str;
+			flag=1;
+			break;
+		}
+	}
+	while(cin.getline(a,300,'\n'))
+	{
+		if(a[0]!='/'||a[1]!='/')
+		{
+			p->next=new str;
+			p=p->next;
+			strcpy(p->a,a);
+		}
+	}
+	p->next=NULL;
+	if(flag==1)showlist(head);
+}
+
+
+类做法
+#include<iostream>
+#include<cstring>
+using namespace std;
+class str
+{
+private:
+	char a[300];
+	str* next,*head;
+	int flag;
+public:
+	void inp()
+	{
+		char c[300];
+		flag=0;
+		str*p=head=new str;
+		while(cin.getline(c,300,'\n'))//使用这种格式才能符合
+		{
+			if(c[0]!='/'||c[1]!='/')
+			{
+				strcpy(head->a,c);
+				head->next=new str;
+				flag=1;
+				break;
+			}
+		}
+		while(cin.getline(c,300,'\n'))//使用这种格式才能符合
+		{
+			if(c[0]!='/'||c[1]!='/')
+			{
+				p->next=new str;
+				p=p->next;
+				strcpy(p->a,c);
+			}
+		}
+		p->next=NULL;
+	}
+void showlist()
+{
+	if(flag==1)//当第一行有ctrl+z时且以//开头时，不应有输出
+	while(head!=NULL)
+	{
+		cout<<head->a<<endl;
+		head=head->next;
+	}
+}
+};
+int main()
+{
+	str a;
+	a.inp();
+	a.showlist();
+}

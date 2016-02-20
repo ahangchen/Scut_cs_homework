@@ -1,0 +1,262 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+struct bookdata
+{
+	int tp;
+	char bookname[40];
+	long balance;
+};
+void initial(const char*filedat);//
+void append(const char*filedat);//
+void sale(const char*filedat);//
+void inquire(const char*filedat);//
+void createtxt(const char*filedat);//
+int endmark(bookdata book);
+const char*filedat="d\\booksfile.dat";
+int main()
+{
+	char choice;
+	while(1)
+	{
+		cout<<"***********书库管理**********"<<endl;
+		cout<<"***********请输入操作选择**********\n";
+		cout<<"1：入库	2：售出	3：查询	4：建立文本	0：初始化	Q：退出\n";
+		cin>>choice;
+		switch(choice)
+		{
+		case '1':append(filedat);break;
+		case '2':sale(filedat);break;
+		case '3':inquire(filedat);break;
+		case '4':createtxt(filedat);break;
+		case '0':initial(filedat);break;
+		case 'Q':cout<<"退出系统\n";return 0;
+		default:cout<<"输入错误，请再输入\n";
+		}	
+	}
+}
+//
+const bookdata mark={0,"noname",0};//
+void initial(const char*filedat)
+{
+	fstream fdat(filedat,ios::out|ios::binary);//
+	cout<<"若账目文件存在，将删除原有数据，要进行初始化吗?（	Y/N）\n";
+	char answer;
+	cin>>answer;
+	if(answer=='Y'||answer=='y')
+	{
+		fdat.seekp(0,ios::beg);//
+		fdat.write((char*)&mark,sizeof(bookdata));//
+		cout<<"文件已经初始化\n";
+	}
+	else 
+	{
+		cout<<"取消操作\n";
+	}
+	fdat.close();//
+}
+//
+void append(const char*filedat)
+{
+	char choice;
+	bookdata book;
+	int key;
+	long num;
+	fstream fdat(filedat,ios::in|ios::out|ios::binary);//
+	if(!fdat)//
+	{
+		cout<<"账目文件不存在，请进行初始化操作\n";
+		return;
+	}
+	cout<<"**********入库登记**********\n";
+	while(1)
+	{
+		cout<<"请输入操作选择\n1:新书号	2：旧书号		Q:退出\n";
+		cin>>choice;
+		switch(choice)
+		{
+		case '1':
+			{
+				fdat.seekg(0,ios::beg);//
+				do//
+				{
+					fdat.read((char*)&book,sizeof(bookdata));//
+				}while(!endmark(book));//
+				fdat.seekp(-long(sizeof(bookdata)),ios::cur);//
+				cout<<"输入书号（TP）,书名，数量：\n";
+				cin>>book.bookname;
+				cout<<"?";
+				cin>>book.balance;
+				fdat.write((char*)&book,sizeof(bookdata));//
+				fdat.write((char*)&mark,sizeof(bookdata));//
+				break;
+			};
+		case '2':
+			{
+				fdat.seekg(0,ios::beg);
+				cout<<"书号（TP）：\n";
+				cin>>key;
+				do
+				{
+					fdat.read((char*)&book,sizeof(bookdata));//
+				}while(book.tp!=key&&endmark(book));
+				if(book.tp==key)
+				{
+					cout<<book.tp<<"\t"<<book.bookname<<"\t"<<book.balance<<endl;
+					cout<<"入库数量：\n";
+					cin>>num;
+					if(num>0)book.balance+=num;//
+					else 
+					{
+						cout<<"数量输入错误"<<endl;
+						continue;
+					}
+					fdat.seekp(-long(sizeof(bookdata)),ios::cur);//
+					fdat.write((char*)&book,sizeof(bookdata));//
+					cout<<"现库存量\t\t"<<book.balance<<endl;
+				}
+				else 
+					cout<<"书号输入错误\n";
+				break;
+			}
+		case 'Q':
+		case 'q':return;//
+		}
+	}
+	fdat.close();
+}
+void sale(const char*filedat)
+{
+	char choice;
+	bookdata book;
+	int key;
+	fstream fdat(filedat,ios::in|ios::binary);//
+	cout<<"**********查询*********\n";
+	while(1)
+	{
+		cout<<"请输入操作选择\n"
+			<<"1:按书号查询\t2:浏览\tQ:退出\n";
+		cin>>choice;
+		switch(choice)
+		{
+		case '1':
+			{
+				fdat.seekg(0,ios::beg);
+				cout<<"书号（TP）："<<endl;
+				cin>>key;
+				do
+				{
+					fdat.read((char*)&book,sizeof(bookdata));//
+				}while(book.tp!=key&&!endmark(book));//
+				if(book.tp==key)//
+					cout<<book.tp<<'\t'<<book.bookname<<'\t'<<book.balance<<endl;
+				else
+				{
+					cout<<"书号输入错误\n";
+					continue;
+				}
+				break;
+			}
+		case '2':
+			{
+				fdat.seekg(0,ios::beg);
+				do
+				{
+					fdat.read((char*)&book,sizeof(bookdata));
+					if(!endmark(book))//
+						cout<<book.tp<<'\t'<<book.bookname<<'\t'<<book.balance<<endl;
+				}while(!endmark(book));//
+				break;
+			}
+			case 'Q':
+			case 'q':return;//
+		}
+	}
+	fdat.close();//
+}
+void inquire(const char*filedat)
+{
+	char choice;
+	bookdata book;
+	int key;
+	fstream fdat(filedat,ios::in|ios::binary);
+	cout<<"********查询**********";
+	cout<<endl;
+	while(1)
+	{
+		cout<<"请输入操作选择\n"
+			<<"1:按书号查询\t2:浏览\tQ:退出\n";
+		cin>>choice;
+		switch(choice)
+		{
+		case '1':
+			{
+				fdat.seekg(0,ios::beg);
+				cout<<"书号\n?";
+				cin>>key;
+				do
+				{
+					fdat.read((char*)&book,sizeof(bookdata));//
+				}while(book.tp!=key&&!endmark(book));//
+				if(book.tp==key)//
+					cout<<book.tp<<'\t'<<book.bookname<<'\t'<<book.balance<<endl;
+				else
+				{
+					cout<<"书号输入错误\n";
+					continue;
+				}
+				break;
+			}
+		case '2':
+			{
+				fdat.seekg(0,ios::beg);
+				do
+				{
+					fdat.read((char*)&book,sizeof(bookdata));
+					if(!endmark(book))
+						cout<<book.tp<<'\t'<<book.bookname<<'t'<<book.balance<<endl;
+				}while(!endmark(book));
+				break;
+			}
+		case 'q':
+		case 'Q':return;
+		}
+	}
+	fdat.close();
+}
+const char*filetxt="d:\\booksfile.txt";
+void createtxt(const char*filedat)
+{
+	fstream fdat(filedat,ios::in|ios::binary);//
+	fstream ftxt(filetxt,ios::out);
+	fdat.seekp(0,ios::beg);
+	bookdata book;
+	cout<<"**********建立文件**********\n";
+	do
+	{
+		fdat.read((char*)&book,sizeof(bookdata));//
+		if(!endmark(book))
+			ftxt<<book.tp<<'\t'<<book.bookname<<'\t'<<book.balance<<endl;
+	}while(!endmark(book));
+	ftxt.close();
+	cout<<"文本文件已建立，要浏览文件吗？（Y/N）\n";
+	char answer,s[80];
+	cin>>answer;
+	if(answer=='y'||answer=='Y')
+	{
+		ftxt.open("d:\\booksfile.txt",ios::in);//
+		while(!ftxt.eof())
+		{
+			ftxt.getline(s,80);
+			cout<<s<<endl;
+		}
+		ftxt.close();//
+	}
+	fdat.close();//
+}
+int endmark(bookdata book)
+{
+	if(book.tp==0)
+		return 1;
+	return 0;
+}

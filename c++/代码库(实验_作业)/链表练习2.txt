@@ -1,0 +1,75 @@
+#include<iostream>
+using namespace std;
+struct num
+{
+	int data;
+	num*next;
+};
+num*createlist();
+void showlist(num*);
+num*changelist(num*);
+int main()
+{
+	num*head=createlist();
+	showlist(head);
+	showlist(changelist(head));
+}
+num*createlist()
+{
+	num*head,*p;
+	head=new num;
+	cin>>head->data;
+	p=head;
+	while(p->data!=0)
+	{
+		p->next=new num;
+		p=p->next;
+		cin>>p->data;
+	}
+	p->next=NULL;
+	return head;
+}
+void showlist(num*head)
+{
+	while(head->next!=NULL)
+	{
+		cout<<head->data<<endl;
+		head=head->next;
+	}
+}
+num*changelist(num*head)
+{
+	cout<<"input the num you want to change:";
+	int a;
+	cin>>a;
+	cout<<"input the number you want to change into:";
+	int b;
+	cin>>b;
+	cout<<"input the number you want to cut out:";
+	int c;
+	cin>>c;
+	num*p=head;
+	while(p)
+	{
+		if(p->data==a)p->data=b;
+		p=p->next;
+	}
+	if(head->data==c)head=head->next;
+	else
+	{
+		p=head;
+		num*q=head->next;
+		while(q)
+		{
+			if(q->data==c)
+			{
+				p->next=q->next;
+				/*delete q;
+				q=NULL;*/
+			}
+			q=q->next;
+			p=p->next;
+		}
+	}
+	return head;
+}

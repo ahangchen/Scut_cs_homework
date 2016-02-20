@@ -1,0 +1,25 @@
+#include<iostream>
+using namespace std;
+#include<cstring>
+char* cy(char*s)
+{
+	int i,j,k;
+	int l=strlen(s);
+	for(i=0;i<l;i++)
+	{
+		for(j=0;j<l;j++)
+	    if(*(s+i)==*(s+j)&&i!=j)
+		{
+			for(k=i;k<l-1;k++)
+			*(s+k)=*(s+k+1);
+			*(s+l-1)='\0';
+		}
+	}
+	return s;
+}
+int main()
+{
+	char *s=new char[2000];
+	cin>>s;
+	cout<<cy(s);
+}

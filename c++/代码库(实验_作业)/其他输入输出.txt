@@ -1,0 +1,53 @@
+#include<iostream>
+using namespace std;
+void f1()
+{
+	char a;
+	cout<<"the first charater?"<<endl;
+	a=getchar();//getchar返回一个字符型
+	putchar(a);
+	cout<<endl;
+}
+void f2()
+{
+	cout<<"another form:"<<endl;
+	putchar(getchar());
+	cout<<endl;
+}
+void f3()
+{
+	//不懂
+	char a;
+	scanf_s("%d",&a);//将a转化为十进制，即ASCII码，逗号前是格式，逗号后是内容
+	printf("the second charater=%d",a);//输出a的ASCII码
+}
+void f4()
+{
+	char c;
+	cout<<"请输入第一个句子，按回车键结束："<<endl;
+	while((c=cin.get())!='\n')
+		cout.put(c);
+	cout<<endl;
+	cout<<"请输入第2个句子，按回车键结束："<<endl;
+	while(cin.get(c))
+	{
+		if(c=='\n')break;
+		cout.put(c);
+	}
+	cout<<endl;
+	cout<<"请输入第3个句子，按回车键结束："<<endl;
+	char s[80];
+	cin.get(s,10);
+	cout<<s<<endl;
+	int i=1;
+	while(i<10)
+	{
+		cout.write(s,i);
+		i++;
+		cout<<endl;
+	}
+}
+int main()
+{
+	f4();
+}

@@ -1,0 +1,34 @@
+//«Û¥Û÷µ
+#include<iostream>
+using namespace std;
+template <typename t>
+t max(const t a,const t b)
+{return a>b?a:b;}
+
+int main()
+{
+	int j,k;
+	cout<<"enter two integer:"<<endl;
+	cin>>j>>k;
+	cout<<"max("<<j<<","<<k<<")="<<max(j,k)<<endl;
+	double x,y;
+	cout<<"enter two double:"<<endl;
+	cin>>x>>y;
+	cout<<"max("<<x<<","<<y<<")="<<max(x,y)<<endl;
+	char c,h;
+	cin>>c>>h;
+	cout<<"max("<<x<<","<<y<<")="<<max(x,y)<<endl;
+}
+
+
+#include<iostream>
+using namespace std;
+template<typename t,typename s>
+t max(const t a,const s b)
+{return a>b?a:b;}
+int main()
+{
+	int a;char c;
+	cin>>a>>c;
+	cout<<max(a,c);
+}

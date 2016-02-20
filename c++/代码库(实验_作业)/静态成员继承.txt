@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+class b
+{
+public:
+	static void add(){i++;}
+	static int i;
+	void out(){cout<<"i="<<i<<endl;}
+};
+int b::i=0;
+class d:private b
+{
+public:
+	void f();
+};
+void d::f()
+{
+	i=5;
+	add();
+	b::i++;
+	b::add();
+}
+int main()
+{
+	b x;
+	d y;      
+	x.add();
+	x.out();
+	y.f();
+	cout<<b::i<<endl;
+	cout<<x.i<<endl;
+}

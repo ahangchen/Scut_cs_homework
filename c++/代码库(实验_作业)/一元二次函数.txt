@@ -1,0 +1,14 @@
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+int main()
+{
+	int a,b,c;
+	cin>>a>>b>>c;
+	double d;
+	d=b*b-4*a*c;
+	cout<<setiosflags(ios::fixed)<<setprecision(2);
+
+	cout<<(-b+sqrt(d))/(2*a)<<" "<<(-b-sqrt(d))/(2*a);
+}

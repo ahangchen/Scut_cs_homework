@@ -1,0 +1,53 @@
+#include<iostream>
+using namespace std;
+class book
+{
+public:
+	book(int,int,char*);
+	~book();
+	void display();
+	void borrow();
+	void restore();
+private:
+	char*bookname;
+	double price;
+	int number;
+	int order;
+};
+book::book(int s,int n,char*a)
+{
+	
+	bookname=a;
+	price=s;
+	number=n;
+}
+book::~book()
+{
+	delete[]bookname;
+	bookname=NULL;
+	price=0;
+	number=0;
+}
+void book::display()
+{
+	cout<<bookname<<endl<<price<<endl<<number<<endl;
+}
+void book::borrow()
+{
+	number-=1;
+}
+void book::restore()
+{
+	number+=1;
+}
+int main()
+{
+	int s,n=0;
+	char a[40];
+	while(cin>>a)
+	{
+		cin>>s>>n;
+		book A(s,n,a);
+
+	}
+}

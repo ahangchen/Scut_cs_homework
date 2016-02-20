@@ -1,0 +1,46 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+class calculator
+{
+public:
+	calculator(){value=0;};
+	void operator++();
+	void operator--();
+	unsigned int operator()()const;
+private:
+	unsigned int value;
+};
+void calculator::operator++()
+{
+	if(value<65535)++value;
+	else
+	{
+		cout<<"\ndata overflow!"<<endl;
+	}
+}
+void calculator::operator--()
+{
+	if(value>0)--value;
+	else
+	{
+		cout<<"\ndata overflow|!"<<endl;
+		abort();
+	}
+}
+unsigned int calculator::operator()()const
+{return value;}
+int main()
+{
+	calculator counter;
+	int i;
+	for(i=0;i<5;i++)
+	{++counter;
+	cout<<"\ncounte4r="<<counter();
+	}
+	for(i=0;i<=5;i++)
+	{
+		--counter;
+		cout<<"\ncounter="<<counter();
+	}
+}

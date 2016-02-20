@@ -1,0 +1,18 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int m,x;
+	cin>>x;
+	m=x;
+	if(x!=-1)
+	while(cin>>x)
+	{
+		m=m>x?m:x;
+		if(x==-1)break;
+	}
+	cout<<m<<endl;
+}
+
+
+

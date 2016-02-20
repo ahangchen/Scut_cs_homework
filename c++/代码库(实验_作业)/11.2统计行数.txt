@@ -1,0 +1,51 @@
+可过（不按回车按ctrl+z该行也统计）
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n=0;
+	char c[300];
+	while(cin.getline(c,300,'\n'))
+	{
+		n++;
+	}
+	cout<<n;
+}
+
+类做法
+#include<iostream>
+using namespace std;
+class word
+{
+public:
+	void count()
+	{
+		n=0;
+		while(cin.getline(c,300,'\n'))
+		{
+			n++;
+		}
+	cout<<n;
+	}
+private:
+	char c[300];
+	int n;
+};
+int main()
+{
+	word a;
+	a.count();
+}
+不可过（不按回车按ctrl+z该行不统计）
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n=0;
+	char c;
+	while(cin.get(c))
+	{
+		if(c=='\n')n++;
+	}
+	cout<<n;
+}

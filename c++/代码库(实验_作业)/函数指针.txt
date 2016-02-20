@@ -1,0 +1,25 @@
+#include<iostream>
+using namespace std;
+typedef int func(int,int);//定义函数类型
+func max,sum,min;//用函数类型进行函数原型声明
+int callfun(func*,int,int);//一个可以调用函数的函数（可选择要调用的函数）
+int main()
+{
+	int x,y;
+	func *p1,*p2;//定义函数指针
+	p1=sum;
+	p2=min;
+	cin>>x>>y;
+	cout<<max(x,y)<<endl;
+	cout<<p1(x,y)<<endl;
+	cout<<p2(x,y)<<endl;
+	cout<<callfun(max,x,y)<<endl;
+}
+int max(int x,int y)
+{return x>y?x:y;}
+int min(int x,int y)
+{return x<y?x:y;}
+int sum (int x,int y)
+{return x+y;}
+int callfun(func* q,int m,int n)
+{return q(m,n);}

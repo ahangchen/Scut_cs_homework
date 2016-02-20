@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i,j,k,n,m,p;
+	char a;
+	while(cin>>m>>n)
+	{
+		int**x=new int*[m];
+		for(i=0;i<m;i++)
+		{x[i]=new int[n];}
+		for(i=0;i<m;i++)
+			for(j=0;j<n;j++)
+				cin>>x[i][j];
+		cin>>n>>p;
+		int**y=new int*[n];
+		for(i=0;i<n;i++)
+		{y[i]=new int[p];}
+		for(i=0;i<n;i++)
+			for(j=0;j<p;j++)
+				cin>>y[i][j];
+
+		int**s=new int*[m];
+		for(i=0;i<m;i++)
+		{s[i]=new int[p];}
+		int f=0;
+		for(i=0;i<m;i++)
+			for(j=0;j<p;j++)
+				{
+				for(k=0;k<n;k++)
+					f+=x[i][k]*y[k][j];
+				s[i][j]=f;
+				f=0;
+			    }
+		for(i=0;i<m;i++)
+		{
+		for(j=0;j<p-1;j++)
+			cout<<s[i][j]<<" ";
+		cout<<s[i][j]<<endl;
+		}
+	}
+}

@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+#include<cassert>
+#include<cstdlib>
+int main()
+{
+	int x;
+	cin>>x;
+	assert(x>0);
+	cout<<"x不为0"<<endl;
+	int y;
+	cin>>y;
+	assert(y>0);
+	cout<<"y不为0"<<endl;
+	int z;
+	cin>>z;
+	if(z==0)abort();
+	else cout<<"z不为0"<<endl;
+	int a;
+	cin>>a;
+	if(a==0)exit(0);
+	if(a==1)exit(1);
+	cout<<"没有exit"<<endl;
+}

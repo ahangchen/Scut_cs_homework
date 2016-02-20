@@ -1,0 +1,104 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n,i;
+	cin>>n;
+	int *a=new int[n];
+	int *b=new int[n];
+	for(i=0;i<n;i++)cin>>a[i]>>b[i];
+	for(i=0;i<n;i++)cout<<a[i]+b[i]<<endl;
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+int a,b;
+while(cin>>a>>b)
+cout<<a+b<<endl;
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+	int a,b;
+	cin>>a>>b;
+	while(a!=0||b!=0)
+	{
+		cout<<a+b<<endl;
+		cin>>a>>b;
+	}
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+	int n;
+	cin>>n;
+	while(n!=0)
+	{
+		int*s=new int[n];
+		int i,m=0;
+		for(i=0;i<n;i++)cin>>s[i];
+		for(i=0;i<n;i++)m+=s[i];
+		cout<<m<<endl;
+		cin>>n;
+	}
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+	int j,k;
+	cin>>j;
+	for(k=0;k<j;k++)
+	{
+		int n;
+		cin>>n;
+		int*s=new int[n];
+		int i,m=0;
+		for(i=0;i<n;i++)cin>>s[i];
+		for(i=0;i<n;i++)m+=s[i];
+		cout<<m<<endl;
+	}
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+int a,b;
+cin>>a>>b;
+cout<<a+b<<endl;
+while(cin>>a>>b)
+cout<<endl<<a+b<<endl;
+}
+
+#include<iostream>
+using namespace std;
+int main()
+{
+	int j,k,y;
+	cin>>j;
+	cin>>y;
+		int*s=new int[y];
+		int i,m=0;
+		for(i=0;i<y;i++)cin>>s[i];
+		for(i=0;i<y;i++)m+=s[i];
+		cout<<m<<endl;
+	for(k=1;k<j;k++)
+	{
+		cout<<endl;
+		int n;
+		cin>>n;
+		int*s=new int[n];
+        m=0;
+		for(i=0;i<n;i++)cin>>s[i];
+		for(i=0;i<n;i++)m+=s[i];
+		cout<<m<<endl;
+	}
+}

@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+void movedisc(int n,char*src,char*dst,char*tmp,long long&count)
+{
+	if(n>0)
+	{
+		//移动最底层以上n-1个金环由起点放到暂放柱，此时终点柱视为暂放柱
+		movedisc(n-1,src,tmp,dst,count);
+		cout<<"第"<<n<<"块由"<<src<<"->"<<dst<<endl;
+		count++;
+		//移动最底层金环以上的n-1个金环由暂放柱到终点柱，此时起点柱视为暂放柱使用
+		movedisc(n-1,tmp,dst,src,count);
+	}
+}
+int main()
+{
+	int disc;
+	long long count=0;
+	cin>>disc;
+	if(disc<0)cout<<"输入错误"<<endl;
+	else movedisc(disc,"起点柱","终点柱","暂放柱",count);
+	cout<<"success"<<endl;
+	cout<<"移动了"<<count<<"次"<<endl;
+}

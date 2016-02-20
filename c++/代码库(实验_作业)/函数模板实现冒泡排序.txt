@@ -1,0 +1,32 @@
+#include<iostream>
+using namespace std;
+template<typename ele>
+void sortb(ele*a,int size)
+{
+	int i,work;
+	ele temp;
+	for(int p=1;p<size;p++)
+	{
+		work=1;
+		for(i=0;i<size-p;i++)
+			if(a[i]<a[i+1])
+			{
+				temp=a[i];
+				a[i]=a[i+1];
+				a[i+1]=temp;
+				work=0;
+			}
+			if(work)break;
+	}
+}
+int main()
+{
+	int i,n;
+	cin>>n;
+	int*s=new int[n];
+	for(i=0;i<n;i++)
+		cin>>s[i];
+	sortb(s,n);
+	for(i=0;i<n;i++)
+		cout<<s[i];
+}

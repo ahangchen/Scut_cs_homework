@@ -1,0 +1,28 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	int a=1,b=2;
+cout<<setfill('*');
+cout.setf(ios::right);
+cout<<setw(4)<<a<<setw(4)<<b<<endl;
+cout.fill('^');
+cout<<left;
+cout<<setw(4)<<a<<setw(4)<<b<<endl;
+cout<<setiosflags(ios::showpos);//显示正号
+cout<<a<<endl;
+cout.unsetf(ios::showpos);//取消显示正号
+cout<<a<<endl;
+}
+
+#include<iostream>
+#include<iomanip>
+using namespace std;
+int main()
+{
+	double i=1;
+	cout<<std::fixed<<setprecision(2)<<i<<endl;
+	cout<<setiosflags(ios::fixed)<<setprecision(3)<<i<<endl;
+	cout<<setiosflags(ios::fixed|ios::showpoint)<<setprecision(4)<<i<<endl;
+}

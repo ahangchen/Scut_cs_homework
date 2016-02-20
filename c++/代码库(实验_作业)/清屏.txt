@@ -1,0 +1,11 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	cout<<"clear"<<endl;
+	int a;
+	cout<<"随便输入一个数：";
+	cin>>a;
+	system("cls");
+	cout<<endl;
+}

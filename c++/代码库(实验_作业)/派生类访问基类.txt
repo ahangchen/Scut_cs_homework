@@ -1,0 +1,46 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+class date
+{
+public:
+	date(int y,int m,int d)
+	{setdate(y,m,d);}
+	void setdate(int y,int m,int d)
+	{
+		year=y;month=m;day=d;
+	}
+	void print()const
+	{cout<<year<<'/'<<month<<'/'<<day<<";";}
+protected:
+	int year,month,day;
+};
+class datetime:public date
+{
+public:
+	datetime(int y,int m,int d,int h,int mi,int s):date(y,m,d)
+	{settime(h,mi,s);}
+	void settime(int h,int mi,int s)
+	{hours=h;minutes=mi;seconds=s;}
+	void print()const
+	{
+		cout<<hours<<';'<<minutes<<':'<<seconds<<endl;
+	}
+	void printbase()const
+	{
+		((date*)this)->print();//对this指针做类型转换，使其能够访问基类成员
+	}
+private:
+	int hours,minutes,seconds;
+};
+int main()
+{
+	datetime dt(2003,1,1,12,30,0);
+	datetime*pdt=&dt;
+	((date)dt).print();//对象类型转换，派生类转换为基类调用基类函数
+	dt.print();//派生类对象访问派生类成员函数
+	((date*)pdt)->print();//对象指针类型转换、指向基类对象，调用基类成员函数
+	cout<<"or: "<<endl;
+	dt.printbase();
+	pdt->print();//派生类指针访问派生类成员函数
+}

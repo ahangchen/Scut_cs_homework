@@ -1,0 +1,8 @@
+//这是一个求100—200内满足用3除余2，用5除余3，用7除余2的所有整数的程序
+#include<iostream>
+using namespace std;
+int main()
+{int x;
+for(x=100;x<=200;x++)
+if(x%3==2||x%5==3||x%7==2)cout<<x<<"  ";//判断并输出满足条件的整数
+}

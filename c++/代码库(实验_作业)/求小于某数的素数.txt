@@ -1,0 +1,20 @@
+#include<iostream>
+using namespace std;
+#include<cmath>
+void ss(int x)
+{
+	int m,i,k,n=0;
+	for(m=2;m<=x;m++)
+	{
+		k=int(sqrt(double(m)));
+		i=2;
+		while(m%i&&i<=k)i++;
+		if(i>k)cout<<m<<endl;
+    }
+}
+int main()
+{
+int x;
+cin>>x;
+ss(x);
+}

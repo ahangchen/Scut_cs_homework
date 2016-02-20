@@ -1,0 +1,45 @@
+#include<iostream>
+#include<list>
+#include<cstdlib>
+#include<ctime>
+using namespace std;
+void createlist(list<int>&,int);
+void outlist(list<int>&);
+void inordermerge(list<int>&,list<int>);
+int main()
+{
+	list<int>l1,l2;
+	srand(int(time(0)));
+	createlist(l1,10);
+	cout<<"list l1:"<<endl;
+	outlist(l1);
+	createlist(l2,5);
+	cout<<"list l2:"<<endl;
+	outlist(l2);
+	inordermerge(l1,l2);
+	cout<<"list l1:"<<endl;
+	outlist(l1);
+}
+void createlist(list<int>&orderlist,int len)
+{
+	int i,k;
+	for(i=0;i<len;i++)
+	{
+		k=rand()%100;
+		orderlist.push_back(k);
+	}
+	orderlist.sort();
+}
+void inordermerge(list<int>&l1,list<int>l2)
+{l1.merge(l2);}//insert l2 to l1
+void outlist(list<int>&l)
+{
+	list<int>::iterator p;
+	p=l.begin();
+	while(p!=l.end())
+	{
+		cout<<*p<<" ";
+		p++;
+	}
+	cout<<endl;
+}

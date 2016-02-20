@@ -1,0 +1,101 @@
+#include<iostream>
+#include<string.h>
+using namespace std;
+class staff
+{
+protected:
+	char name[30];
+	int n;
+public:
+	staff(char*s,int i){strcpy(name,s);n=i;}
+	virtual int salary(){return 0;}
+	virtual void print(){}
+	staff*next;
+};
+class prof:public staff
+{
+protected:
+	int x;
+public:
+	prof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class fuprof:public staff
+{
+protected:
+	int x;
+public:
+	fuprof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class teacher:public staff
+{
+protected:
+	int x;
+public:
+	teacher(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+void addfront(staff*&h,staff*&t)
+{t->next=h;h=t;}
+int main()
+{
+	int n,x,sal,max=0,min=100000;
+	char s[30];
+	staff*head=NULL,*p;
+	while(cin>>x)
+	{
+		cin>>s;
+		cin>>n;
+		if(x==0)
+		{
+			x=5;
+			p=new prof(s,n,x);
+		}
+		if(x==1)
+		{
+			x=3;
+			p=new fuprof(s,n,x);
+		}
+		if(x==2)
+		{
+			x=1;
+			p=new teacher(s,n,x);
+		}
+		p->print();
+		addfront(head,p);
+	}
+	while(p)
+	{
+		sal=p->salary();
+		if(sal>max)max=sal;
+		if(sal<min)min=sal;
+		p=p->next;
+	}
+	cout<<max<<endl;
+	cout<<min<<endl;
+}

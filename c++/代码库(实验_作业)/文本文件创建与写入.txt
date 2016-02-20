@@ -1,0 +1,25 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+int main()
+{
+	char filename[30],name[30];
+	int number,score;
+	ofstream outstuf;
+	cout<<"please input the name of students file:"<<endl;
+	cin>>filename;
+	outstuf.open(filename,ios::out);//连接文件指定打开方式
+	if(!outstuf)
+	{
+		cerr<<"file coule not be open."<<endl;
+		abort();
+	}
+	outstuf<<"this is  afile of studets"<<endl;//写入标题
+	cout<<"input the number,name,and score:(enter ctrl+x to end input)"<<endl;
+	while(cin>>number>>name>>score)//写入内容
+	{
+		outstuf<<number<<" "<<name<<" "<<score<<'\n';
+		cout<<"?";
+	}
+	outstuf.close();//关闭文件
+}

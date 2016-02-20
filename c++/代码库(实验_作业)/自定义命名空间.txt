@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+namespace A
+{
+	void f()
+	{cout<<"f():from namespace A"<<endl;}
+	void g()
+	{cout<<"g():from namespace A"<<endl;}
+	namespace B
+{
+	void f()
+	{cout<<"f():from namespace B"<<endl;}
+}
+}
+namespace C
+{
+	void g()
+	{cout<<"g():from namespace C"<<endl;}
+}
+int main()
+{
+	using namespace A;
+	f();
+	B::f();
+	A::B::f();
+	A::g();
+	C::g();
+}

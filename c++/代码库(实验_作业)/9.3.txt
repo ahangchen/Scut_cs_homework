@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int x,n;
+	double s,max=0,min=100000;
+	char a[50];
+	while(cin>>x)
+	{
+		cin>>a;
+		cin>>n;
+		if(x==0)x=5;
+		if(x==1)x=3;
+		if(x==2)x=2;
+		cout<<a<<endl;
+		s=x*1000+x*n*10;
+		cout<<s<<endl;
+		if(s>max)max=s;
+	if(s<min)min=s;
+	}
+	cout<<max<<endl;
+	cout<<min<<endl;
+}

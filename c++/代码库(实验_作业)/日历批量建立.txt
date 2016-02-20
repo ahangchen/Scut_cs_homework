@@ -1,0 +1,44 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+int main()
+{
+	fstream fdat("e:\\day.txt",ios::out);
+	fdat.clear();
+	int year1,month1,year2,month2;
+	cout<<"请输入希望建立的工作表包含的起始时间的年月：";
+	cin>>year1>>month1;
+	cout<<"请输入希望建立的工作表包含的结束时间的年月：";
+	cin>>year2>>month2;
+	system("cls");
+	int sum;
+	int y,m,d;
+	for(y=year1;y<=year2;y++)
+		for(m=month1;m<=month2;m++)
+		{
+			//设置每月对应天数
+			switch(m)
+			{
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:sum=31;break;
+			case 2:if(year1%4==0&&year1%100!=0||year1%400==0)sum=29;
+					 else sum=28;break;
+			default:sum=30;break;
+			}
+			for(d=1;d<=sum;d++)
+			{
+				char riqi[10];
+				sprintf_s(riqi, "%d%d%d",y,m,d);
+				if(m<10&&d>9)sprintf_s(riqi,"%d0%d%d",y,m,d);
+				if(m>9&&d<10)sprintf_s(riqi,"%d%d0%d",y,m,d);
+				if(m<10&&d<10)sprintf_s(riqi,"%d0%d0%d",y,m,d);
+				fdat<<riqi<<"\n";
+			}			
+		}
+		fdat.close();
+}

@@ -1,0 +1,89 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+char* create()
+{
+	char filename[30],name[30];
+	int number,score;
+	ofstream outstuf;
+	cout<<"please input the name of students file:"<<endl;
+	cin>>filename;
+	outstuf.open(filename,ios::out);//连接文件指定打开方式
+	if(!outstuf)
+	{
+		cerr<<"file coule not be open."<<endl;
+		abort();
+	}
+	outstuf<<"this is  a file of studets"<<endl;//写入标题
+	cout<<"input the number,name,and score:(enter ctrl+z to end input)"<<endl;
+	while(cin>>number>>name>>score)//写入内容
+	{
+		outstuf<<number<<" "<<name<<" "<<score<<'\n';
+		cout<<"?";
+	}
+	outstuf.close();//关闭文件
+	return filename;
+}
+void browsefile(char*filename,int delline)//delline的功能是指要去掉的那一行
+{
+	ifstream inf(filename,ios::in);
+	char s[80];
+	for(int i=1;i<=delline;i++)
+		inf.getline(s,80);
+	while(!inf.eof())
+	{
+		inf.getline(s,80);
+		cout<<s<<endl;
+	}
+	inf.close();
+}
+int app(char*filename)
+{
+	char name[30],ch;
+	int number,score;
+	ofstream outstuf(filename,ios::app);
+	if(!outstuf)
+	{
+		cerr<<"file could not be open."<<endl;
+		return 0;
+	}
+	cout<<"append to "<<filename<<"?"<<endl;
+	cin>>ch;
+	while(ch=='y')
+	{
+		cout<<"input the number,name and score:"<<endl;
+		cin>>number>>name>>score;
+		outstuf<<number<<" "<<name<<' '<<score<<'\n';
+		cout<<"?(y or n)";
+		cin>>ch;
+		if(ch=='n')
+			cout<<"close file"<<endl;
+	}
+	outstuf.close();
+	return 1;
+}
+int copyfile(char*destfile,char*srcfile)
+{
+	char ch;
+	ifstream infile(srcfile,ios::in);//源文件
+	ofstream outfile(destfile,ios::out);//目标文件
+	if(!infile)
+	{
+		cerr<<srcfile<<":file could not be open."<<endl;
+		return 0;
+	}
+	while(infile.get(ch))//复制字符直到没有可获取的字符
+	outfile.put(ch);
+	infile.close();
+	outfile.close();
+	cout<<"finishi!"<<endl;
+	return 1;
+}
+int main()
+{
+	char s[30];
+	strcpy(s,create());
+	browsefile(s,0);
+	app(s);
+	copyfile("e:\\1.txt","e:\\0.txt");
+}

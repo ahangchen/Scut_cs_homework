@@ -1,0 +1,45 @@
+#include<iostream>(能过OJ有BUG)
+using namespace std;
+int main()
+{
+	int i=0,n=0;
+	char a[300];
+	while(cin.getline(a,300,'\n'))
+	{
+		for(i=0;i<300;i++)
+			if(a[i]=='/'&&a[i+1]=='*')n++;
+	}
+	cout<<n;
+}
+
+修正版：（加了重置数组对象）
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i=0,n=0;
+	char a[300];
+	while(cin.getline(a,300,'\n'))
+	{
+		for(i=0;i<300;i++)
+			if(a[i]=='/'&&a[i+1]=='*')n++;
+		for(i=0;i<300;i++)a[i]=0;//重置数组对象
+	}
+	cout<<n;
+}
+
+类做法
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i=0,n=0;
+	char a[300];
+	while(cin.getline(a,300,'\n'))
+	{
+		for(i=0;i<300;i++)
+			if(a[i]=='/'&&a[i+1]=='*')n++;
+		for(i=0;i<300;i++)a[i]=0;
+	}
+	cout<<n;
+}

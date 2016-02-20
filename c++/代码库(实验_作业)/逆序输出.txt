@@ -1,0 +1,47 @@
+//contrary order
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+int i,n;
+char *b=new char[2000];
+cin>>b;
+n=strlen(b);
+for(i=0;i<n;i++)
+cout<<b[n-i-1];
+return 0;
+}
+//contrary order
+#include<iostream>
+#include<cstring>
+using namespace std;
+char* same(char*x)
+{return x;}
+int main()
+{
+int i,n;
+char *b=new char[2000];
+cin>>b;
+char*p=same(b);
+n=strlen(p);
+for(i=0;i<n;i++)
+cout<<p[n-i-1];
+return 0;
+}
+
+#include<stdio.h>
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+int i=0,n;
+char *b=new char[100];
+gets(b);
+n=strlen(b);
+for(i=0;i<n;i++)cout<<b[n-i-1];
+delete[]b;
+b=NULL;
+return 0;
+}

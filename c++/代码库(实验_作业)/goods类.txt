@@ -1,0 +1,68 @@
+#include<iostream>
+using namespace std;
+class goods
+{
+public:
+		goods(int w){weight=w;total_weight+=w;}
+		~goods(){total_weight-=weight;}
+		static int totalweight(){return total_weight;}
+		 goods*next;
+private:
+	int weight;
+	static int total_weight;
+};
+int goods::total_weight=0;
+void purchase(goods*&f,goods*&r,int w)
+{
+	goods*p=new goods(w);
+	p->next=NULL;
+	if(f==NULL)
+		f=r=p;
+	else
+	{r->next=p;r=r->next;}
+}
+void sale(goods*&f,goods*&r)
+{
+	if(f==NULL)
+	{
+		cout<<"no anygoods!\n";
+		return;
+	}
+	goods*q=f;
+	f=f->next;
+	delete q;
+	q=NULL;
+	cout<<"saled.\n";
+}
+int main()
+{
+	goods*front =NULL,*rear=NULL;
+	int w;
+	int choice;
+	do
+	{
+		cout<<"please choice:"<<endl;
+		cout<<"1 is purchase,\n2 is sale,\n0 is over.\n";
+		cin>>choice;
+		switch(choice)
+		{
+		case 1:
+			{
+				cout<<"input weight:";
+				cin>>w;
+				purchase(front,rear,w);
+				break;
+			}
+		case 2:
+			{
+				sale(front,rear);
+				break;
+			}
+		case 0:
+			{
+				break;
+			}
+		}
+		cout<<"total:"<<goods::totalweight()<<endl;
+	}while(choice);
+}

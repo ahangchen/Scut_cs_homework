@@ -1,0 +1,32 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+bool greater10(int);
+bool inorder(int,int);
+int main()
+{
+	const int size=10;
+	int i;
+	int a[size]={10,3,17,6,15,8,13,34,25,2};
+	vector<int>v(a,a+size);
+	vector<int>::iterator location;
+	cout<<"vector v contains:"<<endl;
+	for(i=0;i<size;i++)cout<<v[i]<<" ";
+	cout<<endl;
+	location=find(v.begin(),v.end(),15);
+	if(location!=v.end())cout<<"found 15 at location"<<(location-v.begin())<<endl;
+	else cout<<"100 not found"<<endl;
+	sort(v.begin(),v.end());
+	cout<<"vector v after sort:"<<endl;
+	for(i=0;i<size;i++)cout<<v[i]<<" ";
+	cout<<endl;
+	if(binary_search(v.begin(),v.end(),50))cout<<"50 was found in v"<<endl;
+	else cout<<"50 was not found in v"<<endl;
+	sort(v.begin(),v.end(),inorder);
+	cout<<"vector v afer sort inorder:"<<endl;
+	for(i=0;i<size;i++)cout<<v[i]<<" ";
+	cout<<endl;
+}
+bool greater10(int value){return value>10;}
+bool inorder(int a,int b){return a>b;}

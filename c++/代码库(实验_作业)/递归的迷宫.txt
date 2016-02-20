@@ -1,0 +1,81 @@
+#include<iostream>
+#include<cstdlib>
+#include<ctime>
+#include<iomanip>
+using namespace std;
+void mazeGenerator(char maz[40][40],int m ,int n )
+	{srand(int(time(0)));
+for(int i=1;i<m;i++)
+{for(int j=1;j<n;j++)
+if(rand()%3==0) maz[i][j]='.';
+else maz[i][j]='#';
+}
+for(int i=0;i<m;i++)
+	maz[i][0]='#';
+for(int j=0;j<n;j++)
+	maz[0][j]='#';
+maz[0][1]='.';maz[1][1]=maz[1][2]=maz[2][2]='.';       //生成迷宫，人口为(0,1)其中之一出口为（m-1.n-1)
+maz[m-1][n-1]='.';};
+void printmaze(char maze[40][40],int m,int n)    //输出迷宫
+{
+for(int i=0;i<m;i++)
+{for(int j=0;j<n;j++)
+cout<<maze[i][j]<<" ";
+cout<<endl;
+}
+cout<<endl;
+cin.get();
+};
+int bianjie(int a,int b,int m,int n)          //判断是否为边界，是返回1
+{if(a==0||a==m-1||b==0||b==n-1) return 1;
+else return 0;
+};
+bool panduan(char maz[40][40],int x,int y,int m,int n)        //判断是否是墙，是返回0
+{if (0<=x&&x<=m&&0<=y&&y<=n&&maz[x][y]!='#')
+return true;
+else return false;
+}
+int xstart=0;    //入口坐标
+int ystart=1;
+void mazeTraverse(char maz[40][40], const int xstart,const int ystart,int x,int y,int dir,int m,int n)
+{static int work=0;  //标记
+maz[x][y]='x';    
+printmaze(maz,m,n);
+if(bianjie(x,y,m,n)&&work==1)     //如果是边界但不是入口,已经探索过
+	{
+		if(x==0&&y==1)         //如果回到了入口，定义了(0,2)。所以他一定探索过。
+		cout<<"回退到人口!"<<endl;
+		else cout<<"成功！"<<endl;
+		work=0;
+	}
+else 
+{work=1; //标记
+for(int c=dir, i=0;i<4;i++,c++,c%=4)    
+{switch(c)
+{case 0:        //本来想用enum direction{up,down,left,right}即for(int c=direction……）mazeTraverse(maz,xstart,ystart,x+1,y,left,m,n)后来发现用不了，于是用数字代替
+	if(panduan(maz,x+1,y,m,n))
+{dir=3;mazeTraverse(maz,xstart,ystart,x+1,y,dir,m,n);return;}break;
+case 1:
+
+if(panduan(maz,x,y+1,m,n))
+{dir=0;mazeTraverse(maz,xstart,ystart,x,y+1,dir,m,n);return;}break;
+case 2:
+if(panduan(maz,x-1,y,m,n))
+{dir=1;mazeTraverse(maz,xstart,ystart,x-1,y,dir,m,n);return;}break;
+case 3:
+if(panduan(maz,x,y-1,m,n))
+{dir=2;mazeTraverse(maz,xstart,ystart,x,y-1,dir,m,n);return;}break;
+
+}
+}
+}
+};
+int main()
+{int x,y,a1=0,b1=1,a=0,b=1,d=0;
+cout<<"输入："<<endl;
+cin>>x>>y;
+char maze[40][40];
+	mazeGenerator(maze,x,y);
+printmaze(maze,x,y);
+mazeTraverse(maze,a1,b1,a,b,d,x,y);
+}

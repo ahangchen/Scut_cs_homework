@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int password(const int &key);
+int main()
+{
+	if(password(123456))
+		cout<<"welcome"<<endl;
+	else cout<<"sorry,you are wrong!"<<endl;
+}
+int password (const int&key)
+{
+	static int n=0;
+	int k;
+	cout<<"please input your password:";
+	cin>>k;
+	n++;
+	if(n<3)
+	{
+		if(k==key)return 1;
+		else password(key);
+	}
+	else {if(k!=key)return 0;}
+}

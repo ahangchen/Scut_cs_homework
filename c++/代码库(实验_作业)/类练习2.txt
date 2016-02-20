@@ -1,0 +1,58 @@
+#include<iostream>
+using namespace std;
+/*class a
+{
+public:
+	a(int b);
+	~a();
+	void show();
+private:
+	int c;
+};
+a::a(int b):c(b)
+{
+	cout<<"constructing:"<<b<<endl;
+}
+a::~a()
+{
+	cout<<"destructing:"<<c<<endl;
+}
+void a::show()
+{
+	cout<<"showing:"<<c<<endl;
+}
+int main()
+{
+	a a1(3);
+	a1.show();
+}*/
+class a
+{
+public:
+	a();
+	~a();
+	void show();
+private:
+	int b;
+};
+a::a()
+{
+	cout<<"constructing"<<endl;
+	int c;
+	cin>>c;
+	b=c;
+}
+a::~a()
+{
+	cout<<"destructing"<<endl;
+}
+void a::show()
+{
+	cout<<"showing"<<endl;
+	cout<<b<<endl;
+}
+int main()
+{
+	a a1;
+	a1.show();
+}

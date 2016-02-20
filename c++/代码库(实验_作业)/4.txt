@@ -1,0 +1,161 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+class vector
+{
+public:
+	vector(int=1);
+	vector(const int*,int);
+	vector(const vector&);
+	~vector();
+	int &operator[](int i)const;
+	int operator()()const;
+	vector&operator=(const vector&);
+	bool operator==(const vector&)const;
+	bool operator!=(const vector&)const;
+	friend vector operator+(const vector&,const vector&);
+	friend vector operator-(const vector&,const vector&);
+	friend int operator*(const vector&,const vector&);
+	friend ostream&operator<<(ostream&output,const vector&);
+	friend istream&operator>>(istream&input,vector&);
+private:
+	int*v;
+	int len;
+};
+vector::vector(int size)
+{
+	v=new int[size];
+	len=size;
+	for(int i=0;i<len;i++)v[i]=0;
+
+}
+vector::vector(const int*b,int size)
+{
+	v=new int[size];
+	len=size;
+	for(int i=0;i<size;i++)v[i]=b[i];
+}
+vector::vector(const vector&a)
+{
+	len=a();
+	v=new int[len];
+	for(int i=0;i<len;i++)v[i]=a[i];
+}
+vector::~vector()
+{
+	delete[]v;
+	len=0;
+}
+int &vector::operator[](int i)const
+{
+	if(i>=0&&i<len)return v[i];
+	cout<<"the subscript"<<i<<"is outside!\n";
+	exit(0);
+}
+int vector::operator()()const
+{return len;}
+vector&vector::operator=(const vector&b)
+{
+	if(len==b())
+	{
+		for(int i=0;i<len;i++)
+			v[i]=b.v[i];
+		return *this;
+	}
+	else
+	{
+		cout<<"operator=fail\n";
+		exit(0);
+	}
+}
+bool vector::operator==(const vector&b)const
+{
+	if(len==b.len)
+	{
+		for(int i=0;i<len;i++)
+			if(v[i]!=b.v[i])return false;
+	}
+	else return false;
+	return true;
+}
+bool vector::operator!=(const vector&b)const
+{
+	return!(*this==b);
+}
+vector operator+(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]+b.v[i];
+		return vector(t,size);
+	}
+}
+vector operator-(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]-b.v[i];
+		return vector(t,size);
+	}
+}
+int operator*(const vector&a,const vector&b)
+{
+	int size=a();
+	int t=0;
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t+=a.v[i]*b.v[i];
+		return t;
+	}
+}
+ostream &operator<<(ostream&output,const vector &a)
+{
+	for(int i=0;i<a.len-1;i++)
+		output<<a.v[i]<<" ";
+output<<a.v[a.len-1];
+	return output;
+}
+istream&operator>>(istream&input,vector&a)
+{
+	for(int i=0;i<a();i++)
+		input>>a.v[i];
+	return input;
+}
+int main()
+{
+char s;
+while(cin>>s)
+{
+	int k;
+	cin>>k;
+	vector a(k),b(k),c(k);
+	cin>>a;
+	cin>>b;
+	{switch(s)
+	{
+	case '+':
+		{
+		c=a+b;
+		cout<<c<<endl;
+		}break;
+	case '-':
+		{
+			c=a-b;
+			cout<<c<<endl;
+		}break;
+	case'*':
+		{
+			cout<<a*b<<endl;
+		}break;
+	}
+	}
+}
+}
+

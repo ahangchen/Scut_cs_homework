@@ -1,0 +1,18 @@
+#include<iostream>
+using namespace std;
+int max(int,int);
+int max(int,int,int);
+int main()
+{
+	int x,y,z;
+	cin>>x>>y>>z;
+	cout<<max(x,y)<<endl;
+	cout<<max(x,y,z)<<endl;
+}
+int max(int x,int y)
+{return x>y?x:y;}
+int max(int x,int y,int z)
+{
+	if(x>y)return x>z?x:z;
+	else return y>z?y:z;
+}

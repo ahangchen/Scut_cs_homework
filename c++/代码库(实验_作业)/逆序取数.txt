@@ -1,0 +1,24 @@
+while (a)
+{
+b[i++]=a%10;
+a=a/10;
+}
+//ÄæÐòÈ¡Êý
+#include<iostream>
+using namespace std;
+int main()
+{
+int i=0,a,b[100];
+cin>>a;
+while (a)
+{
+b[i++]=a%10;
+a=a/10;
+}
+int n=i,c[100];
+i=0;
+while(i<n)
+{c[i]=b[n-i-1];i++;}
+for(i=0;i<n;i++)
+cout<<c[i]<<" ";
+}

@@ -1,0 +1,9 @@
+#include<iostream>
+using namespace std;
+#define PI 3.1415926
+#define print() cout<<endl
+int main()
+{
+	cout<<PI;
+	print();
+}

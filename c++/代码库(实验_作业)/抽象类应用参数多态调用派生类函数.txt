@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+class number
+{
+public:
+	number(int i){val=i;}
+	virtual void show()const=0;
+protected:
+	int val;
+};
+class hextype:public number
+{
+public:
+	hextype(int i):number(i){};
+	void show()const
+	{cout<<"hex:"<<hex<<val<<endl;}
+};
+class dectype:public number
+{
+public:
+	dectype(int i):number(i){}
+	void show()const
+	{cout<<"dec:"<<dec<<val<<endl;}
+};
+class octtype:public number
+{
+public:
+	octtype(int i):number(i){}
+	void show()const
+	{cout<<"oct:"<<oct<<val<<endl;}
+};
+void fun(number&n)//抽象类引用参数
+{n.show();}
+int main()
+{
+	dectype n1(50);
+	fun(n1);//基类对象多态调用派生类对象函数
+	hextype n2(50);
+	fun(n2);
+	octtype n3(50);
+	fun(n3);
+}

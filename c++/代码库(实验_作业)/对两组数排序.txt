@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i,j,k,p[6]={0,7,9,2,4,6};
+int temp;
+int n=3,m=3;
+for(j=n;j<(n+m);j++)
+{
+	k=0;
+for(i=n;i>=1;i--)
+{
+if(p[j-k]<p[j-k-1])
+{
+temp=p[j-k-1];p[j-k-1]=p[j-k];p[j-k]=temp;
+k++;
+}
+else break;
+}
+}
+for(i=0;i<n+m;i++)
+cout<<p[i];
+}

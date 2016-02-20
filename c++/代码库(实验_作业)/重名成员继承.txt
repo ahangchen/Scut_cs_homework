@@ -1,0 +1,31 @@
+#include<iostream>
+using namespace std;
+class base 
+{
+public:
+	int a,b;
+	void print()
+	{cout<<a<<" "<<b<<endl;}
+};
+class derived:public base 
+{
+public:
+	int b,c;
+	void print()
+	{cout<<b<<" "<<c<<endl;}
+	void print0()
+	{
+		base::print();
+		print();
+	}
+};
+int main()
+{
+	derived d;
+	d.a=1;
+	d.base::b=2;//l类作用域访问
+	d.b=3;
+	d.c=4;
+	d.base::print();
+	d.print0();
+}

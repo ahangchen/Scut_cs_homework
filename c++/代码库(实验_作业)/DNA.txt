@@ -1,0 +1,49 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	int n;
+	cin>>n;
+	int i,j,l,p;
+	for(l=0;l<n-1;l++)
+	{
+		int m,k,s;
+		cin>>m>>k;
+		for(p=0;p<k;p++)//重复k 次DNA
+			for(i=0;i<m-1;i++)//对每一行进行操作
+			{
+				s=(m-i)>(i+1)?(m-i):(i+1);
+				char*a=new char[s];
+				for(j=0;j<s;j++)//对每个字符赋值
+					if(j==i||j==m-i-1)a[j]='X';
+					else a[j]=' ';
+					for(j=0;j<s;j++)//输出每个字符
+						cout<<a[j];
+					cout<<endl;//一行结束
+			}
+		cout<<'X';
+		for(j=0;j<m-2;j++)
+			cout<<' ';
+		cout<<'X'<<endl;
+		cout<<endl;
+	}
+	int m,k,s;
+		cin>>m>>k;
+		for(p=0;p<k;p++)//重复k 次DNA
+			for(i=0;i<m-1;i++)//对每一行进行操作
+			{
+				s=(m-i)>(i+1)?(m-i):(i+1);
+				char*a=new char[s];
+				for(j=0;j<s;j++)//对每个字符赋值
+					if(j==i||j==m-i-1)a[j]='X';
+					else a[j]=' ';
+					for(j=0;j<s;j++)//输出每个字符
+						cout<<a[j];
+					cout<<endl;//一行结束
+			}
+		cout<<'X';
+		for(j=0;j<m-2;j++)
+			cout<<' ';
+		cout<<'X'<<endl;
+}

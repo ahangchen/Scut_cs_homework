@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+class box
+{
+public:
+	box();
+	void volume();
+private:
+	double length,width,height;
+};
+box::box()
+{
+	cout<<"请输入长宽高"<<endl;
+	double l,w,h;
+	cin>>l>>w>>h;
+	length=l;
+	width=w;
+	height=h;
+}
+void box::volume()
+{
+	cout<<"体积："<<length*width*height<<endl;
+}
+int main()
+{
+	box b1;
+	b1.volume();
+}

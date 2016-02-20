@@ -1,0 +1,60 @@
+#include<iostream>
+using namespace std;
+class a
+{
+public:
+	void getxy()
+	{
+		cout<<"enter x and y:";
+		cin>>x>>y;
+	}
+	void putxy()
+	{
+		cout<<"x="<<x<<"y="<<y<<endl;
+	}
+	protected:
+		int x,y;
+};
+class b:public a
+{
+public:
+	int gets(){return s;}
+	void makes(){s=x*y;}
+protected:
+	int s;
+};
+class c:public b
+{
+public:
+	void geth()
+	{
+		cout<<"enter h:";
+		cin>>h;
+	}
+	int getv(){return v;};
+	void makev()
+	{
+		makes();
+		v=gets()*h;
+	}
+protected:
+	int h,v;
+};
+int main()
+{
+	a obja;
+	b objb;
+	c objc;
+	cout<<"it is obja:\n";
+	obja.getxy();
+	obja.putxy();
+	cout<<"it is objb:\n";
+	objb.getxy();
+	objb.makes();
+	cout<<"s="<<objb.gets()<<endl;
+	cout<<"it is objc:\n";
+	objc.getxy();
+	objc.geth();
+	objc.makev();
+	cout<<"v="<<objc.getv()<<endl;
+}

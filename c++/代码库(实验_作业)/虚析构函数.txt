@@ -1,0 +1,22 @@
+#include<iostream>
+using namespace std;
+class a
+{
+public:
+	virtual ~a(){cout<<"a::~a()is called."<<endl;}//防止基类指针指向派生类对象后，析构时不调用派生类析构函数
+};
+class b:public a
+{public:
+~b(){cout<<"b:~b() is called."<<endl;}//默认为虚析构函数
+};
+int main()
+{
+	a*ap=new b;
+	b*bp2=new b;
+	cout<<"delete the first:"<<endl;
+	delete ap;
+	ap=NULL;
+	cout<<"delete the second:"<<endl;
+	delete bp2;
+	bp2=NULL;
+}

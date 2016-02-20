@@ -1,0 +1,11 @@
+#include<iostream>
+#include<conio.h>
+#include<cstdlib>
+int main()
+{
+	_cputs("Please input the text:\n");
+	char a[80];
+	size_t b;
+	_cgets_s(a,80,&b);//a是字符串，b是输入的字符串长度，这里只需输入一串字符
+	_cprintf("Linelegth=%d\nText=%s\n",b,a);
+}

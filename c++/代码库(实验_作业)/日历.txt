@@ -1,0 +1,68 @@
+#include<iostream>
+using namespace std;
+class date
+{};
+int f(int,int,int);
+int md(int,int,int);
+int main()
+{
+	int y1,y2,m1,m2,d1,d2;
+	char c;
+	cin>>y1>>c>>m1>>c>>d1;
+	cin>>y2>>c>>m2>>c>>d2;
+	int r1,r2;
+	r1=f(y1,m1,d1);
+	r2=f(y2,m2,d2);
+	cout<<r1<<" ";
+	cout<<r2<<" ";
+	cout<<r1-r2<<endl;
+}
+int md(int y,int m,int d)
+{
+	int day,feb;
+	if((y%4==0&&y%100!=0)||(y%400==0))feb=29;
+	else feb=28;
+	switch (m)
+	{
+	case 1:day=-1+d;break;
+	case 2:day=31+d-1;break;
+	case 3:day=feb+31+d-1;break;
+	case 4:day=feb+62+d-1;break;
+	case 5:day=feb+92+d-1;break;
+	case 6:day=feb+123+d-1;break;
+	case 7:day=feb+153+d-1;break;
+	case 8:day=feb+164+d-1;break;
+	case 9:day=feb+195+d-1;break;
+	case 10:day=feb+225+d-1;break;
+	case 11:day=feb+236+d-1;break;
+	case 12:day=feb+266+d-1;break;
+	}
+	return day;
+}
+int f(int y,int m,int d)
+{
+	int i=y/4,j=y%4;
+	switch(j)
+	{
+	case 0:
+		{
+			return md(y,m,d)+i*1461;
+			break;
+		}
+	case 1:
+		{
+			return md(y,m,d)+(i)*1461+366;
+			break;
+		}
+	case 2:
+		{
+			return md(y,m,d)+(i)*1461+731;
+			break;
+		}
+	case 3:
+		{
+			return md(y,m,d)+(i)*1461+1096;
+			break;
+		}
+	}
+}

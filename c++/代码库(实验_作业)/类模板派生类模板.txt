@@ -1,0 +1,81 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+template<typename t>
+class array
+{
+public:
+	array(int s);
+	virtual ~array(){delete[]ele;}
+	virtual const t&entry(int index)const;
+	virtual void enter(int index,const t&value);
+protected:
+	int size;
+	t*ele;
+};
+template<typename t>
+array<t>::array(int s)
+{
+	if(s>1)size=s;
+	else size=1;
+	ele=new t[size];
+}
+template<typename t>const t&array<t>::entry(int index)const
+{return ele[index];}
+template<typename t>void array<t>::enter(int index,const t&value)
+{ele[index]=value;}
+
+template<typename t>
+class boundarray:public array<t>
+{
+public:
+	boundarray(int low=0,int height=1);
+	virtual const t&entry(int index)const;
+	virtual void enter(int index,const t&value);
+private:
+		int min; 
+};
+template<typename t>
+boundarray<t>::boundarray(int low,int height):array<t>(height-low+1)
+{
+	if(height-low<0)
+	{
+		cout<<"beyond the bounds of array"<<endl;
+		exit(1);
+	}
+	min=low;
+}
+template<class t>
+const t&boundarray<t>::entry(int index)const
+{
+	if(index<min||index>min+size-1)
+	{
+		cout<<"beyond the bounds of index"<<endl;
+		exit(1);
+	}
+	return array<t>::entry(index-min);
+}
+template<typename t>
+void boundarray<t>::enter(int index,const t&value)
+{
+	if(index<min||index>min+size-1)
+	{
+		cout<<"beyond the bounds of index"<<endl;
+		exit;
+	}
+	array<t>::enter(index-min,value);
+}
+int main()
+{
+	int i;
+	int low=1,height=10;
+	boundarray<int>b(low,height);
+	for(i=low;i<=height;i++)
+		b.enter(i,i*2);
+	cout<<"boundarray"<<endl;
+	for(i=low;i<=height;i++)
+	{
+		cout<<"b["<<i<<"]="<<b.entry(i)<<"\t";
+		if(i%5==0)cout<<endl;
+	}
+}

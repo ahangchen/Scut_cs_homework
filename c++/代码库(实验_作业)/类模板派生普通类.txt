@@ -1,0 +1,27 @@
+#include<iostream>
+using namespace std;
+template<typename t0>
+class a0
+{
+public:
+	a0(t0 x){t=x;}
+	void out(){cout<<t<<endl;}
+protected:
+	t0 t; 
+};
+class b:public a0<int>//实例化基类的类属参数
+{
+protected:
+	double y;
+public:
+	b(int a,double x):a0<int>(a){y=x;}
+	void out()
+	{a0<int>::out();cout<<y<<endl;}
+};
+int main()
+{
+	a0<int>a(123);
+	a.out();
+	b m(789,5.16);
+	m.out();
+}

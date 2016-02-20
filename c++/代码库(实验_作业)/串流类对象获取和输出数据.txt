@@ -1,0 +1,29 @@
+#include<iostream>
+using namespace std;
+#include<strstream>
+int main()
+{
+	char*teststr="input test 256 * 0.5";
+	char s1[10],s2[10],s3[10];
+	double x,y;
+	istrstream input(teststr);
+	input>>s1>>s2>>x>>s3>>y;
+	cout<<s1<<" "<<s2<<" "<<x<<s3<<y<<"="<<x*y<<endl;
+}
+
+
+#include<iostream>
+#include<strstream>
+using namespace std;
+void main()
+{
+	char buf[80];
+	ostrstream output(buf,sizeof(buf));
+	double x,y;
+	cout<<"input x:";
+	cin>>x;
+	cout<<"input y:";
+	cin>>y;
+	output<<x<<"*"<<y<<"="<<x*y<<'\0';
+	cout<<buf<<endl;
+}

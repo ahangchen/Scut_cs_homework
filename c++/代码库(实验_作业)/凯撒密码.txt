@@ -1,0 +1,30 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	char s;
+	while(cin.get(s))
+	{
+		if(s>=65&&s<=87||s>=97&&s<=119)s+=3;
+		else if(s>=88&&s<=90||s>=120&&s<=122)s-=23;
+		cout<<s;
+	}
+}
+
+#include<iostream>
+#include<fstream>
+using namespace std;
+int main()
+{
+	char s;
+	while(cin.get(s))
+	{
+		if(s>=65&&s<=87||s>=97&&s<=119)s+=3;
+		else if(s>=88&&s<=90||s>=120&&s<=122)s-=23;
+		cout<<s;
+		fstream f("C:\\KAISA.txt",ios::app);
+		//f.seekp(0,ios::beg);
+		f<<s;
+		f.close();
+	}
+}

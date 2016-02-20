@@ -1,0 +1,34 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+struct student//定义记录
+{
+	int number;
+	char name[30];
+	int score;
+};
+const student mark={0,"noname\0",0};//空记录，文件结束标志
+int main()
+{
+	char s[80];
+	student stu;
+	ifstream instuf("d:\\students.txt",ios::in);//读文本文件
+	ofstream outf("d:\\students.dat",ios::out||ios::binary);
+	//略去标题行
+	if(!instuf|!outf)
+	{
+		cerr<<"file could not be open.\n";
+	abort();
+	}
+	instuf.getline(s,80);
+	while(instuf>>stu.number>>stu.name>>stu.score)
+		//从文本文件提取数据，并测试
+	{
+		cout<<stu.number<<"\t"<<stu.name<<'\t'<<stu.score<<endl;//
+		outf.write((char*)&stu,sizeof(student));
+		//写一个记录到二进制数据文件中
+	}
+	outf.write((char*)&mark,sizeof(student));//写入文件结束标志
+		instuf.close();//关闭文本文件
+	outf.close();//关闭二进制文件
+}

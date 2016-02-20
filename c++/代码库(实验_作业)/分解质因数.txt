@@ -1,0 +1,11 @@
+//这是一个求整数的所有素数因子的程序
+#include<iostream>
+using namespace std;
+int main()
+{int x,i;//x为整数；i为计数器
+cout<<"请输入一个整数";
+cin>>x;
+for(i=2;i<=x;)
+if(x%i==0){cout<<i;x=x/i;}//求余数，能整除的是这个整数的因数，由于此时i不自增，故能求出其素数因子
+else i++;//不能整除则i自增
+}

@@ -1,0 +1,78 @@
+#include<iostream>
+using namespace std;
+class shape
+{
+protected:
+int area;
+public:
+shape(){area=1;}
+virtual void setdim(){}
+virtual int getarea(){return 0;}
+};
+class twodimshape:public shape
+{
+protected:
+int a,b;
+public:
+twodimshape():shape(){a=1;b=1;}
+void setdim()
+{
+cin>>a>>b;
+}
+};
+class threedimshape:public shape
+{
+protected:
+int a,b,c;
+public:
+threedimshape():shape(){a=1;b=1;c=1;}
+void setdim()
+{
+cin>>a>>b>>c;
+}
+};
+class changfangxing:public twodimshape
+{
+public:
+changfangxing():twodimshape(){};
+int getarea()
+{
+int i;
+for(i=0;i<2;i++)area=a*b;
+return area;
+}
+};
+class lifangti:public threedimshape
+{
+public:
+lifangti():threedimshape(){};
+int getarea()
+{
+int i;
+for(i=0;i<3;i++)area=a*b*c;
+return area;
+}
+};
+int main()
+{
+int n;
+shape*p;
+changfangxing s;
+lifangti t;
+while(cin>>n)
+{
+switch (n)
+{
+case 2:
+{
+p=&s;break;
+}
+case 3:
+{
+p=&t;break;
+}
+}
+p->setdim();
+cout<<p->getarea()<<endl;
+}
+}

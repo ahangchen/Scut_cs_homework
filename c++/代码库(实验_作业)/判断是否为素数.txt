@@ -1,0 +1,19 @@
+#include<iostream>
+using namespace std;
+#include<cmath>
+bool ss(int x)
+{
+	int i,k;
+	k=int(sqrt(double(x)));
+	i=2;
+	while(x%i&&i<=k)i++;
+	if(i>k)return true;
+	return false;
+}
+int main()
+{
+int x;
+cin>>x;
+if(ss(x))cout<<"Y\n";
+else cout<<"N\n";
+}

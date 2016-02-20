@@ -1,0 +1,42 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i,j,n,m;
+	char a;
+	while(cin>>a)
+	{
+		cin>>n>>m;//m is 每一行的元素个数,n是列数
+		int**x=new int*[n];
+		for(i=0;i<n;i++)
+		{x[i]=new int[m];}
+		
+		int**y=new int*[n];
+		for(i=0;i<n;i++)
+		{y[i]=new int[m];}
+
+		for(i=0;i<n;i++)
+			for(j=0;j<m;j++)
+				cin>>x[i][j];
+
+		for(i=0;i<n;i++)
+			for(j=0;j<m;j++)
+				cin>>y[i][j];
+
+		int**s=new int*[n];
+		for(i=0;i<n;i++)
+		{s[i]=new int[m];}
+		for(i=0;i<n;i++)
+			for(j=0;j<m;j++)
+				{
+					if(a=='+')s[i][j]=x[i][j]+y[i][j];
+					if(a=='-')s[i][j]=x[i][j]-y[i][j];
+			    }
+		for(i=0;i<n;i++)
+		{
+		for(j=0;j<m-1;j++)
+			cout<<s[i][j]<<" ";
+		cout<<s[i][j]<<endl;
+		}
+	}
+}

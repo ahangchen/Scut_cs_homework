@@ -1,0 +1,57 @@
+#include<iostream>
+using namespace std;
+template<typename t>
+class vec
+{
+private:
+	t*s;
+	int len;
+public:
+	vec(t*str,int n){s=str;len=n;}
+	~vec(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len-1;i++)cout<<s[i]<<" ";
+		cout<<s[len-1]<<endl;
+	}
+	
+	template<typename t1>//different name with all the t
+	friend vec<t1> operator+(vec<t1>&a,vec<t1>&b)
+	{
+		int x=a.gl();
+		t1*p=new t1[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		return vec(p,x);
+	}
+	template<typename t2>
+	friend vec<t2> operator-(vec<t2>&a,vec<t2>&b)
+	{
+		int x=a.gl();
+		t2*p=new t2[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		return vec(p,x);
+	}
+};
+int main()
+{
+	int n,i;
+	char s;
+	while(cin>>s>>n)
+	{
+		int*a=new int[n];
+		int*b=new int[n];
+		int*c=new int[n];
+		for(i=0;i<n;i++)cin>>a[i];
+		for(i=0;i<n;i++)cin>>b[i];
+		vec<int>x(a,n),y(b,n),z(c,n);
+		if(s=='+')z=x+y;
+		if(s=='-')z=x-y;
+		z.print();
+	}
+}

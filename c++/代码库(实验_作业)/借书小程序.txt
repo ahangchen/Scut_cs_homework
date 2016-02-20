@@ -1,0 +1,62 @@
+#include<iostream>
+using namespace std;
+class book
+{
+public:
+	book();
+	~book();
+	void display();
+	void borrow();
+	void restore();
+private:
+	char*bookname;
+	double price;
+	int number;
+};
+book::book()
+{
+	cout<<"请输入图书的书名，价格，现有数量"<<endl;
+	char*s=new char[100];double a;int i;
+	cin>>s>>a>>i;
+	bookname=s;
+	price=a;
+	number=i;
+}
+book::~book()
+{
+	delete[]bookname;
+	bookname=NULL;
+	price=0;
+	number=0;
+}
+void book::display()
+{
+	cout<<bookname<<"每本"<<price<<"元，"<<"有"<<number<<"本"<<endl;
+}
+void book::borrow()
+{
+	cout<<"借书后：";
+	number-=1;
+	if(number>=0)book::display();
+	else cout<<"no any books,can'tborrow\n";
+}
+void book::restore()
+{
+	cout<<"还书后：";
+	number+=1;
+	book::display();
+}
+int main()
+{
+	int choice;
+	book b1;
+	cout<<"1 is display\n2 is borrow\n3 is restore\nctrl+z is over\n";
+	while(cin>>choice)
+		switch(choice)
+	{
+		case 1:b1.display();break;
+		case 2:b1.borrow();break;
+		case 3:b1.restore();break;
+		default:break;
+	}
+}

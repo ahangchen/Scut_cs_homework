@@ -1,0 +1,129 @@
+#include<iostream>
+using namespace std;
+class integer
+{
+public:
+	integer(int k):len(k){}
+protected:
+	int len;
+};
+class vector:public integer
+{
+public:
+	vector(int);
+	vector(const int*,int);
+	vector(const vector&);
+	~vector();
+	int &operator[](int i)const;
+	int operator()()const;
+	vector&operator=(const vector&);
+	friend vector operator+(const vector&,const vector&);
+	friend vector operator-(const vector&,const vector&);
+	friend int operator*(const vector&,const vector&);
+	friend ostream&operator<<(ostream&output,const vector&);
+	friend istream&operator>>(istream&input,vector&);
+private:
+	int*v;
+};
+vector::vector(int size):integer(size)
+{
+	v=new int[size];
+	for(int i=0;i<len;i++)v[i]=0;
+}
+vector::vector(const int*b,int size):integer(size)
+{
+	v=new int[size];
+	len=size;
+	for(int i=0;i<size;i++)v[i]=b[i];
+}
+vector::vector(const vector&a):integer(a())
+{
+	v=new int[len];
+	for(int i=0;i<len;i++)v[i]=a[i];
+}
+vector::~vector()
+{
+	delete[]v;
+	len=0;
+}
+int &vector::operator[](int i)const
+{return v[i];}
+int vector::operator()()const
+{return len;}
+vector&vector::operator=(const vector&b)
+{
+	for(int i=0;i<len;i++)
+		v[i]=b.v[i];
+	return *this;
+}
+vector operator+(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]+b.v[i];
+		return vector(t,size);
+	}
+}
+vector operator-(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]-b.v[i];
+		return vector(t,size);
+	}
+}
+int operator*(const vector&a,const vector&b)
+{
+	int size=a();
+	int t=0;
+	{
+		for(int i=0;i<size;i++)
+			t+=a.v[i]*b.v[i];
+		return t;
+	}
+}
+ostream &operator<<(ostream&output,const vector &a)
+{
+	int i;
+	for(i=0;i<a.len-1;i++)
+		output<<a.v[i]<<" ";
+	output<<a.v[i];
+	return output;
+}
+istream&operator>>(istream&input,vector&a)
+{
+	for(int i=0;i<a();i++)
+		input>>a.v[i];
+	return input;
+}
+int main()
+{
+	int k;
+	char s;
+	while(cin>>s)
+	{
+		cin>>k;
+		vector a(k),b(k);
+		cin>>a;
+		cin>>b;
+		switch(s)
+	{
+	case '+':
+		{
+		cout<<a+b<<endl;
+		}break;
+	case '-':
+		{
+			cout<<a-b<<endl;
+		}break;
+	case '*':
+		{
+			cout<<a*b<<endl;
+		}break;
+	}
+	}
+}

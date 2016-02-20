@@ -1,0 +1,40 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+class a
+{};
+int main()
+{
+	int i,j;
+	fstream f;//说明文件流对象
+	//建立文件
+	f.open("d:\\data.dat",ios::out|ios::binary);//写方式打开文件
+	for(i=1;i<=10;i++)//循环
+		f.write((char*)&i,sizeof(int));//写入i的值
+	f.close();//关闭文件
+	//修改文件
+	f.open("d:\\data.dat",ios::in|ios::out|ios::binary);//读写方式打开文件
+	for(i=0;i<10;i++)//遍历文件中的10个数据
+	{
+		f.seekg(long(sizeof(int)*i));//移动流指针
+		f.read((char*)&j,sizeof(int));//读出指针所指的数据，写入变量j
+		if(j%2)//
+		{
+			j+=10;//修改j的值
+			f.seekp(-long(sizeof(int)),ios::cur);//流指针指示写位置
+			f.write((char*)&j,sizeof(int));//写入修改后的数据
+		}
+	}
+	f.seekg(long(sizeof(int))*10);//流指针移到文件尾
+	for(i=91;i<=95;i++)//添加5个数据
+		f.write((char*)&i,sizeof(int));//把i的值写入文件
+	//输出文件数据
+	f.seekg(0,ios::beg);//流指针移到文件头
+	for(i=0;i<15;i++)//遍历
+	{
+		f.read((char*)&j,sizeof(int));//读出流当前数据，写入变量j
+		cout<<j<<" ";//显示j的值
+	}
+	cout<<endl;
+	f.close();//
+}

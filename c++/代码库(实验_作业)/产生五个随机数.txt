@@ -1,0 +1,9 @@
+#include<iostream>
+#include<ctime>
+using namespace std;
+int main() 
+{
+	srand(int(time(0)));
+	for(int i=0;i<5;i++)
+	cout<<rand()%59+2<<endl;
+}

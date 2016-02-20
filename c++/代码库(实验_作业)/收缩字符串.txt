@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std ;
+#include<cstring>
+//收缩函数
+char*suo (char*cb)
+{
+int n=strlen(cb);
+cb[n]='\0';
+char *s=new char[n+1];
+int i=0;
+while(cb[i])
+s[i]=cb[i++];
+s[n]='\0';
+return s;
+}
+
+//调用方法
+int main()
+{
+char b[100] ;
+cin>>b;
+char *a=suo(b);
+cout<<a;
+}

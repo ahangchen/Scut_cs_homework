@@ -1,0 +1,23 @@
+#include<iostream>
+using namespace std;
+int gcd (int m,int n)
+{
+	int a,b,r;
+	if(m>n)
+	{a=m;b=n;}
+	else{a=n;b=m;}
+	r=b;
+	while(r!=0)
+	{
+		r=a%b;
+		a=b;
+		b=r;
+	}
+	return a;
+}
+int main()
+{
+	int m,n;
+	cin>>m>>n;
+	cout<<gcd(m,n);
+}

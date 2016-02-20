@@ -1,0 +1,44 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+struct re
+{
+	double a,b,v;
+	re*next;
+};
+double set(double a,double b)
+{
+	double v;
+	const double pi=3.1415926;
+	double s1,s2;
+	s1=(a*a)*(b-a/pi)/(4*pi);
+	if(b/(pi+1)>a)s2=pi*a*a*a/4;
+	else s2=pi*a*(b/(2*pi+2))*(b/(2*pi+2));
+	if(s1>=s2)v=s1;
+	else v=s2;
+	return v;
+}
+int main()
+{
+	re*head=NULL;
+	re*s,*p;
+	s=new re;
+   	cin>>s->a>>s->b;
+	while(s->a!=0||s->b!=0)
+	{
+		if(head==NULL)head=s;
+		else p->next=s;
+		s->v=set(s->a,s->b);
+		p=s;
+		s=new re;
+		cin>>s->a>>s->b;
+		s->v=set(s->a,s->b);
+	}
+	p->next=NULL;delete s;
+	while(head)
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<head->v<<endl;
+		head=head->next;
+	}
+}

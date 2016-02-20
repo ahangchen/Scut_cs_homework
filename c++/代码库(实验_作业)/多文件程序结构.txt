@@ -1,0 +1,17 @@
+//函数声明.h
+void print();
+//函数定义.cpp
+#include<iostream>
+using namespace std;
+void print()
+{
+	cout<<"HELLO!";
+}
+//000.cpp
+#include<iostream>
+using namespace std;
+#include"函数声明.h"
+int main()
+{
+	print();
+}

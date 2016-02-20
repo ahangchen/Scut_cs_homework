@@ -1,0 +1,24 @@
+#include<iostream>
+using namespace std;
+int zxgb (int m,int n)
+{
+	int a,b,r;
+	if(m>n)
+	{a=m;b=n;}
+	else{a=n;b=m;}
+	r=b;
+	while(r!=0)
+	{
+		r=a%b;
+		a=b;
+		b=r;
+	}
+
+	return m*n/a;
+}
+int main()
+{
+	int m,n;
+	cin>>m>>n;
+	cout<<zxgb(m,n);
+}

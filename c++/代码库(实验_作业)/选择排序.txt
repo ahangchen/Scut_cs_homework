@@ -1,0 +1,22 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int min,i,j,t;
+	int p[4];
+	for(i=0;i<4;i++)cin>>p[i];
+for(i=0;i<3;i++)
+{
+t=i;
+for(j=i+1;j<4;j++)
+if(p[j]<p[t])t=j;
+if(t!=i)
+{min=p[i];p[i]=p[t];p[t]=min;}
+}
+for(i=0;i<3;i++)
+cout<<p[i]<<" ";
+cout<<p[3];
+}
+
+
+

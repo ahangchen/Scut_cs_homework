@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+int main()
+{char x,y;
+cout<<"s为剪刀，r为石头，p为布"<<endl;
+cout<<"请甲输入所选对象"<<endl;
+cin>>x;
+cout<<"请乙输入所选对象"<<endl;
+cin>>y;
+if(x==y)cout<<"平手";
+else if((x=='s'&&y=='p')||(x=='r'&&y=='s')||(x=='p'&&y=='r'))cout<<"甲胜";
+        else cout<<"乙胜";
+}
+
+

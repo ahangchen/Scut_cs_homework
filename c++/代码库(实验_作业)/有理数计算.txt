@@ -1,0 +1,81 @@
+#include<iostream>
+using namespace std;
+class rational
+{
+public:
+	rational();
+	rational(int n,int d=1);
+	rational(double x);
+	operator double();
+	friend rational operator+(const rational&,const rational&);
+	friend ostream&operator<<(ostream&,const rational&);
+private:
+	int numerator,denominator;
+};
+int gcd(int a,int b);
+rational::rational()
+{
+	numerator=0;
+	denominator=0;
+}
+rational::rational(int n,int d)
+{
+	int g;
+	if(d==1)
+	{
+		numerator=n;
+		denominator=d;
+	}
+	else
+	{
+		g=gcd(n,d);
+		numerator=n/g;
+		denominator=d/g;
+	};
+}
+rational::rational(double x)
+{
+	int a,b,g;
+	a=int(x*1e5);
+	b=int(1e5);
+	g=gcd(a,b);
+	numerator=a/g;
+	denominator=b/g;
+}
+rational::operator double()
+{
+	return double(numerator)/double(denominator);
+}
+rational operator+(const rational&r1,const rational&r2)
+{
+	int n,d;
+	n=r1.numerator*r2.denominator+r1.denominator*r2.numerator;
+	d=r1.denominator*r2.denominator;
+	return rational(n,d);
+}
+ostream&operator<<(ostream&output,const rational&x)
+{
+	output<<x.numerator;
+	if(x.denominator!=1)
+		output<<"/"<<x.denominator;
+	return output;
+}
+int gcd(int a,int b)
+{
+	int g;
+	if(b==0)g=a;
+	else g=gcd(b,a%b);
+	return g;
+}
+int main()
+{
+	rational a(2,4);
+	rational b=0.3;
+	rational c=a+b;
+	cout<<double(a)<<"+"<<double(b)<<"="<<double(c)<<endl;
+	cout<<a<<"+"<<b<<"="<<c<<endl;
+	double x=b;
+	c=x+1+0.6;
+	cout<<x<<"+"<<1<<"+"<<0.6<<"="<<double(c)<<endl;
+	cout<<rational(x)<<"+"<<rational(0.6)<<"="<<c<<endl;
+}

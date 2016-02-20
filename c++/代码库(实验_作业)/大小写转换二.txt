@@ -1,0 +1,12 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main()
+{
+	char s;
+	while(cin.get(s))
+	{
+		if(s<='z'&&s>='a')s-=32;
+		cout<<s;
+	}
+}

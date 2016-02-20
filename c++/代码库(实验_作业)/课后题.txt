@@ -1,0 +1,1566 @@
+#include<iostream>
+using namespace std;
+class book
+{
+public:
+	book();
+	~book();
+	void display();
+	void borrow();
+	void restore();
+private:
+	char*bookname;
+	double price;
+	int number;
+};
+book::book()
+{
+	cout<<"请输入图书的书名，价格，现有数量"<<endl;
+	char*s=new char[100];double a;int i;
+	cin>>s>>a>>i;
+	bookname=s;
+	price=a;
+	number=i;
+}
+book::~book()
+{
+	delete[]bookname;
+	bookname=NULL;
+	price=0;
+	number=0;
+}
+void book::display()
+{
+	cout<<bookname<<"每本"<<price<<"元，"<<"有"<<number<<"本"<<endl;
+}
+void book::borrow()
+{
+	cout<<"借书后：";
+	number-=1;
+	if(number>=0)book::display();
+	else cout<<"no any books,can'tborrow\n";
+}
+void book::restore()
+{
+	cout<<"还书后：";
+	number+=1;
+	book::display();
+}
+int main()
+{
+	int choice;
+	book b1;
+	cout<<"1 is display\n2 is borrow\n3 is restore\nctrl+z is over\n";
+	while(cin>>choice)
+		switch(choice)
+	{
+		case 1:b1.display();break;
+		case 2:b1.borrow();break;
+		case 3:b1.restore();break;
+		default:break;
+	}
+}
+
+ 
+6.4.3
+#include<iostream>
+using namespace std;
+class student
+{
+public:
+	void scoretotalcount(double);
+	static double sum(){return total;}
+	static double average(){return total/count;}
+private:
+	double score;
+	static double total;
+	static int count;
+};
+double student::total=0;
+int student::count=0;
+void student::scoretotalcount(double s )
+{
+	score=s;
+	count+=1;
+	total+=s;
+}
+int main()
+{
+	double s;
+	cout<<"please input student's score,input 0when you want to finish:\n";
+	while(cin>>s)
+	{
+		if(s!=0)
+		{
+			student a;
+			a.scoretotalcount(s);
+		}
+		else break;
+	};
+	cout<<student::sum()<<endl;
+	cout<<student::average()<<endl;
+}
+ 
+6.4.5
+#include<iostream>
+using namespace std;
+class point
+{
+	friend class setpoint;
+public:
+	point(double m,double n):x(m),y(n){};
+private:
+	double x, y;
+};
+class line
+{
+	friend class setpoint;
+public:
+	line(double i,double j):a(i),b(j){};
+	void print()
+	{
+		cout<<"y=("<<a<<")x+("<<b<<")"<<endl;
+	}
+private:
+	double a,b;
+};
+class setpoint
+{
+public:
+	setpoint(double k):l1(k,k),l2(k,k),p0(k,k){};
+	void set1(double i,double j)
+	{
+		l1.a=i;
+		l1.b=j;
+	}
+	void set2(double i,double j)
+	{
+		l2.a=i;
+		l2.b=j;
+	}
+	void cross()
+	{
+		p0.x=(l2.b-l1.b)/(l1.a-l2.a);
+		p0.y=(l1.a*l2.b-l2.a*l1.b)/(l1.a-l2.a);
+		cout<<"交点坐标：（"<<p0.x<<","<<p0.y<<")"<<endl;
+	}
+	void display()
+	{
+		l1.print();
+		l2.print();
+	}
+private:
+	line l1,l2;
+	point p0;
+};
+int main()
+{
+	double a1,b1,a2,b2;
+	setpoint A(0);
+	cout<<"请依次输入直线1的斜率，截距\n";
+	cin>>a1>>b1;
+	A.set1(a1,b1);
+	cout<<"请依次输入直线2的斜率，截距\n";
+	cin>>a2>>b2;
+	A.set2(a2,b2);
+	cout<<"这是两直线的方程：\n";
+	A.display();
+	cout<<"这是两直线的交点坐标：";
+	A.cross();
+}
+
+
+
+77777777
+
+7.4.2
+#include<iostream>
+using namespace std;
+class integer
+{
+public:
+	integer(int=1);
+	integer(const integer&);
+	~integer();
+	integer&operator=(const integer&);
+	friend integer operator+(const integer&,const integer&);
+	friend integer operator-(const integer&,const integer&);
+	friend integer operator*(const integer&,const integer&);
+	friend integer operator/(const integer&,const integer&);
+	friend ostream&operator<<(ostream&output,const integer&);
+	friend istream&operator>>(istream&input,integer&);
+private:
+	int i;
+};
+integer::integer(int t)
+{
+	if(t<=-32768||t>32768)
+	{
+		cout<<"the size of"<<t<<"is fail!\n";
+		exit(0);
+	}
+	i=t;
+}
+integer::integer(const integer&a)
+{
+	if(a.i<=-32768||a.i>32768)
+	{
+		cout<<"the size of"<<a.i<<"is fail!\n";
+		exit(0);
+	}
+	i=a.i;
+}
+integer::~integer()
+{
+	i=0;
+}
+integer&integer::operator=(const integer&b)
+{
+	i=b.i;
+	return *this;
+}
+integer operator+(const integer&a,const integer&b)
+{
+	int t;
+	t=a.i+b.i;
+	if(t<=-32768||t>32768)
+	{
+		cout<<"the size of"<<t<<"is fail!\n";
+		exit(0);
+	}
+	return integer(t);
+}
+integer operator-(const integer&a,const integer&b)
+{
+	int t;
+	t=a.i-b.i;
+	if(t<=-32768||t>32768)
+	{
+		cout<<"the size of"<<t<<"is fail!\n";
+		exit(0);
+	}
+	return integer(t);
+}
+integer operator*(const integer&a,const integer&b)
+{
+	int t;
+	t=a.i*b.i;
+	if(t<=-32768||t>32768)
+	{
+		cout<<"the size of"<<t<<"is fail!\n";
+		exit(0);
+	}
+	return integer(t);
+}
+integer operator/(const integer&a,const integer&b)
+{
+	int t;
+	t=(a.i)/(b.i);
+	if(t<=-32768||t>32768)
+	{
+		cout<<"the size of"<<t<<"is fail!\n";
+		exit(0);
+	}
+	return integer(t);
+}
+
+ostream &operator<<(ostream&output,const integer &a)
+{
+	output<<a.i;
+	return output;
+}
+istream&operator>>(istream&input,integer&a)
+{
+	input>>a.i;
+	return input;
+}
+int main()
+{
+	integer a(1),b(1),c(1);
+	cout<<"input the elements of integer a:\n";
+	cin>>a;
+	cout<<"input the element of integer b:\n";
+	cin>>b;
+	cout<<"input the number to choose the calculate:1 is +, 2 is -, 3 is *, 4 is / "<<endl;
+	int ii;
+	while(cin>>ii)
+	{switch(ii)
+	{
+	case 1:
+		{
+			c=a+b;
+			cout<<"["<<a<<"]\n+["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	case 2:
+		{
+			c=a-b;
+			cout<<"["<<a<<"]\n-["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	case 3:
+		{
+			c=a*b;
+			cout<<"["<<a<<"]\n*["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	case 4:
+		{
+			c=a/b;
+			cout<<"["<<a<<"]\n/["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	}
+	}
+	cout<<"finished"<<endl;
+}
+ 
+ 
+7.4.4
+#include<iostream>
+using namespace std;
+class vector
+{
+public:
+	vector(int=1);
+	vector(const int*,int);
+	vector(const vector&);
+	~vector();
+	int &operator[](int i)const;
+	int operator()()const;
+	vector&operator=(const vector&);
+	bool operator==(const vector&)const;
+	bool operator!=(const vector&)const;
+	friend vector operator+(const vector&,const vector&);
+	friend vector operator-(const vector&,const vector&);
+	friend vector operator*(const vector&,const vector&);
+	friend ostream&operator<<(ostream&output,const vector&);
+	friend istream&operator>>(istream&input,vector&);
+private:
+	int*v;
+	int len;
+};
+vector::vector(int size)
+{
+	if(size<=0||size>100)
+	{
+		cout<<"the size of"<<size<<"is fail!\n";
+		exit(0);
+	}
+	v=new int[size];
+	for(int i=0;i<len;i++)v[i]=0;
+	len=size;
+}
+vector::vector(const int*b,int size)
+{
+	if(size<=0||size>100)
+	{
+		cout<<"the size of"<<size<<"is fail!\n";
+		exit(0);
+	}
+	v=new int[size];
+	len=size;
+	for(int i=0;i<size;i++)v[i]=b[i];
+}
+vector::vector(const vector&a)
+{
+	len=a();
+	v=new int[len];
+	for(int i=0;i<len;i++)v[i]=a[i];
+}
+vector::~vector()
+{
+	delete[]v;
+	len=0;
+}
+int &vector::operator[](int i)const
+{
+	if(i>=0&&i<len)return v[i];
+	cout<<"the subscript"<<i<<"is outside!\n";
+	exit(0);
+}
+int vector::operator()()const
+{return len;}
+vector&vector::operator=(const vector&b)
+{
+	if(len==b())
+	{
+		for(int i=0;i<len;i++)
+			v[i]=b.v[i];
+		return *this;
+	}
+	else
+	{
+		cout<<"operator=fail\n";
+		exit(0);
+	}
+}
+bool vector::operator==(const vector&b)const
+{
+	if(len==b.len)
+	{
+		for(int i=0;i<len;i++)
+			if(v[i]!=b.v[i])return false;
+	}
+	else return false;
+	return true;
+}
+bool vector::operator!=(const vector&b)const
+{
+	return!(*this==b);
+}
+vector operator+(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]+b.v[i];
+		return vector(t,size);
+	}
+	else 
+	{
+		cout<<"operator+fail\n";
+		exit(0);
+	}
+}
+vector operator-(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]-b.v[i];
+		return vector(t,size);
+	}
+	else 
+	{
+		cout<<"operator-fail\n";
+		exit(0);
+	}
+}
+vector operator*(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	if(size==b())
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]*b.v[i];
+		return vector(t,size);
+	}
+	else 
+	{
+		cout<<"operator+fail\n";
+		exit(0);
+	}
+}
+ostream &operator<<(ostream&output,const vector &a)
+{
+	for(int i=0;i<a.len;i++)
+		output<<a.v[i]<<" ";
+	return output;
+}
+istream&operator>>(istream&input,vector&a)
+{
+	for(int i=0;i<a();i++)
+		input>>a.v[i];
+	return input;
+}
+int main()
+{
+	int k;
+	cout<<"input the length of vector:\n";
+	cin>>k;
+	vector a(k),b(k),c(k);
+	cout<<"input the elements of vector a:\n";
+	cin>>a;
+	cout<<"input the element of vector b:\n";
+	cin>>b;
+	cout<<"input the number to choose the calculate:1 is +, 2 is -, 3 is *,"<<endl;
+	int ii;
+	while(cin>>ii)
+	{switch(ii)
+	{
+	case 1:
+		{
+			if(a==b)
+			{
+				for(int i=0;i<a();i++)
+					c[i]=a[i]*2;
+			}
+	else
+		c=a+b;
+		cout<<"["<<a<<"]\n+["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	case 2:
+		{
+			c=a-b;
+			cout<<"["<<a<<"]\n-["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	case 3:
+		{
+			c=a*b;
+			cout<<"["<<a<<"]\n["<<b<<"] \n=["<<c<<"]"<<endl;
+		}break;
+	}
+	}
+	cout<<"finished"<<endl;
+}
+测试结果：
+ 
+7.4.5
+#include<iostream>
+using namespace std;
+class nauticalmile_kilometer
+{
+public:
+	nauticalmile_kilometer(int ,int );
+	nauticalmile_kilometer(const nauticalmile_kilometer&);
+	~nauticalmile_kilometer();
+	void print();
+	operator double ();
+private:
+	int km,m;
+};
+nauticalmile_kilometer::nauticalmile_kilometer(int a,int b){km=a;m=b;}
+nauticalmile_kilometer::~nauticalmile_kilometer(){km=0;m=0;}
+nauticalmile_kilometer::nauticalmile_kilometer(const nauticalmile_kilometer&t)
+{km=t.km;m=t.m;}
+void nauticalmile_kilometer::print()
+{
+	cout<<km<<" kilometers="<<m<<" meters"<<endl;
+}
+nauticalmile_kilometer::operator double()
+{return km/1.852;}
+int main()
+{
+	int a;
+	cout<<"please input the length with km:"<<endl;
+	while(cin>>a)
+	{
+		nauticalmile_kilometer k(a,1000*a);
+		k.print();
+		cout<<"="<<double(k)<<" nauticalmile"<<endl<<endl;
+		cout<<"one more try?Input the length with km."<<endl;
+		cout<<"Or press ctrl+z to quit"<<endl;
+	}
+	cout<<"finish!"<<endl;
+}
+测试结果：
+ 
+
+
+88888888888888
+
+
+8.4.2
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class employee
+{
+protected:
+	char name[10];
+	double salary;
+};
+class salesman:public employee
+{
+public:
+	salesman(double S){sales=S;commrate=0.005;}
+	void pay(){salary=commrate*sales;}
+	void print(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<salary
+<<endl;}
+protected:
+	double commrate;
+	double sales;
+};
+class salesmanager:public salesman
+{
+public:
+	salesmanager(double s):salesman(s){monthpay=8000;}
+	void pay(){salary=commrate*sales+monthpay;}
+protected:
+	double monthpay;
+};
+int main()
+{
+	char c[10];
+	int x;
+	double s;
+	while(cin>>c)
+	{
+		cin>>x;
+		cin>>s;
+		if(x==0)
+		{
+			salesman a(s);
+			a.pay();
+			a.print();
+		}
+		else if(x==1)
+		{
+			salesmanager a(s);
+			a.pay();
+			a.print();
+		}
+	}
+}
+运行结果：
+ 
+8.4.3
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class integer
+{
+public:
+	integer(int x,int y){i=x;j=y;}
+	~integer(){i=0;}
+	integer(const integer&);
+	void pi(){cout<<i+j<<endl;}
+	void mi(){cout<< i-j<<endl;}
+protected:
+	int i,j;
+};
+integer::integer(const integer&a)
+{
+	i=a.i;
+}
+class real
+{
+public:
+	real(double x,double y){i=x;j=y;}
+	~real(){i=0;}
+	real(const real&);
+	void pi(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<i+j<<endl;}
+	void mi(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<i-j<<endl;}
+protected:
+	double i,j;
+};
+real::real(const real&a)
+{
+	i=a.i;
+}
+class intreal:public integer,public real
+{
+public:
+	intreal(int a,int b,double c,double d):integer(a,b),real(c,d){}
+};
+int main()
+{
+	char s;
+	int x;
+	while(cin>>s)
+	{
+		int a,b;
+		cin>>x;
+		if(x==0)
+		{
+			cin>>a>>b;
+			intreal t(a,b,0,0);
+			switch(s)
+			{
+			case '+':t.integer::pi();break;
+			case '-':t.integer::mi();break;
+			}
+		}
+		else if(x==1)
+		{
+			double a,b;
+			cin>>a>>b;
+			intreal t(0,0,a,b);
+			switch(s)
+			{
+			case '+':t.real::pi();break;
+			case '-':t.real::mi();break;
+			}
+		}
+	}
+}
+运行结果：
+ 
+8.4.4
+#include<iostream>
+using namespace std;
+class integer
+{
+public:
+	integer(int k):len(k){}
+protected:
+	int len;
+};
+class vector:public integer
+{
+public:
+	vector(int);
+	vector(const int*,int);
+	vector(const vector&);
+	~vector();
+	int &operator[](int i)const;
+	int operator()()const;
+	vector&operator=(const vector&);
+	friend vector operator+(const vector&,const vector&);
+	friend vector operator-(const vector&,const vector&);
+	friend int operator*(const vector&,const vector&);
+	friend ostream&operator<<(ostream&output,const vector&);
+	friend istream&operator>>(istream&input,vector&);
+private:
+	int*v;
+};
+vector::vector(int size):integer(size)
+{
+	v=new int[size];
+	for(int i=0;i<len;i++)v[i]=0;
+}
+vector::vector(const int*b,int size):integer(size)
+{
+	v=new int[size];
+	len=size;
+	for(int i=0;i<size;i++)v[i]=b[i];
+}
+vector::vector(const vector&a):integer(a())
+{
+	v=new int[len];
+	for(int i=0;i<len;i++)v[i]=a[i];
+}
+vector::~vector()
+{
+	delete[]v;
+	len=0;
+}
+int &vector::operator[](int i)const
+{return v[i];}
+int vector::operator()()const
+{return len;}
+vector&vector::operator=(const vector&b)
+{
+	for(int i=0;i<len;i++)
+		v[i]=b.v[i];
+	return *this;
+}
+vector operator+(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]+b.v[i];
+		return vector(t,size);
+	}
+}
+vector operator-(const vector&a,const vector&b)
+{
+	int size=a();
+	int*t=new int[size];
+	{
+		for(int i=0;i<size;i++)
+			t[i]=a.v[i]-b.v[i];
+		return vector(t,size);
+	}
+}
+int operator*(const vector&a,const vector&b)
+{
+	int size=a();
+	int t=0;
+	{
+		for(int i=0;i<size;i++)
+			t+=a.v[i]*b.v[i];
+		return t;
+	}
+}
+ostream &operator<<(ostream&output,const vector &a)
+{
+	int i;
+	for(i=0;i<a.len-1;i++)
+		output<<a.v[i]<<" ";
+	output<<a.v[i];
+	return output;
+}
+istream&operator>>(istream&input,vector&a)
+{
+	for(int i=0;i<a();i++)
+		input>>a.v[i];
+	return input;
+}
+int main()
+{
+	int k;
+	char s;
+	while(cin>>s)
+	{
+		cin>>k;
+		vector a(k),b(k);
+		cin>>a;
+		cin>>b;
+		switch(s)
+	{
+	case '+':
+		{
+		cout<<a+b<<endl;
+		}break;
+	case '-':
+		{
+			cout<<a-b<<endl;
+		}break;
+	case '*':
+		{
+			cout<<a*b<<endl;
+		}break;
+	}
+	}
+}
+运行结果：
+ 
+
+
+9999999999999999
+
+实验步骤与结果
+9.1
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class circle
+{
+protected:
+	double radius;
+public:
+	circle(double r){radius=r;}
+	virtual void area(){}
+	virtual void volume(){}
+};
+class sphere:public circle
+{
+public:
+	sphere(double r):circle(r){}
+	void area()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<4*3.14*radius*radius<<endl;
+	}
+	void volume()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<4.0/3.0*radius*radius*radius*3.14<<endl;
+	}
+};
+class column:public circle
+{
+protected:
+	double height;
+public:
+	column(double r,double h):circle(r){height=h;}
+	void area()
+	{
+		cout<<3.14*2*radius*radius+3.14*2*radius*height<<endl;
+	}
+	void volume()
+	{
+		cout<<setiosflags(ios::fixed)<<setprecision(3);
+		cout<<3.14*radius*radius*height<<endl;
+	}
+};
+int main()
+{
+	int n;
+	double r,h;
+	while(cin>>n)
+	{
+		if(n==0)
+		{
+			cin>>r;
+			sphere a(r);
+			a.area();
+			a.volume();
+		}
+		else if(n==1)
+		{
+			cin>>r>>h;
+			column a(r,h);
+			a.area();
+			a.volume();
+		}
+	}
+}
+运行结果：
+ 
+9.2
+#include<iostream>
+#include<string.h>
+using namespace std;
+class staff
+{
+protected:
+	char name[30];
+	int n;
+public:
+	staff(char*s,int i){strcpy(name,s);n=i;}
+	virtual int salary(){return 0;}
+	virtual void print(){}
+};
+class prof:public staff
+{
+protected:
+	int x;
+public:
+	prof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class fuprof:public staff
+{
+protected:
+	int x;
+public:
+	fuprof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class teacher:public staff
+{
+protected:
+	int x;
+public:
+	teacher(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+int main()
+{
+	int n,x;
+	char s[30];
+	while(cin>>x)
+	{
+		cin>>s;
+		cin>>n;
+		if(x==0)
+		{
+			x=5;
+			prof a(s,n,x);
+			a.print();
+		}
+		if(x==1)
+		{
+			x=3;
+			fuprof a(s,n,x);
+			a.print();
+		}
+		if(x==2)
+		{
+			x=2;
+			teacher a(s,n,x);
+			a.print();
+		}
+	}
+}
+运行结果：
+ 
+9.3
+#include<iostream>
+#include<string.h>
+using namespace std;
+class staff
+{
+protected:
+	char name[30];
+	int n;
+public:
+	staff(char*s,int i){strcpy(name,s);n=i;}
+	virtual int salary(){return 0;}
+	virtual void print(){}
+	staff*next;
+};
+class prof:public staff
+{
+protected:
+	int x;
+public:
+	prof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class fuprof:public staff
+{
+protected:
+	int x;
+public:
+	fuprof(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+class teacher:public staff
+{
+protected:
+	int x;
+public:
+	teacher(char*s,int i,int a):staff(s,i){x=a;}
+	int salary()
+	{
+		return x*1000+x*n*10;
+	}
+	void print()
+	{
+		cout<<name<<endl;
+		cout<<salary()<<endl;
+	}
+};
+void addfront(staff*&h,staff*&t)
+{t->next=h;h=t;}
+int main()
+{
+	int n,x,sal,max=0,min=100000;
+	char s[30];
+	staff*head=NULL,*p;
+	while(cin>>x)
+	{
+		cin>>s;
+		cin>>n;
+		if(x==0)
+		{
+			x=5;
+			p=new prof(s,n,x);
+		}
+		if(x==1)
+		{
+			x=3;
+			p=new fuprof(s,n,x);
+		}
+		if(x==2)
+		{
+			x=2;
+			p=new teacher(s,n,x);
+		}
+		p->print();
+		addfront(head,p);
+	}
+	while(p)
+	{
+		sal=p->salary();
+		if(sal>max)max=sal;
+		if(sal<min)min=sal;
+		p=p->next;
+	}
+	cout<<max<<endl;
+	cout<<min<<endl;
+}
+运行结果：
+ 
+9.4
+#include<iostream>
+using namespace std;
+class shape
+{
+protected:
+int area;
+public:
+shape(){area=1;}
+virtual void setdim(){}
+virtual int getarea(){return 0;}
+};
+class twodimshape:public shape
+{
+protected:
+int a,b;
+public:
+twodimshape():shape(){a=1;b=1;}
+void setdim()
+{
+cin>>a>>b;
+}
+};
+class threedimshape:public shape
+{
+protected:
+int a,b,c;
+public:
+threedimshape():shape(){a=1;b=1;c=1;}
+void setdim()
+{
+cin>>a>>b>>c;
+}
+};
+class changfangxing:public twodimshape
+{
+public:
+changfangxing():twodimshape(){};
+int getarea()
+{
+int i;
+for(i=0;i<2;i++)area=a*b;
+return area;
+}
+};
+class lifangti:public threedimshape
+{
+public:
+lifangti():threedimshape(){};
+int getarea()
+{
+int i;
+for(i=0;i<3;i++)area=a*b*c;
+return area;
+}
+};
+int main()
+{
+int n;
+shape*p;
+changfangxing s;
+lifangti t;
+while(cin>>n)
+{
+switch (n)
+{
+case 2:
+{
+p=&s;break;
+}
+case 3:
+{
+p=&t;break;
+}
+}
+p->setdim();
+cout<<p->getarea()<<endl;
+}
+}
+运行结果：
+ 
+
+
+101010101010
+
+1.
+#include<iostream>
+#include<iomanip>
+using namespace std;
+template<typename t>
+t ave(t*s,int n)
+{
+	t a=0;
+	int i;
+	for(i=0;i<n;i++)a+=s[i];
+	return a/n;
+}
+int main()
+{
+	int c,i,n;
+	while(cin>>c>>n)
+	{
+		if(c==0)
+		{
+			int*a=new int [n];
+			for(i=0;i<n;i++)cin>>a[i];
+			cout<<ave(a,n)<<endl;
+		}
+		if(c==1)
+		{
+			double*a=new double[n];
+			for(i=0;i<n;i++)cin>>a[i];
+			cout<<setiosflags(ios::fixed)<<setprecision(2)<<ave(a,n)<<endl;
+		}
+	}
+	
+}
+ 
+2
+#include<iostream>
+using namespace std;
+template<typename t>
+struct list
+{
+	t data;
+	list*next;
+};
+template<typename t>
+list<t>*createlist(int n)
+{
+	int i=0;
+	list<t>*head,*p;
+	head=new list<t>;
+	cin>>head->data;
+	p=head;
+	i=1;
+	while(i<n)
+	{
+		p->next=new list<t>;
+		p=p->next;
+		i++;
+		cin>>p->data;
+	}
+	p->next=NULL;
+	return head;
+}
+template<typename t>
+void showlist(list<t>*head,int n)
+{
+	list<t>*p=head;
+	int i,j;
+	for(i=0;i<n-1;i++)
+	{
+		for(j=1,p=head;j<n-i;j++)
+			p=p->next;
+		cout<<p->data<<" ";
+	}
+	cout<<head->data<<endl;
+}
+int main()
+{
+	int n;
+	while(cin>>n)
+	{
+		list<int>*head=createlist<int>(n);
+		showlist<int>(head,n);
+	}
+}
+运行结果：
+ 
+3
+#include<iostream>
+using namespace std;
+template<typename t>
+class vec
+{
+private:
+	t*s;
+	int len;
+public:
+	vec(t*str,int n){s=str;len=n;}
+	~vec(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len-1;i++)cout<<s[i]<<" ";
+		cout<<s[len-1]<<endl;
+	}
+	
+	template<typename t1>
+	friend vec<t1> operator+(vec<t1>&a,vec<t1>&b)
+	{
+		int x=a.gl();
+		t1*p=new t1[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		return vec(p,x);
+	}
+	template<typename t2>
+	friend vec<t2> operator-(vec<t2>&a,vec<t2>&b)
+	{
+		int x=a.gl();
+		t2*p=new t2[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		return vec(p,x);
+	}
+};
+int main()
+{
+	int n,i;
+	char s;
+	while(cin>>s>>n)
+	{
+		int*a=new int[n];
+		int*b=new int[n];
+		int*c=new int[n];
+		for(i=0;i<n;i++)cin>>a[i];
+		for(i=0;i<n;i++)cin>>b[i];
+		vec<int>x(a,n),y(b,n),z(c,n);
+		if(s=='+')z=x+y;
+		if(s=='-')z=x-y;
+		z.print();
+	}
+}
+ 
+
+4.
+#include<iostream>
+using namespace std;
+template<typename t>
+class vec
+{
+private:
+	t*s;
+	int len;
+public:
+	vec(){s=NULL;len=0;}
+	vec(t*str,int n){s=str;len=n;}
+	void set(t*str,int n){s=str;len=n;}
+	~vec(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len-1;i++)cout<<s[i]<<" ";
+		cout<<s[len-1]<<endl;
+	}
+	
+	template<typename t1>
+	friend vec<t1> operator+(vec<t1>&a,vec<t1>&b)
+	{
+		int x=a.gl();
+		t1*p=new t1[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		/*vec<t1> m;
+		set(p,x);
+		return m;*/
+		return vec<t1>(p,x);
+	}
+	template<typename t2>
+	friend vec<t2> operator-(vec<t2>&a,vec<t2>&b)
+	{
+		int x=a.gl();
+		t2*p=new t2[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		/*vec<t1> m;
+		set(p,x);
+		return m;*/
+		return vec<t2>(p,x);
+	}
+};
+template<typename t0>
+class mart
+{
+private:
+	vec<t0>*s;
+	int len;
+public:
+	mart(vec<t0>*str,int n){s=str;len=n;}
+	~mart(){s=NULL;len=0;}
+	int gl(){return len;}
+	void print()
+	{
+		int i;
+		for(i=0;i<len;i++)s[i].print();
+	}	
+	template<typename t3>
+	friend mart<t3> operator+(mart<t3>&a,mart<t3>&b)
+	{
+		int x=a.gl();
+		vec<t3>*p=new vec<t3>[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]+b.s[i];
+		return mart(p,x);
+	}
+	template<typename t4>
+	friend mart<t4> operator-(mart<t4>&a,mart<t4>&b)
+	{
+		int x=a.gl();
+		vec<t4>*p=new vec<t4>[x];
+		int i;
+		for(i=0;i<x;i++)
+			p[i]=a.s[i]-b.s[i];
+		return mart(p,x);
+	}
+};
+int main()
+{
+	int n,m,i,j;
+	char s;
+	while(cin>>s>>n>>m)
+	{
+		int**x=new int*[n];
+		for(i=0;i<n;i++)
+		{x[i]=new int[m];}
+		
+		int**y=new int*[n];
+		for(i=0;i<n;i++)
+		{y[i]=new int[m];}
+		vec<int>*A=new vec<int>[m];
+		vec<int>*B=new vec<int>[m];
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+				cin>>x[i][j];
+			A[i].set(x[i],j);
+		}
+		for(i=0;i<n;i++)
+		{
+			for(j=0;j<m;j++)
+				cin>>y[i][j]; 
+			B[i].set(y[i],j);
+		}
+		mart<int>X(A,n),Y(B,n),Z(NULL,n);
+		if(s=='+')Z=X+Y;
+		if(s=='-')Z=X-Y;
+		Z.print();
+	}
+}
+运行结果：
+ 
+11chapter
+
+第一题
+#include<iostream>
+#include<iomanip>
+#include<cmath>
+using namespace std;
+class d
+{
+public:
+	d(double m){x=3.1415926*m/180;}
+	void set()
+	{
+		cout<<left;
+		cout<<setw(5)<<setiosflags(ios::fixed)<<setprecision(2);
+	}
+	void print()
+	{
+		cout<<sin(x)<<cos(x)<<endl;
+	}
+private:
+	double x;
+};
+int main()
+{
+	double x;
+	while(cin>>x)
+	{
+		d a(x);
+		a.set();
+		a.print();
+	}
+}
+运行结果：
+ 
+第二题
+#include<iostream>
+using namespace std;
+class word
+{
+public:
+	void count()
+	{
+		n=0;
+		while(cin.getline(c,300,'\n'))
+		{
+			n++;
+		}
+	cout<<n;
+	}
+private:
+	char c[300];
+	int n;
+};
+int main()
+{
+	word a;
+	a.count();
+}
+运行结果
+ 
+第三题
+#include<iostream>
+using namespace std;
+int main()
+{
+	int i=0,n=0;
+	char a[300];
+	while(cin.getline(a,300,'\n'))
+	{
+		for(i=0;i<300;i++)
+			if(a[i]=='/'&&a[i+1]=='*')n++;
+		for(i=0;i<300;i++)a[i]=0;
+	}
+	cout<<n;
+}
+运行结果
+ 
+第四题
+#include<iostream>
+#include<cstring>
+using namespace std;
+class str
+{
+private:
+	char a[300];
+	str* next,*head;
+	int flag;
+public:
+	void inp()
+	{
+		char c[300];
+		flag=0;
+		str*p=head=new str;
+		while(cin.getline(c,300,'\n'))//使用这种格式才能符合
+		{
+			if(c[0]!='/'||c[1]!='/')
+			{
+				strcpy(head->a,c);
+				head->next=new str;
+				flag=1;
+				break;
+			}
+		}
+		while(cin.getline(c,300,'\n'))//使用这种格式才能符合
+		{
+			if(c[0]!='/'||c[1]!='/')
+			{
+				p->next=new str;
+				p=p->next;
+				strcpy(p->a,c);
+			}
+		}
+		p->next=NULL;
+	}
+void showlist()
+{
+	if(flag==1)//当第一行有ctrl+z时且以//开头时，不应有输出
+	while(head!=NULL)
+	{
+		cout<<head->a<<endl;
+		head=head->next;
+	}
+}
+};
+int main()
+{
+	str a;
+	a.inp();
+	a.showlist();
+}
+
+运行结果：
+ 
+

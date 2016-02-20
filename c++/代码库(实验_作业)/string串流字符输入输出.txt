@@ -1,0 +1,28 @@
+#include<iostream>
+using namespace std;
+#include<sstream>
+#include<string>
+int main()
+{
+	string teststr("input test 256 * 0.5");//need blank to divide every word
+	string s1,s2,s3;
+	double x,y;
+	istringstream input(teststr);
+	input>>s1>>s2>>x>>s3>>y;
+	cout<<s1<<" "<<s2<<" "<<x<<s3<<y<<"="<<x*y<<endl;
+}
+
+#include<iostream>
+#include<sstream>
+using namespace std;
+int main()
+{
+	ostringstream output;
+	double x,y;
+	cout<<"input x:";
+	cin>>x;
+	cout<<"input y:";
+	cin>>y;
+	output<<x<<"*"<<y<<"="<<x*y<<endl;
+	cout<<output.str();
+}

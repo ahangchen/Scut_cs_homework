@@ -1,0 +1,43 @@
+class real
+{
+public:
+	real(double x){i=x;}
+	~real(){i=0;}
+	real(const real&);
+	real&operator=(const real&);
+	friend real operator+(const real&,const real&);
+	friend real operator-(const real&,const real&);
+	friend real operator*(const real&,const real&);
+	friend real operator/(const real&,const real&);
+	void prdouble(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<i<<endl;}
+protected:
+	double i;
+};
+real::real(const real&a)
+{
+	i=a.i;
+}
+real operator+(const real&a,const real&b)
+{
+	double t;
+	t=a.i+b.i;
+	return real(t);
+}
+real operator-(const real&a,const real&b)
+{
+	double t;
+	t=a.i-b.i;
+	return real(t);
+}
+real operator*(const real&a,const real&b)
+{
+	double t;
+	t=a.i*b.i;
+	return real(t);
+}
+real operator/(const real&a,const real&b)
+{
+	double t;
+	t=(a.i)/(b.i);
+	return real(t);
+}

@@ -1,0 +1,20 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+void browsefile(char*filename,int delline)//delline的功能是指要去掉的那一行
+{
+	ifstream inf(filename,ios::in);
+	char s[80];
+	for(int i=1;i<=delline;i++)
+		inf.getline(s,80);
+	while(!inf.eof())
+	{
+		inf.getline(s,80);
+		cout<<s<<endl;
+	}
+	inf.close();
+}
+int main()
+{
+	browsefile("e:\\0.txt",0);
+}

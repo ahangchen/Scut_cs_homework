@@ -1,0 +1,12 @@
+#include <iostream>
+using namespace std;
+int main()
+{
+double a,b,c;
+cout<<"输入三条边的长";
+cin>>a>>b>>c;
+if(a+b<=c||a+c<=b||b+c<=a)cout<<"三边不能构成三角形";
+else if(a!=b&&b!=c&&a!=c)cout<<"三边构成普通三角形";
+       else if(a==b&&b==c)cout<<"三边构成等边三角形";
+              else cout<<"三边构成等腰三角形";
+}

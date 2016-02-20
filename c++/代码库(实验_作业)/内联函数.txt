@@ -1,0 +1,11 @@
+#include<iostream>
+using namespace std;
+inline int max(int,int);//声明内联函数
+int main()
+{
+	int x,y;
+	cin>>x>>y;
+	cout<<max(x,y)<<endl;
+}
+int max(int x,int y)
+{return x>y?x:y;}

@@ -1,0 +1,50 @@
+#include<iostream>
+#include<iomanip>
+using namespace std;
+class employee
+{
+protected:
+	char name[10];
+	double salary;
+};
+class salesman:public employee
+{
+public:
+	salesman(double S){sales=S;commrate=0.005;}
+	void pay(){salary=commrate*sales;}
+	void print(){cout<<setiosflags(ios::fixed)<<setprecision(2)<<salary<<endl;}
+protected:
+	double commrate;
+	double sales;
+};
+class salesmanager:public salesman
+{
+public:
+	salesmanager(double s):salesman(s){monthpay=8000;}
+	void pay(){salary=commrate*sales+monthpay;}
+protected:
+	double monthpay;
+};
+int main()
+{
+	char c[10];
+	int x;
+	double s;
+	while(cin>>c)
+	{
+		cin>>x;
+		cin>>s;
+		if(x==0)
+		{
+			salesman a(s);
+			a.pay();
+			a.print();
+		}
+		else if(x==1)
+		{
+			salesmanager a(s);
+			a.pay();
+			a.print();
+		}
+	}
+}

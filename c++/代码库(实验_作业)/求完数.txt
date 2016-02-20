@@ -1,0 +1,14 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+int x,y,i,m=0;
+for(x=2;x<=1000;x++)//计数器
+{
+for(i=1,y=x;i<=x;i++)
+if(y%i==0){m=m+i;y=y/i;;}//求余看是否为其因子，累加所有因子
+if(x==m)
+	cout<<x<<endl;//符合完数条件则输出
+system("pause");
+}
+}

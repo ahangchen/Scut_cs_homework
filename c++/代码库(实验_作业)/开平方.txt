@@ -1,0 +1,17 @@
+//这是一个对一个整数开平方的程序
+#include<iostream>
+#include<cmath>
+using namespace std;
+int main()
+{double a,x,y,epson;//a为待开方的整数,x为a的1/2次方的一个近似值，epson为精度
+cout<<"请输入一个正整数a";
+cin>>a;
+epson=a;//保证精度一开始足够大
+for(x=a/2,y=a/2;epson>1e-12;)//精度不够小时执行循环体
+{y=(y+a/y)/2;//求a的开平方
+epson=fabs(x*2-y);//计算两次的近似值的接近程度
+x=y/2;//保留此次计算所得近似值
+}
+cout<<y;
+system("pause");
+}

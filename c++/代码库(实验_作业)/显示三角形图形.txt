@@ -1,0 +1,18 @@
+#include<iostream>
+using namespace std;
+int main()
+{
+	int line,i,j;
+char character;
+cout<<"How many lines?";
+cin>>line;
+cout<<"What's the character?";
+cin>>character;
+for(i=0;i<line;i++)
+{for(j=0;j<line-i-1;j++)
+cout<<" ";
+for(j=0;j<=2*i;j++)
+cout<<character;
+cout<<endl;
+}
+}

@@ -1,0 +1,48 @@
+#include<iostream>
+using namespace std;
+class base1
+{
+public:
+	base1(int x){value=x;}
+	int getdata()const{return value;}
+protected:
+	int value;
+};
+class base2
+{
+public:
+	base2(char c){letter=c;}
+	char getdata()const{return letter;}
+protected:
+	char letter;
+};
+class derived:public base1,public base2
+{
+	friend ostream&operator<<(ostream&,const derived&);
+public:
+	derived(int,char,double);
+	double getreal()const;
+private:
+	double real;
+};
+derived::derived(int i,char c,double f):base1(i),base2(c),real(f){};
+double derived::getreal()const{return real;}
+ostream&operator<<(ostream&output,const derived&d)
+{
+	output<<"integer:"<<d.value<<"\ncharacter:"<<d.letter
+		<<"\nreal number:"<<d.real;
+	return output;
+}
+int main()
+{
+	base1 b1(10);
+	base2 b2('k');
+	derived d(5,'a',2.5);
+	cout<<"object b1 contain integer"<<b1.getdata()
+		<<"\nobject b2 contains character"<<b2.getdata()
+		<<endl<<"object d contains:\n"<<d<<endl;
+	cout<<"data members of derived can be accessed in other way:"<<endl;
+	cout<<"integer:"<<d.base1::getdata()<<endl
+		<<"character:"<<d.base2::getdata()<<endl
+		<<"real number:"<<d.getreal()<<"\n";
+}

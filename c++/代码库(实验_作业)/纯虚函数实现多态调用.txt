@@ -1,0 +1,58 @@
+#include<iostream>
+using namespace std;
+class figure
+{
+protected:double x,y;
+public:
+	void setdim(double i,double j=0){x=i;y=j;}
+	virtual void showarea()const=0;//定义纯虚函数类
+};
+class triangle:public figure
+{
+public:
+	void showarea()const
+	{
+		cout<<"triangle with high "<<x<<"and base "<<y;
+		cout<<" has an area of "<<x*0.5*y<<endl;
+	}
+};
+class square:public figure
+{
+public:
+	void showarea()const
+	{
+		cout<<"square with dimension "<<x<<"*"<<y;
+		cout<<" has an area of "<<x*y<<endl;
+	}
+};
+class circle:public figure
+{
+public:
+	void showarea()const
+	{
+		cout<<"circle with radius "<<x;
+		cout<<" has an area of "<<3.14*x*x<<endl;
+	}
+};
+int main()
+{
+	triangle t;
+	square s;
+	circle c;
+	t.setdim(10.0,5.0);
+	t.showarea();
+	s.setdim(10.0,5.0);
+	s.showarea();
+	c.setdim(9.0);
+	c.showarea();
+	figure*p;//抽象类指针多态调用派生类的纯虚函数
+	p=&t;
+	p->setdim(20.0,10.0);
+	p->showarea();
+	p=&s;
+	p->setdim(20.0,10.0);
+	p->showarea();
+	p=&c;
+	p->setdim(9.0);
+	p->showarea();
+}

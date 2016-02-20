@@ -1,8 +1,0 @@
-(KEY, true)	(KEY, false)	(KEY, or)	(KEY, and)	(KEY, not)
-(KEY, int)	(KEY, bool)	(KEY, string)	(KEY, while)	(KEY, do)
-(KEY, if)	(KEY, then)	(KEY, else) 	(KEY, end)	(KEY, repeat)
-(KEY, until)	(KEY, read)	(KEY, write)	(SYM, ,)	(SYM, ;)
-(SYM, :=)	(SYM, +)	(SYM, -)	(SYM, *)	(SYM, /)
-(SYM, ()	(SYM, ))	(SYM, <)	(SYM, =)	(SYM, >)
-(SYM, <=)	(SYM, >=)	(ID, a2c)	(NUM, 123)	(STR, EFG)
-and some error messages..

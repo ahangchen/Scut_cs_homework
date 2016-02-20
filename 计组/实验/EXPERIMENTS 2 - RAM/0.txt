@@ -1,0 +1,10 @@
+除了AR_CLK外全1；
+SW_BUS=0；
+拨码开关00，地址01锁入AR，
+AR_CLK为1，瞬间给一个高电平，AR为全0，即锁入地址00
+拨码01，RAM_CE为0，使能，RAM_WE先低后高，即负脉冲给RAM，将01写入6116，（可在memory contest 。。。查看）
+地址10锁入AR,给一个高电平1，锁入
+拨码02，RAM_CE使能，RAM_WE负脉冲，给RAM
+地址00，锁入AR，使SW-BUS失效，总线为FLT，RAM_CE使能，RAM-OE使能，RAM把00H中的数据输出。此时记录数据。
+sw-bus使能，其他失效，RAM输出端高阻态。
+地址01，放入总线，锁入AR，使SW-BUS失效，RAM-CE,OE，使能，RAM把01中的数据输出。

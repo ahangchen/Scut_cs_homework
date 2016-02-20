@@ -1,0 +1,108 @@
+#include<iostream>
+#include<stdlib.h>
+#include<cmath>
+#include<fstream>
+using namespace  std;
+
+struct POINT_3D {					// 3D点的结构
+	double x, y, z;
+	POINT_3D ()
+	{
+
+	}
+	POINT_3D(double nx,double ny,double nz)
+	{
+		x=nx;y=ny;z=nz;
+	}
+} ;
+
+// 两个向量相加，p=p+q
+POINT_3D pointAdd(POINT_3D p, POINT_3D q) {
+	p.x += q.x;		p.y += q.y;		p.z += q.z;
+	return p;
+}
+POINT_3D pointPlus(POINT_3D p,POINT_3D q)
+{
+	p.x -= q.x;		p.y -= q.y;		p.z -= q.z;
+	return p;
+}
+POINT_3D makePoint(double a, double b, double c) {
+	POINT_3D p;
+	p.x = a;	p.y = b;	p.z = c;
+	return p;
+}
+//两个向量叉乘
+POINT_3D pointXmulti(POINT_3D p,POINT_3D q)
+{
+	double x,y,z=0;
+	x=p.y*q.z-q.y*p.z;
+	y=p.z*q.x-p.x*q.z;
+	z=p.x*q.y-p.y*q.x;
+	return makePoint(x,y,z);
+}
+double pointPmulti(POINT_3D p,POINT_3D q)
+{
+	return p.x*q.x+p.y*q.y+p.z*q.z;
+}
+POINT_3D pointOp(POINT_3D p)
+{
+	return makePoint(-p.x,-p.y,-p.z);
+}
+// 向量和标量相乘p=c*p
+POINT_3D pointTimes(double c, POINT_3D p) {
+	p.x *= c;	p.y *= c;	p.z *= c;
+	return p;
+}
+//向量单位化
+POINT_3D pointStd(POINT_3D n0)
+{
+	return pointTimes(1/sqrt(n0.x*n0.x+n0.y*n0.y+n0.z*n0.z),n0);
+}
+double pointModule(POINT_3D n0)
+{
+	return sqrt(n0.x*n0.x+n0.y*n0.y+n0.z*n0.z);
+}
+POINT_3D normalLightUp(POINT_3D n0)
+{
+	return pointTimes(1.5,n0);
+}
+POINT_3D getTriNormal(POINT_3D v0,POINT_3D v1,POINT_3D v2)
+{
+	POINT_3D n0=pointXmulti(pointAdd(v1,pointOp(v0)),pointAdd(v2,pointOp(v1)));
+	return pointTimes(1/sqrt(n0.x*n0.x+n0.y*n0.y+n0.z*n0.z),n0);
+}
+int main()
+{
+	fstream f=fstream("d:/4.txt",ios::out);
+	double pt[4][3]={
+		{0,0,0},
+		{0,1,-2},
+		{-1,-1,-2},
+		{1,-1,-2}
+	};
+	double ft[4][3]={
+		{0,1,2},
+		{0,2,3},
+		{0,3,1},
+		{2,4,3}
+	};
+	POINT_3D v=makePoint(0,0,1),s=makePoint(0,2,0),Ipa=makePoint(0.06,0.05,0.04),Ip=makePoint(0.6,0.5,0.4);
+	POINT_3D p,n;
+	double ka=0.4,kd=0.6,ks=0.8;
+	int i=0;
+	p=makePoint(pt[i][0],pt[i][1],pt[i][2]);
+	//求各个邻接面法向量
+	POINT_3D n0=getTriNormal(makePoint(0,0,0),makePoint(0,1,-2),makePoint(-1,-1,-2));
+	POINT_3D n1=getTriNormal(makePoint(0,0,0),makePoint(-1,-1,-2),makePoint(1,-1,-2));
+	POINT_3D n2=getTriNormal(makePoint(0,0,0),makePoint(1,-1,-2),makePoint(0,1,-2));
+	//n=normal p
+	n=pointTimes(double(1)/double(3),pointAdd(pointAdd(n0,n1),n2));
+	POINT_3D ps=pointPlus(s,p),pn=pointPlus(n,p),pv=pointPlus(v,p);
+	double cosi=pointPmulti(ps,pn)/(pointModule(ps)*pointModule(pn));
+	double cos_spv=pointPmulti(ps,pv)/(pointModule(ps)*pointModule(pv));
+	double xita=acos(cos_spv)-2*acos(cosi);
+	double cosxt=cos(xita);
+	POINT_3D I=pointAdd(pointTimes(ka,Ipa),pointTimes((kd*cosi+ks*pow(cosxt,10)),Ip));
+	f<<"("<<I.x<<","<<I.y<<","<<I.z<<")\n"; 
+
+}

@@ -1,0 +1,113 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+using namespace std;
+class Vector3
+{
+public:
+	Vector3(float fx, float fy, float fz)
+		:x(fx), y(fy), z(fz)
+	{
+	}
+
+	// Subtract
+	Vector3 operator - (const Vector3& v) const
+	{
+		return Vector3(x - v.x, y - v.y, z - v.z) ;
+	}
+
+	// Dot product
+	float Dot(const Vector3& v) const
+	{
+		return x * v.x + y * v.y + z * v.z ;
+	}
+
+	// Cross product
+	Vector3 Cross(const Vector3& v) const
+	{
+		return Vector3(
+			y * v.z - z * v.y,
+			z * v.x - x * v.z,
+			x * v.y - y * v.x ) ;
+	}
+
+public:
+	float x, y, z ;
+};
+
+bool PointinTriangle(Vector3 A, Vector3 B, Vector3 C, Vector3 P)
+{
+	Vector3 v0 = C - A ;
+	Vector3 v1 = B - A ;
+	Vector3 v2 = P - A ;
+
+	float dot00 = v0.Dot(v0) ;
+	float dot01 = v0.Dot(v1) ;
+	float dot02 = v0.Dot(v2) ;
+	float dot11 = v1.Dot(v1) ;
+	float dot12 = v1.Dot(v2) ;
+
+	float inverDeno = 1 / (dot00 * dot11 - dot01 * dot01) ;
+
+	float u = (dot11 * dot02 - dot01 * dot12) * inverDeno ;
+	if (u < 0 || u > 1) // if u out of range, return directly
+	{
+		return false ;
+	}
+
+	float v = (dot00 * dot12 - dot01 * dot02) * inverDeno ;
+	if (v < 0 || v > 1) // if v out of range, return directly
+	{
+		return false ;
+	}
+
+	return u + v <= 1 ;
+}
+int main()
+{
+	fstream f=fstream("d:/d.txt",ios::out);
+	double pt[32][32],pf[32][32];
+	for (int i=0;i<32;i++)
+	{
+		for (int j=0;j<32;j++)
+		{
+			if (j>=10&&j<25&&i>=5&&i<25)
+			{
+				pf[i][j]=10;
+			}
+			else
+				pf[i][j]=30;
+			//f<<pt[i][j]<<" ";
+		}
+		//f<<"\n";
+	}
+	for (int i=0;i<32;i++)
+	{
+		for (int j=0;j<32;j++)
+		{
+			if (j>=10&&j<25&&i>=5&&i<25)
+			{
+				pt[i][j]=1;
+			}
+			else
+				pt[i][j]=0;
+			//f<<pt[i][j]<<" ";
+		}
+		//f<<"\n";
+	}
+	Vector3 v1=Vector3(15,15,15),v2=Vector3(25,25,5),v3=Vector3(30,10,5);
+	double z;
+	for (int i=0;i<32;i++)
+	{
+		for (int j=0;j<32;j++)
+		{
+			z=(120-3*j-i)/4;
+			if (z<pf[i][j]&&PointinTriangle(v1,v2,v3,Vector3(j,i,z)))
+			{
+				pf[i][j]=z;
+			}
+			f<<setiosflags(ios::fixed)<<setprecision(2)<<pf[i][j]/30<<" ";
+		}
+		f<<"\n";
+	}
+}

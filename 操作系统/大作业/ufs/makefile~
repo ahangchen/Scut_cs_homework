@@ -1,0 +1,23 @@
+all:format ufs
+format:format.o
+	gcc    format.o -o format
+ufs:ufs.o dm.o
+	gcc ufs.o dm.o -o ufs -Wall -D_FILE_OFFSET_BITS=64 -g -pthread -lfuse -lrt -ldl
+ufs.o:global.h 
+	gcc  -Wall -D_FILE_OFFSET_BITS=64 -g   -c -o ufs.o ufs.c
+dm.o:dm.h
+	gcc  -Wall -D_FILE_OFFSET_BITS=64 -g   -c -o dm.o dm.c
+format.o:global.h
+	gcc  -Wall -D_FILE_OFFSET_BITS=64 -g   -c -o format.o format.c
+.PHONY : all
+clean :
+	rm  -f ufs format ufs.o dm.o format.o
+
+
+
+
+
+
+
+
+

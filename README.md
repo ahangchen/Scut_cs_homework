@@ -3,15 +3,21 @@
 
 华南理工大学计算机科学与技术专业一些作业，试卷，实验，代码，报告。。。
 
-   (一切只下载代码不点star的行为都是耍流氓)
+   > 一切只下载不点star的行为都是耍流氓
+   
+  - 话说在前头，这里不一定有你要的所有东西，即使有，也是仅供参考，鼓励知识共享，希望看这些东西的人都是能独立思考的人
+  
+  > 当然你直接拿去交作业的话我也不会反对的，只不过你要记得把里面各种报告里，我的名字换成你的名字啊。。。
 
-  > 如果你没用过github，我建议你还是[注册](https://github.com/join?source=header-home)一个账户玩一下，毕竟是全球最大代码开源平台
+  - 如果你没用过github，我建议你还是[注册](https://github.com/join?source=header-home)一个账户玩一下，毕竟是全球最大代码开源平台
 
-  > 如果你只是来找代码的，那么点击 download zip 按钮（在工程目录右上方），找不到就点这个[下载](https://github.com/ahangchen/Scut_cs_homework/archive/master.zip)吧orz
+  > 不要问我有没有百度云什么的。。百度云当然有，只不过修改的时候又要重新给地址了，哪有github这么方便
+  
+  - 如果你只想交作业了事，那么就点这个[下载](https://github.com/ahangchen/Scut_cs_homework/archive/master.zip)吧orz（可是你甘心就这样算了吗？稍微把代码看一看也好啊）
 
-  > 毕竟我水平有限，年轻时也写了很多shit一样的代码，所以要是对一些问题觉得自己的解法更好，欢迎PR（难道这个项目会变成华工的开源平台？）
+  - 毕竟我水平有限，年轻时也写了很多shit一样的代码，所以要是对一些问题觉得自己的解法更好，欢迎PR（难道这个项目会变成华工的开源平台？）
 
-  > 如果有什么建议，可以在[这里提issue](https://github.com/ahangchen/Scut_cs_homework/issues/new)，如果你没有github账号（那还当什么程序员。。），就发邮件给我吧，1418659400@qq.com
+  - 如果有什么建议，可以在[这里提issue](https://github.com/ahangchen/Scut_cs_homework/issues/new)，如果你没有github账号（那还当什么程序员。。），就发邮件给我吧，1418659400@qq.com
 
   > 由于github时不时会被墙，授人以鱼不如授人以渔，翻墙工具 [XX-NET](https://github.com/XX-net/XX-Net)在此
   
@@ -20,7 +26,9 @@
 
   > 想要我的财宝吗？想要的话可以全部给你，去找吧！我把所有财宝都放在那里。
   
-  额，好像混入了什么奇怪的东西。。。本科四年写的19W行代码可以分享的原来只有这么点啊。。。
+  额，好像混入了什么奇怪的东西。。。
+  
+  本科前三年写的19W行代码可以分享的原来只有这么点啊。。。
   
   - [c++](c++)
   - [java](java)
@@ -33,6 +41,7 @@
   - [计网](计网)
   - [软件工程](软件工程)
   - [图形学](图形学)
+  - [数字图像处理](数字图像处理)
   
 最近翻译了一份国外程序员写的How to be a programmer，有兴趣也可以[看看](https://github.com/ahangchen/How-to-Be-A-Programmer-CN)
 

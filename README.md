@@ -41,6 +41,7 @@
   - [计网](计网)
   - [软件工程](软件工程)
   - [图形学](图形学)
+  - [计算方法实验](计算方法实验/Caculate)
   - [数字图像处理](数字图像处理)
   
 最近翻译了一份国外程序员写的How to be a programmer，有兴趣也可以[看看](https://github.com/ahangchen/How-to-Be-A-Programmer-CN)
